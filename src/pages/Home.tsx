@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "../components/NavBar";
 import TrainingCard from "../components/TrainingCard";
+import AddTrainingCard from "../components/AddTrainingCard";
 
 const Home = () => {
   const trainings = [
@@ -17,9 +18,11 @@ const Home = () => {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center">
-      <p className="text-3xl font-bold tracking-wide">UPCOMING TRAINING</p>
-      <div className="flex flex-wrap gap-6">
+    <div className="flex flex-col items-start justify-center">
+      <p className="text-3xl font-bold tracking-wide w-full text-center mb-2">
+        UPCOMING TRAINING
+      </p>
+      <div className="flex flex-wrap gap-8 m-2">
         {trainings.map((training, index) => (
           <TrainingCard
             key={index}
@@ -28,6 +31,7 @@ const Home = () => {
             lastDone={training.lastDone}
           />
         ))}
+        {trainings.length < 3 && <AddTrainingCard />}
       </div>
     </div>
   );
