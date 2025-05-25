@@ -5,15 +5,20 @@ interface TrainingCardProps {
   title: string;
   nextTraining: string;
   lastDone: string;
+  onClick?: () => void;
 }
 
 const TrainingCard: React.FC<TrainingCardProps> = ({
   title,
   nextTraining,
   lastDone,
+  onClick,
 }) => {
   return (
-    <div className="min-w-96 max-w-md bg-white rounded-2xl shadow-lg p-6">
+    <div
+      className="min-w-96 max-w-md bg-white rounded-2xl shadow-lg p-6"
+      onClick={onClick}
+    >
       <div className="flex flex-col items-center justify-between">
         <div className="flex flex-row justify-between items-center w-full">
           <p className="text-2xl font-semibold first-letter:capitalize">

@@ -17,6 +17,10 @@ const Home = () => {
     },
   ];
 
+  const handleCardClick = (training: any) => {
+    console.log("Card clicked:", training);
+  };
+
   return (
     <div className="flex flex-col items-start justify-center">
       <p className="text-3xl font-bold tracking-wide w-full text-center mb-2">
@@ -29,6 +33,7 @@ const Home = () => {
             title={training.title}
             nextTraining={training.nextTraining}
             lastDone={training.lastDone}
+            onClick={() => handleCardClick(training)}
           />
         ))}
         {trainings.length < 3 && <AddTrainingCard />}
