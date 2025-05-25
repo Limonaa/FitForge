@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { supabase as authService } from "../../services/authService";
+import { supabase as authService } from "../../services/supabaseService";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import NotificationCard from "../../components/NotificationCard";
