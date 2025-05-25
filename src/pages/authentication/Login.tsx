@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { supabase as authService } from "../services/authService";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { supabase as authService } from "../../services/authService";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
-import NotificationCard from "../components/NotificationCard";
+import NotificationCard from "../../components/NotificationCard";
 
-const Register = () => {
+const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -20,53 +21,27 @@ const Register = () => {
     }
   }, [notification]);
 
-  const validatePassword = (password: string) => {
-    const minLength = /.{8,}/;
-    const upperCase = /[A-Z]/;
-    const number = /[0-9]/;
-    const specialChar = /[!@#$%^&*]/;
-
-    return {
-      minLength: minLength.test(password),
-      upperCase: upperCase.test(password),
-      number: number.test(password),
-      specialChar: specialChar.test(password),
-    };
-  };
-
-  const handleRegister = async (event: React.FormEvent) => {
+  const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const validation = validatePassword(password);
-    const isValid = Object.values(validation).every(Boolean);
-    if (!isValid) {
-      alert(
-        "Password must be at least 8 characters long, contain an uppercase letter, a number, and a special character!"
-      );
-      return;
-    }
-
-    const { data, error } = await authService.auth.signUp({
+    const { data, error } = await authService.auth.signInWithPassword({
       email: email,
       password: password,
     });
     if (error) {
-      setNotification({ message: "Error: " + error.message, type: "error" });
+      setNotification({
+        message: "Error: " + error.message,
+        type: "error",
+      });
       return;
     }
-    if (data) {
-      setNotification({
-        message: "User created successfully!",
-        type: "success",
-        // TODO: VERIFY EMAIL
-      });
-    }
 
+    if (data) {
+      navigate("/home");
+    }
     setEmail("");
     setPassword("");
   };
-
-  const passwordValidation = validatePassword(password);
 
   return (
     <>
@@ -77,13 +52,12 @@ const Register = () => {
           onClose={() => setNotification(null)}
         />
       )}
-
       <div className="min-h-screen bg-gradient-to-br from-blue-500 via-purple-500 to-indigo-600 flex items-center justify-center p-4">
         <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8">
           <h2 className="text-3xl font-bold text-center text-indigo-600 mb-6">
-            Create an Account
+            Log in to your account
           </h2>
-          <form onSubmit={handleRegister} className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Email
@@ -108,7 +82,7 @@ const Register = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10"
-                  placeholder="••••••••"
+                  placeholder={showPassword ? "K^nc7!Di*1xa" : "••••••••"}
                 />
                 <button
                   type="button"
@@ -118,56 +92,18 @@ const Register = () => {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              <ul className="text-sm mt-2 space-y-1 text-gray-600">
-                <li
-                  className={
-                    passwordValidation.minLength
-                      ? "text-green-600"
-                      : "text-red-500"
-                  }
-                >
-                  • At least 8 characters
-                </li>
-                <li
-                  className={
-                    passwordValidation.upperCase
-                      ? "text-green-600"
-                      : "text-red-500"
-                  }
-                >
-                  • 1 uppercase letter
-                </li>
-                <li
-                  className={
-                    passwordValidation.number
-                      ? "text-green-600"
-                      : "text-red-500"
-                  }
-                >
-                  • 1 number
-                </li>
-                <li
-                  className={
-                    passwordValidation.specialChar
-                      ? "text-green-600"
-                      : "text-red-500"
-                  }
-                >
-                  • 1 special character (!@#$%^&*)
-                </li>
-              </ul>
             </div>
             <button
               type="submit"
               className="w-full bg-indigo-600 text-white py-2 rounded-xl font-semibold hover:bg-indigo-700 transition"
             >
-              Register
+              Log in
             </button>
           </form>
           <p className="text-sm text-center text-gray-500 mt-4">
-            Already have an account?{" "}
-            <Link to="/login" className="text-indigo-600 hover:underline">
-              Log in
+            Dont have an account yet?{" "}
+            <Link to="/register" className="text-indigo-600 hover:underline">
+              Create one
             </Link>
           </p>
         </div>
@@ -176,4 +112,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
