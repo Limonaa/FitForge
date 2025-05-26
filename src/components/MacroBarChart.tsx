@@ -2,12 +2,18 @@ import React from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 
 interface BarChartData {
+  calories: number;
   protein: number;
   carbs: number;
   fats: number;
 }
 
-const MacroBarChart: React.FC<BarChartData> = ({ protein, carbs, fats }) => {
+const MacroBarChart: React.FC<BarChartData> = ({
+  calories,
+  protein,
+  carbs,
+  fats,
+}) => {
   const COLORS = ["#6366f1", "#a855f7", "#06b6d4"];
   const data = [
     { name: "Protein", value: protein },
