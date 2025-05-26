@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import TrainingCard from "../components/TrainingCard";
 import AddTrainingCard from "../components/AddTrainingCard";
-import { supabase } from "../services/supabaseService";
 import NotificationCard from "../components/NotificationCard";
-import MacroBarChart from "../components/MacroBarChart";
+import MacroBarChart from "../components/MacroDonutChart";
 import { useTodayMacros } from "../hooks/useTodayMacros";
 import { useTrainings } from "../hooks/useTrainings";
 
@@ -53,7 +52,7 @@ const Home = () => {
   }, [macrosError]);
 
   const handleCardClick = (training: any) => {
-    console.log("Card clicked:", training);
+    console.log("Card edit clicked:", training);
   };
 
   return (

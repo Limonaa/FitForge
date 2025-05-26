@@ -22,14 +22,19 @@ const MacroBarChart: React.FC<BarChartData> = ({
   ];
 
   return (
-    <div className="flex justify-center items-center p-2 bg-white rounded-2xl shadow-lg">
+    <div className="flex flex-col justify-center items-center p-2 bg-white rounded-2xl shadow-lg">
+      <p className="text-center text-2xl text-amber-500 font-bold -mb-4 tracking-wide">
+        {calories}kcal
+      </p>
       <PieChart width={300} height={300}>
         <Pie
           data={data}
           cx="50%"
           cy="50%"
-          label
+          innerRadius={60}
           outerRadius={100}
+          paddingAngle={4}
+          label
           fill="#8884d8"
           dataKey="value"
         >
@@ -38,7 +43,7 @@ const MacroBarChart: React.FC<BarChartData> = ({
           ))}
         </Pie>
         <Tooltip />
-        <Legend />
+        <Legend verticalAlign="bottom" height={36} />
       </PieChart>
     </div>
   );
