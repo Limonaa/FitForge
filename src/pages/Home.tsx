@@ -5,61 +5,52 @@ import { supabase } from "../services/supabaseService";
 import NotificationCard from "../components/NotificationCard";
 import MacroBarChart from "../components/MacroBarChart";
 import { useTodayMacros } from "../hooks/useTodayMacros";
+import { useTrainings } from "../hooks/useTrainings";
 
 const Home = () => {
-  type Training = {
-    title: string;
-    nextTraining: string;
-    lastDone: string;
-  };
+  // Trainings
+  const trainingsWithState = useTrainings();
+  const trainings = trainingsWithState.map(
+    ({ loading, error, ...rest }) => rest
+  );
+  const trainingsLoading = trainingsWithState[0]?.loading ?? false;
+  const trainingsError = trainingsWithState[0]?.error ?? null;
 
-  const [trainings, setTrainings] = useState<Training[]>([]);
+  // Macros
+  const {
+    calories,
+    protein,
+    carbs,
+    fats,
+    loading: macrosLoading,
+    error: macrosError,
+  } = useTodayMacros();
+
+  // Notification
   const [notification, setNotification] = useState<{
     message: string;
     type: "success" | "error" | "info";
   } | null>(null);
 
-  const { calories, protein, carbs, fats, loading, error } = useTodayMacros();
-
+  // Trainings error handling
   useEffect(() => {
-    if (error) {
+    if (trainingsError) {
       setNotification({
-        message: "Error fetching today's macros: " + error.message,
+        message: "Error fetching trainings: " + trainingsError.message,
         type: "error",
       });
     }
-  }, [error]);
+  }, [trainingsError]);
 
-  const fetchTrainings = async () => {
-    const { data, error } = await supabase
-      .from("trainings")
-      .select("title, next_date, last_date")
-      .order("next_date", { ascending: true })
-      .limit(3);
-    if (error) {
+  // Macros error handling
+  useEffect(() => {
+    if (macrosError) {
       setNotification({
-        message: "Error fetching trainings: " + error.message,
+        message: "Error loading statistics: " + macrosError.message,
         type: "error",
       });
-      return;
-    } else {
-      setTrainings(
-        data.map((training: any) => ({
-          title: training.title,
-          nextTraining: training.next_date
-            ? new Date(training.next_date).toLocaleDateString()
-            : "Not scheduled",
-          lastDone: training.last_date
-            ? new Date(training.last_date).toLocaleDateString()
-            : "Never done",
-        }))
-      );
     }
-  };
-
-  useEffect(() => {
-    fetchTrainings();
-  }, []);
+  }, [macrosError]);
 
   const handleCardClick = (training: any) => {
     console.log("Card clicked:", training);
@@ -74,32 +65,36 @@ const Home = () => {
           onClose={() => setNotification(null)}
         />
       )}
-      {trainings.length === 0 && (
-        <div className="flex justify-center items-center h-screen">
-          <p className="text-2xl font-bold">No trainings available</p>
-        </div>
-      )}
       <div className="flex flex-col items-start justify-center">
         <p className="text-3xl font-bold tracking-wide w-full text-center mb-2">
           UPCOMING TRAINING
         </p>
-        <div className="flex flex-wrap gap-8 m-2">
-          {trainings.map((training, index) => (
-            <TrainingCard
-              key={index}
-              title={training.title}
-              nextTraining={training.nextTraining}
-              lastDone={training.lastDone}
-              onClick={() => handleCardClick(training)}
-            />
-          ))}
-          {trainings.length < 3 && <AddTrainingCard />}
-        </div>
+        {trainingsLoading ? (
+          <p className="text-text-xl font-bold tracking-wide w-full text-center mt-6">
+            Loading trainings...
+          </p>
+        ) : (
+          <div className="flex flex-wrap gap-8 m-2">
+            {trainings.map((training, index) => (
+              <TrainingCard
+                key={index}
+                title={training.title}
+                nextTraining={training.nextTraining}
+                lastDone={training.lastDone}
+                onClick={() => handleCardClick(training)}
+              />
+            ))}
+            {trainings.length < 3 && <AddTrainingCard />}
+          </div>
+        )}
+
         <p className="text-3xl font-bold tracking-wide w-full text-center mt-6">
           STATISTICS
         </p>
-        {loading ? (
-          <p className="text-center">Loading statistics...</p>
+        {macrosLoading ? (
+          <p className="text-text-xl font-bold tracking-wide w-full text-center mt-6">
+            Loading macros...
+          </p>
         ) : (
           <MacroBarChart
             calories={calories}
