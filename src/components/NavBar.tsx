@@ -45,7 +45,7 @@ const Navbar = () => {
                   : "text-white hover:text-gray-200 transition"
               }
             >
-              Calory
+              Calories
             </NavLink>
 
             <NavLink
