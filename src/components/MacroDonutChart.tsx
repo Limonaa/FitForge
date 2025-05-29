@@ -1,14 +1,14 @@
 import React from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 
-interface BarChartData {
+interface MacroChartData {
   calories: number;
   protein: number;
   carbs: number;
   fats: number;
 }
 
-const MacroBarChart: React.FC<BarChartData> = ({
+const MacroBarChart: React.FC<MacroChartData> = ({
   calories,
   protein,
   carbs,

@@ -24,8 +24,8 @@ const MacroHistoryChart: React.FC = () => {
   const [selected, setSelected] = useState<OptionType>("calories");
   const { data, loading, error } = useMacroHistory(7);
 
-  if (loading) return <p>Ładowanie danych...</p>;
-  if (error) return <p>Błąd: {error.message}</p>;
+  if (loading) return <p>Loading data...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div className="flex flex-col justify-center items-center p-2 bg-white rounded-2xl shadow-lg">
@@ -49,7 +49,10 @@ const MacroHistoryChart: React.FC = () => {
       </div>
       <ResponsiveContainer width="100%" height={250} className="px-2">
         <LineChart data={data}>
-          <XAxis dataKey="date" />
+          <XAxis
+            dataKey="date"
+            tickFormatter={(date) => new Date(date).toLocaleDateString()}
+          />
           <YAxis />
           <Tooltip />
           <Line

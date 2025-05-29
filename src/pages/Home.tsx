@@ -1,4 +1,4 @@
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect } from "react";
 import TrainingCard from "../components/TrainingCard";
 import AddTrainingCard from "../components/AddTrainingCard";
 import NotificationCard from "../components/NotificationCard";
@@ -9,6 +9,12 @@ import DailyTip from "../components/DailyTip";
 import { useTodayMacros } from "../hooks/useTodayMacros";
 import { useTrainings } from "../hooks/useTrainings";
 import { useUserSettings } from "../hooks/useUserSettings";
+
+interface Training {
+  title: string;
+  nextTraining: string;
+  lastDone: string;
+}
 
 const Home = () => {
   // Trainings
@@ -71,8 +77,8 @@ const Home = () => {
     }
   }, [settingsError]);
 
-  const handleCardClick = (training: any) => {
-    console.log("Card edit clicked:", training);
+  const handleCardClick = (training: Training) => {
+    // TODO
   };
 
   return (
@@ -89,7 +95,7 @@ const Home = () => {
           UPCOMING TRAINING
         </p>
         {trainingsLoading ? (
-          <p className="text-text-xl font-bold tracking-wide w-full text-center mt-6">
+          <p className="text-xl font-bold tracking-wide w-full text-center mt-6">
             Loading trainings...
           </p>
         ) : (
@@ -104,6 +110,7 @@ const Home = () => {
               />
             ))}
             {trainings.length < 3 && <AddTrainingCard />}
+            {/* TODO resposnible */}
           </div>
         )}
 
@@ -112,7 +119,7 @@ const Home = () => {
         </p>
         <div className="flex flex-row items-center justify-center w-full mt-4 mb-6 gap-4">
           {macrosLoading ? (
-            <p className="text-text-xl font-bold tracking-wide w-full text-center mt-6">
+            <p className="text-xl font-bold tracking-wide w-full text-center mt-6">
               Loading macros...
             </p>
           ) : (
@@ -124,7 +131,7 @@ const Home = () => {
             />
           )}
           {settingsLoading ? (
-            <p className="text-text-xl font-bold tracking-wide w-full text-center mt-6">
+            <p className="text-xl font-bold tracking-wide w-full text-center mt-6">
               Loading calories...
             </p>
           ) : (

@@ -2,6 +2,11 @@ import React from "react";
 import { NavLink, Link } from "react-router-dom";
 
 const Navbar = () => {
+  const linkClass = ({ isActive }: { isActive: boolean }) =>
+    isActive
+      ? "text-white font-semibold border-b-2 border-gray-300 pb-1 transition"
+      : "text-white hover:text-gray-200 transition";
+
   return (
     <nav className="bg-indigo-600 shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -16,57 +21,19 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex space-x-6">
-            <NavLink
-              to="/home"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-white font-semibold border-b-2 border-gray-300 pb-1 transition"
-                  : "text-white hover:text-gray-200 transition"
-              }
-            >
+            <NavLink to="/home" className={linkClass}>
               Home
             </NavLink>
-            <NavLink
-              to="/training"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-white font-semibold border-b-2 border-gray-300 pb-1 transition"
-                  : "text-white hover:text-gray-200 transition"
-              }
-            >
+            <NavLink to="/training" className={linkClass}>
               Training
             </NavLink>
-
-            <NavLink
-              to="/training"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-white font-semibold border-b-2 border-gray-300 pb-1 transition"
-                  : "text-white hover:text-gray-200 transition"
-              }
-            >
+            <NavLink to="/calories" className={linkClass}>
               Calories
             </NavLink>
-
-            <NavLink
-              to="/training"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-white font-semibold border-b-2 border-gray-300 pb-1 transition"
-                  : "text-white hover:text-gray-200 transition"
-              }
-            >
+            <NavLink to="/history" className={linkClass}>
               History
             </NavLink>
-
-            <NavLink
-              to="/training"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-white font-semibold border-b-2 border-gray-300 pb-1 transition"
-                  : "text-white hover:text-gray-200 transition"
-              }
-            >
+            <NavLink to="/account" className={linkClass}>
               Account
             </NavLink>
           </div>

@@ -80,7 +80,6 @@ export function useTodayMacros(): UseTodayMacrosResult {
           });
         }
       } catch (err: any) {
-        console.error("useTodayMacros error:", err);
         setError(err);
       } finally {
         setLoading(false);

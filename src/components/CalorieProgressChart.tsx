@@ -6,25 +6,26 @@ interface CalorieProgressChartProps {
   goal: number;
 }
 
+const getFillColor = (value: number, raw: number): string => {
+  if (value >= 110) return "#ef4444";
+  if (raw < 50) return "#fa7171";
+  if (raw < 90) return "#ffbf00";
+  return "#4ade80";
+};
+
 const CalorieProgressChart: React.FC<CalorieProgressChartProps> = ({
   calories,
   goal,
 }) => {
-  const rawPercentage = (calories / goal) * 100;
+  const rawPercentage = goal > 0 ? (calories / goal) * 100 : 0;
   const percentage = Math.min(rawPercentage, 100);
-  const overLimit = calories >= goal * 1.1;
+  const fillColor = getFillColor(percentage, rawPercentage);
 
   const data = [
     {
       name: "Postęp",
       value: percentage,
-      fill: overLimit
-        ? "#ef4444"
-        : rawPercentage < 50
-        ? "#fa7171"
-        : rawPercentage < 90
-        ? "#ffbf00"
-        : "#4ade80",
+      fill: fillColor,
     },
   ];
 

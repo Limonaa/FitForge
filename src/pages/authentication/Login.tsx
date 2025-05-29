@@ -9,6 +9,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [notification, setNotification] = useState<{
     message: string;
     type: "success" | "error" | "info";
@@ -23,6 +24,7 @@ const Login = () => {
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
+    setIsSubmitting(true);
 
     const { data, error } = await authService.auth.signInWithPassword({
       email: email,
@@ -33,14 +35,17 @@ const Login = () => {
         message: "Error: " + error.message,
         type: "error",
       });
+      setIsSubmitting(false);
       return;
     }
 
     if (data) {
+      setEmail("");
+      setPassword("");
       navigate("/home");
     }
-    setEmail("");
-    setPassword("");
+
+    setIsSubmitting(false);
   };
 
   return (
@@ -95,13 +100,18 @@ const Login = () => {
             </div>
             <button
               type="submit"
-              className="w-full bg-indigo-600 text-white py-2 rounded-xl font-semibold hover:bg-indigo-700 transition"
+              disabled={isSubmitting}
+              className={`w-full py-2 rounded-xl font-semibold transition ${
+                isSubmitting
+                  ? "bg-indigo-400 cursor-not-allowed"
+                  : "bg-indigo-600 hover:bg-indigo-700 text-white"
+              }`}
             >
-              Log in
+              {isSubmitting ? "Logging in..." : "Log in"}
             </button>
           </form>
           <p className="text-sm text-center text-gray-500 mt-4">
-            Dont have an account yet?{" "}
+            Don't have an account yet?{" "}
             <Link to="/register" className="text-indigo-600 hover:underline">
               Create one
             </Link>

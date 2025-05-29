@@ -8,6 +8,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [notification, setNotification] = useState<{
     message: string;
     type: "success" | "error" | "info";
@@ -36,13 +37,17 @@ const Register = () => {
 
   const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault();
+    setIsSubmitting(true);
 
     const validation = validatePassword(password);
     const isValid = Object.values(validation).every(Boolean);
     if (!isValid) {
-      alert(
-        "Password must be at least 8 characters long, contain an uppercase letter, a number, and a special character!"
-      );
+      setNotification({
+        message:
+          "Password must be at least 8 characters long, contain an uppercase letter, a number, and a special character!",
+        type: "error",
+      });
+      setIsSubmitting(false);
       return;
     }
 
@@ -52,6 +57,7 @@ const Register = () => {
     });
     if (error) {
       setNotification({ message: "Error: " + error.message, type: "error" });
+      setIsSubmitting(false);
       return;
     }
     if (data) {
@@ -60,10 +66,11 @@ const Register = () => {
         type: "success",
         // TODO: VERIFY EMAIL
       });
+      setEmail("");
+      setPassword("");
+      setIsSubmitting(false);
     }
-
-    setEmail("");
-    setPassword("");
+    setIsSubmitting(false);
   };
 
   const passwordValidation = validatePassword(password);
