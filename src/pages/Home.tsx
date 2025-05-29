@@ -5,6 +5,7 @@ import NotificationCard from "../components/NotificationCard";
 import MacroBarChart from "../components/MacroDonutChart";
 import CalorieProgressChart from "../components/CalorieProgressChart";
 import MacroHistoryChart from "../components/MacroHistoryChart";
+import DailyTip from "../components/DailyTip";
 import { useTodayMacros } from "../hooks/useTodayMacros";
 import { useTrainings } from "../hooks/useTrainings";
 import { useUserSettings } from "../hooks/useUserSettings";
