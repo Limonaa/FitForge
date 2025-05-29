@@ -3,8 +3,10 @@ import TrainingCard from "../components/TrainingCard";
 import AddTrainingCard from "../components/AddTrainingCard";
 import NotificationCard from "../components/NotificationCard";
 import MacroBarChart from "../components/MacroDonutChart";
+import CalorieProgressChart from "../components/CalorieProgressChart";
 import { useTodayMacros } from "../hooks/useTodayMacros";
 import { useTrainings } from "../hooks/useTrainings";
+import { useUserSettings } from "../hooks/useUserSettings";
 
 const Home = () => {
   // Trainings
@@ -24,6 +26,12 @@ const Home = () => {
     loading: macrosLoading,
     error: macrosError,
   } = useTodayMacros();
+
+  const {
+    daily_calorie_goal,
+    loading: settingsLoading,
+    error: settingsError,
+  } = useUserSettings();
 
   // Notification
   const [notification, setNotification] = useState<{
@@ -102,6 +110,13 @@ const Home = () => {
               carbs={carbs}
               fats={fats}
             />
+          )}
+          {settingsLoading ? (
+            <p className="text-text-xl font-bold tracking-wide w-full text-center mt-6">
+              Loading calories...
+            </p>
+          ) : (
+            <CalorieProgressChart calories={1000} goal={daily_calorie_goal} />
           )}
         </div>
       </div>
