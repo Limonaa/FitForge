@@ -23,10 +23,10 @@ const MacroBarChart: React.FC<BarChartData> = ({
 
   return (
     <div className="flex flex-col justify-center items-center p-2 bg-white rounded-2xl shadow-lg">
-      <p className="text-center text-xl text-amber-500 font-bold -mb-4 tracking-wide">
+      <p className="text-center text-xl font-bold -mb-4 tracking-wide">
         {calories} kcal
       </p>
-      <PieChart width={300} height={300}>
+      <PieChart width={300} height={300} className="mb-4">
         <Pie
           data={data}
           cx="50%"

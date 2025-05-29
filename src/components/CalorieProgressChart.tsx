@@ -21,22 +21,22 @@ const CalorieProgressChart: React.FC<CalorieProgressChartProps> = ({
       fill: overLimit
         ? "#ef4444"
         : rawPercentage < 50
-        ? "#f87171"
+        ? "#fa7171"
         : rawPercentage < 90
-        ? "#facc15"
+        ? "#ffbf00"
         : "#4ade80",
     },
   ];
 
   return (
     <div className="flex flex-col justify-center items-center p-2 bg-white rounded-2xl shadow-lg">
-      <p className="text-center text-xl text-amber-500 font-bold -mb-4 tracking-wide">
+      <p className="text-center text-xl font-bold -mb-4 tracking-wide">
         Daily calories
       </p>
       <RadialBarChart
-        width={300}
+        width={220}
         height={300}
-        cx={150}
+        cx={110}
         cy={150}
         innerRadius={80}
         outerRadius={120}
@@ -44,6 +44,7 @@ const CalorieProgressChart: React.FC<CalorieProgressChartProps> = ({
         data={data}
         startAngle={180}
         endAngle={0}
+        className="mb-4"
       >
         <PolarAngleAxis type="number" domain={[0, 100]} tick={false} />
         <RadialBar background dataKey="value" />

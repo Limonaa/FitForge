@@ -4,6 +4,7 @@ import AddTrainingCard from "../components/AddTrainingCard";
 import NotificationCard from "../components/NotificationCard";
 import MacroBarChart from "../components/MacroDonutChart";
 import CalorieProgressChart from "../components/CalorieProgressChart";
+import MacroHistoryChart from "../components/MacroHistoryChart";
 import { useTodayMacros } from "../hooks/useTodayMacros";
 import { useTrainings } from "../hooks/useTrainings";
 import { useUserSettings } from "../hooks/useUserSettings";
@@ -59,6 +60,16 @@ const Home = () => {
     }
   }, [macrosError]);
 
+  // Settings error handling
+  useEffect(() => {
+    if (settingsError) {
+      setNotification({
+        message: "Error loading user settings: " + settingsError.message,
+        type: "error",
+      });
+    }
+  }, [settingsError]);
+
   const handleCardClick = (training: any) => {
     console.log("Card edit clicked:", training);
   };
@@ -98,7 +109,7 @@ const Home = () => {
         <p className="text-3xl font-bold tracking-wide w-full text-center mt-6">
           STATISTICS
         </p>
-        <div className="flex flex-row items-center justify-center w-full mt-4 mb-6">
+        <div className="flex flex-row items-center justify-center w-full mt-4 mb-6 gap-4">
           {macrosLoading ? (
             <p className="text-text-xl font-bold tracking-wide w-full text-center mt-6">
               Loading macros...
@@ -116,8 +127,12 @@ const Home = () => {
               Loading calories...
             </p>
           ) : (
-            <CalorieProgressChart calories={1000} goal={daily_calorie_goal} />
+            <CalorieProgressChart
+              calories={calories}
+              goal={daily_calorie_goal}
+            />
           )}
+          <MacroHistoryChart />
         </div>
       </div>
     </>
