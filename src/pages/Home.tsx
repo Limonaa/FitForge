@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import TrainingCard from "../components/TrainingCard";
 import AddTrainingCard from "../components/AddTrainingCard";
 import NotificationCard from "../components/NotificationCard";
@@ -90,18 +90,20 @@ const Home = () => {
         <p className="text-3xl font-bold tracking-wide w-full text-center mt-6">
           STATISTICS
         </p>
-        {macrosLoading ? (
-          <p className="text-text-xl font-bold tracking-wide w-full text-center mt-6">
-            Loading macros...
-          </p>
-        ) : (
-          <MacroBarChart
-            calories={calories}
-            protein={protein}
-            carbs={carbs}
-            fats={fats}
-          />
-        )}
+        <div className="flex flex-row items-center justify-center w-full mt-4 mb-6">
+          {macrosLoading ? (
+            <p className="text-text-xl font-bold tracking-wide w-full text-center mt-6">
+              Loading macros...
+            </p>
+          ) : (
+            <MacroBarChart
+              calories={calories}
+              protein={protein}
+              carbs={carbs}
+              fats={fats}
+            />
+          )}
+        </div>
       </div>
     </>
   );
