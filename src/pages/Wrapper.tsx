@@ -7,7 +7,7 @@ function Wrapper({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const getSesstion = async () => {
+    const getSession = async () => {
       const {
         data: { session },
       } = await supabase.auth.getSession();
@@ -15,13 +15,23 @@ function Wrapper({ children }: { children: React.ReactNode }) {
       setAuthenticated(!!session);
       setLoading(false);
     };
-    getSesstion();
+    getSession();
+
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setAuthenticated(!!session);
+      }
+    );
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
   }, []);
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        Loading...
+        Checking authentication...
       </div>
     );
   } else if (authenticated) {
