@@ -40,45 +40,28 @@ export function useTodayMacros(): UseTodayMacrosResult {
 
         const today = new Date().toISOString().slice(0, 10);
 
-        const { data, error: fetchError } = await supabase
+        // Używamy UPSERT zamiast SELECT + INSERT
+        const { data: upserted, error: upsertError } = await supabase
           .from("calorie_logs")
-          .select("calories, protein, carbs, fats")
-          .eq("user_id", user.id)
-          .eq("date", today)
-          .maybeSingle();
-
-        if (fetchError) throw fetchError;
-
-        if (data) {
-          setMacros({
-            calories: data.calories,
-            protein: data.protein,
-            carbs: data.carbs,
-            fats: data.fats,
-          });
-        } else {
-          const { data: insertData, error: insertError } = await supabase
-            .from("calorie_logs")
-            .insert({
+          .upsert(
+            {
               user_id: user.id,
               date: today,
               calories: 0,
               protein: 0,
               carbs: 0,
               fats: 0,
-            })
-            .select("calories, protein, carbs, fats")
-            .single();
+            },
+            {
+              onConflict: "user_id,date", // klucz unikalny
+              ignoreDuplicates: true,
+            }
+          )
+          .select("calories, protein, carbs, fats")
+          .maybeSingle();
 
-          if (insertError) throw insertError;
-
-          setMacros({
-            calories: insertData.calories,
-            protein: insertData.protein,
-            carbs: insertData.carbs,
-            fats: insertData.fats,
-          });
-        }
+        if (upsertError) throw upsertError;
+        if (upserted) setMacros(upserted);
       } catch (err: any) {
         setError(err);
       } finally {
