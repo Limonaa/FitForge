@@ -53,10 +53,16 @@ const CaloriesPage: React.FC = () => {
       </div>
       <div className="flex flex-row w-full justify-center items-center gap-6 px-6">
         <MacroProgress
+          label="Calories"
+          current={calories}
+          target={daily_calorie_goal}
+          color="blue-500"
+        />
+        <MacroProgress
           label="Proteins"
           current={protein}
           target={daily_protein}
-          color="red-500"
+          color="blue-500"
         />
         <MacroProgress
           label="Carbs"
@@ -68,7 +74,7 @@ const CaloriesPage: React.FC = () => {
           label="Fats"
           current={fats}
           target={daily_fats}
-          color="amber-500"
+          color="blue-500"
         />
       </div>
     </>
