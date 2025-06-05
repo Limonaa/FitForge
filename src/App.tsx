@@ -5,6 +5,7 @@ import Login from "./pages/authentication/Login";
 import Home from "./pages/Home";
 import Wrapper from "./pages/Wrapper";
 import Navbar from "./components/NavBar";
+import CaloriesPage from "./pages/CaloriesPage";
 import { Outlet } from "react-router-dom";
 
 const Layout = () => {
@@ -27,6 +28,7 @@ const App = () => {
         <Route element={<Layout />}>
           <Route path="/home" element={<Home />} />
           <Route index element={<Home />} />
+          <Route path="/calories" element={<CaloriesPage />} />
         </Route>
 
         <Route path="/register" element={<Register />} />
