@@ -8,47 +8,49 @@ interface UseFoodEntriesResult {
   error: Error | null;
 }
 
-export function useFoodEntries(): UseFoodEntriesResult {
+export function useFoodEntries(): UseFoodEntriesResult & {
+  refetch: () => void;
+} {
   const [entries, setEntries] = useState<FoodEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchEntries = async () => {
-      setLoading(true);
-      setError(null);
+  const fetchEntries = async () => {
+    setLoading(true);
+    setError(null);
 
-      try {
-        const {
-          data: { user },
-          error: userError,
-        } = await supabase.auth.getUser();
+    try {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
 
-        if (!user || userError) {
-          throw new Error(userError?.message || "User not authenticated");
-        }
-
-        const today = new Date().toISOString().slice(0, 10);
-
-        const { data, error: fetchError } = await supabase
-          .from("food_entries")
-          .select("*")
-          .eq("user_id", user.id)
-          .eq("date", today)
-          .order("date", { ascending: true });
-
-        if (fetchError) throw fetchError;
-
-        setEntries(data as FoodEntry[]);
-      } catch (err: any) {
-        setError(err);
-      } finally {
-        setLoading(false);
+      if (!user || userError) {
+        throw new Error(userError?.message || "User not authenticated");
       }
-    };
 
+      const today = new Date().toISOString().slice(0, 10);
+
+      const { data, error: fetchError } = await supabase
+        .from("food_entries")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("date", today)
+        .order("date", { ascending: true });
+
+      if (fetchError) throw fetchError;
+
+      setEntries(data as FoodEntry[]);
+    } catch (err: any) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchEntries();
   }, []);
 
-  return { entries, loading, error };
+  return { entries, loading, error, refetch: fetchEntries };
 }

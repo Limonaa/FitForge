@@ -3,7 +3,7 @@ import { useFoodEntries } from "../hooks/useFoodEntries";
 import FoodColumn from "../components/FoodColumn";
 
 const CaloriesPage: React.FC = () => {
-  const { entries, loading, error } = useFoodEntries();
+  const { entries, loading, error, refetch } = useFoodEntries();
   const groupByMealType = (mealType: string) =>
     entries.filter((e) => e.meal_type === mealType);
 
@@ -12,10 +12,30 @@ const CaloriesPage: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
-      <FoodColumn title="Breakfast" entries={groupByMealType("breakfast")} />
-      <FoodColumn title="Lunch" entries={groupByMealType("lunch")} />
-      <FoodColumn title="Dinner" entries={groupByMealType("dinner")} />
-      <FoodColumn title="Snack" entries={groupByMealType("snack")} />
+      <FoodColumn
+        title="Breakfast"
+        entries={groupByMealType("breakfast")}
+        mealType="breakfast"
+        onAddSuccess={refetch}
+      />
+      <FoodColumn
+        title="Lunch"
+        entries={groupByMealType("lunch")}
+        mealType="lunch"
+        onAddSuccess={refetch}
+      />
+      <FoodColumn
+        title="Dinner"
+        entries={groupByMealType("dinner")}
+        mealType="dinner"
+        onAddSuccess={refetch}
+      />
+      <FoodColumn
+        title="Snack"
+        entries={groupByMealType("snack")}
+        mealType="snack"
+        onAddSuccess={refetch}
+      />
     </div>
   );
 };
