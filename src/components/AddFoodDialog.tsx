@@ -65,14 +65,55 @@ const AddFoodDialog: React.FC<Props> = ({
       fats,
     });
 
-    setLoading(false);
     if (error) {
       console.log(error);
+      setLoading(false);
+      return;
     }
-    if (!error) {
-      onSuccess();
-      onClose();
+
+    const { data: existingLog, error: fetchError } = await supabase
+      .from("calorie_logs")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("date", today)
+      .single();
+
+    if (fetchError && fetchError.code !== "PGRST116") {
+      console.error(fetchError);
+      setLoading(false);
+      return;
     }
+
+    if (existingLog) {
+      const { error: updateError } = await supabase
+        .from("calorie_logs")
+        .update({
+          calories: existingLog.calories + calories,
+          protein: existingLog.protein + protein,
+          carbs: existingLog.carbs + carbs,
+          fats: existingLog.fats + fats,
+        })
+        .eq("user_id", user.id)
+        .eq("date", today);
+      if (updateError) console.log(updateError);
+    } else {
+      const { error: insertError } = await supabase
+        .from("calorie_logs")
+        .insert({
+          user_id: user.id,
+          date: today,
+          calories,
+          protein,
+          carbs,
+          fats,
+        });
+
+      if (insertError) console.error(insertError);
+    }
+
+    setLoading(false);
+    onSuccess();
+    onClose();
   };
 
   return (

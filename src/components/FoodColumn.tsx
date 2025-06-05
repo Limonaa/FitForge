@@ -30,7 +30,7 @@ const FoodColumn: React.FC<FoodColumnProps> = ({
           + Add
         </button>
       </div>
-      <ul className="space-y-2">
+      <ul className="space-y-1">
         {entries.map((entry) => (
           <FoodCard key={entry.id} entry={entry} />
         ))}

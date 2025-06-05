@@ -39,29 +39,30 @@ export function useTodayMacros(): UseTodayMacrosResult {
           throw new Error(userError?.message || "Not authenticated");
 
         const today = new Date().toISOString().slice(0, 10);
+        await supabase.from("calorie_logs").upsert(
+          {
+            user_id: user.id,
+            date: today,
+            calories: 0,
+            protein: 0,
+            carbs: 0,
+            fats: 0,
+          },
+          {
+            onConflict: "user_id,date",
+            ignoreDuplicates: true,
+          }
+        );
 
-        // Używamy UPSERT zamiast SELECT + INSERT
-        const { data: upserted, error: upsertError } = await supabase
+        const { data: caloriesLog, error } = await supabase
           .from("calorie_logs")
-          .upsert(
-            {
-              user_id: user.id,
-              date: today,
-              calories: 0,
-              protein: 0,
-              carbs: 0,
-              fats: 0,
-            },
-            {
-              onConflict: "user_id,date", // klucz unikalny
-              ignoreDuplicates: true,
-            }
-          )
           .select("calories, protein, carbs, fats")
+          .eq("user_id", user.id)
+          .eq("date", today)
           .maybeSingle();
 
-        if (upsertError) throw upsertError;
-        if (upserted) setMacros(upserted);
+        if (error) throw error;
+        if (caloriesLog) setMacros(caloriesLog);
       } catch (err: any) {
         setError(err);
       } finally {

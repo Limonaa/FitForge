@@ -3,8 +3,9 @@ import { supabase } from "../services/supabaseService";
 
 interface UserSettings {
   daily_calorie_goal: number;
-  weight: number | null;
-  height: number | null;
+  daily_protein: number;
+  daily_carbs: number;
+  daily_fats: number;
 }
 
 interface UseUserSettingsResult extends UserSettings {
@@ -14,8 +15,9 @@ interface UseUserSettingsResult extends UserSettings {
 
 const defaultSettings: UserSettings = {
   daily_calorie_goal: 2000,
-  weight: null,
-  height: null,
+  daily_protein: 150,
+  daily_carbs: 250,
+  daily_fats: 70,
 };
 
 export function useUserSettings(): UseUserSettingsResult {
@@ -39,7 +41,7 @@ export function useUserSettings(): UseUserSettingsResult {
 
         const { data, error: fetchError } = await supabase
           .from("user_settings")
-          .select("daily_calorie_goal, weight, height")
+          .select("daily_calorie_goal, daily_protein, daily_carbs, daily_fats")
           .eq("user_id", user.id)
           .single();
         if (fetchError) {
