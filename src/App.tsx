@@ -7,6 +7,7 @@ import Wrapper from "./pages/Wrapper";
 import Navbar from "./components/NavBar";
 import CaloriesPage from "./pages/CaloriesPage";
 import { Outlet } from "react-router-dom";
+import AccountPage from "./pages/AccountPage";
 
 const Layout = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="/home" element={<Home />} />
           <Route index element={<Home />} />
           <Route path="/calories" element={<CaloriesPage />} />
+          <Route path="/account" element={<AccountPage />} />
         </Route>
 
         <Route path="/register" element={<Register />} />

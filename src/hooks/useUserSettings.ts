@@ -41,7 +41,9 @@ export function useUserSettings(): UseUserSettingsResult {
 
         const { data, error: fetchError } = await supabase
           .from("user_settings")
-          .select("daily_calorie_goal, daily_protein, daily_carbs, daily_fats")
+          .select(
+            "daily_calorie_goal, daily_protein, daily_carbs, daily_fats, weight, height"
+          )
           .eq("user_id", user.id)
           .single();
         if (fetchError) {
