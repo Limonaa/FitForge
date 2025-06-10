@@ -2,16 +2,15 @@ import React from "react";
 import { Pencil, CalendarCheck, ClipboardCheck } from "lucide-react";
 
 interface TrainingCardProps {
+  id: number;
   title: string;
   nextTraining: string;
-  lastDone: string;
   onClick?: () => void;
 }
 
 const TrainingCard: React.FC<TrainingCardProps> = ({
   title,
   nextTraining,
-  lastDone,
   onClick,
 }) => {
   return (
@@ -36,10 +35,6 @@ const TrainingCard: React.FC<TrainingCardProps> = ({
         <div className="flex flex-row items-center justify-start w-full mt-4">
           <CalendarCheck className="text-blue-500 mr-2" />
           <p className="first-letter:capitalize">Planned for: {nextTraining}</p>
-        </div>
-        <div className="flex flex-row items-center justify-start w-full mt-4">
-          <ClipboardCheck className="text-blue-500 mr-2" />
-          <p className="first-letter:capitalize">Last done: {lastDone}</p>
         </div>
       </div>
     </div>

@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { supabase } from "../services/supabaseService";
 
 interface Training {
+  id: number;
   title: string;
   nextTraining: string;
-  lastDone: string;
 }
 
 interface UseTrainingsResult extends Training {
@@ -12,14 +12,8 @@ interface UseTrainingsResult extends Training {
   error: Error | null;
 }
 
-const defaultTraining: Training = {
-  title: "",
-  nextTraining: "Not scheduled",
-  lastDone: "Never done",
-};
-
 export function useTrainings(): UseTrainingsResult[] {
-  const [trainings, setTrainings] = useState<Training[]>([defaultTraining]);
+  const [trainings, setTrainings] = useState<Training[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -37,21 +31,18 @@ export function useTrainings(): UseTrainingsResult[] {
           throw new Error(userError?.message || "Not authenticated");
 
         const { data, error: fetchError } = await supabase
-          .from("trainings")
-          .select("title, next_date, last_date")
-          .order("next_date", { ascending: true })
+          .from("upcomming_trainings")
+          .select("*")
           .limit(3);
         if (fetchError) throw fetchError;
         if (data) {
           setTrainings(
             data.map((trainings: any) => ({
+              id: trainings.id,
               title: trainings.title,
-              nextTraining: trainings.next_date
-                ? new Date(trainings.next_date).toLocaleDateString()
+              nextTraining: trainings.next_workout
+                ? new Date(trainings.next_workout).toLocaleDateString()
                 : "Not scheduled",
-              lastDone: trainings.last_date
-                ? new Date(trainings.last_date).toLocaleDateString()
-                : "Never done",
             }))
           );
         }

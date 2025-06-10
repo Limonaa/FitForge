@@ -31,8 +31,8 @@ export function useMacroHistory(days: number = 3) {
         const fromDateString = fromDate.toISOString().slice(0, 10);
 
         const { data, error: fetchError } = await supabase
-          .from("calorie_logs")
-          .select("date, calories, protein, carbs, fats")
+          .from("macro_history_view")
+          .select("*")
           .eq("user_id", user.id)
           .gte("date", fromDateString)
           .order("date", { ascending: true });

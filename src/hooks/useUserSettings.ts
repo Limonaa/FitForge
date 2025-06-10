@@ -2,10 +2,13 @@ import { useState, useEffect } from "react";
 import { supabase } from "../services/supabaseService";
 
 interface UserSettings {
-  daily_calorie_goal: number;
-  daily_protein: number;
-  daily_carbs: number;
-  daily_fats: number;
+  weight: number;
+  height: number;
+  gender: string;
+  caloriesGoal: number;
+  proteinGoal: number;
+  carbsGoal: number;
+  fatsGoal: number;
 }
 
 interface UseUserSettingsResult extends UserSettings {
@@ -13,15 +16,16 @@ interface UseUserSettingsResult extends UserSettings {
   error: Error | null;
 }
 
-const defaultSettings: UserSettings = {
-  daily_calorie_goal: 2000,
-  daily_protein: 150,
-  daily_carbs: 250,
-  daily_fats: 70,
-};
-
 export function useUserSettings(): UseUserSettingsResult {
-  const [settings, setSettings] = useState<UserSettings>(defaultSettings);
+  const [settings, setSettings] = useState<UserSettings>({
+    weight: 70,
+    height: 175,
+    gender: "male",
+    caloriesGoal: 2500,
+    proteinGoal: 120,
+    carbsGoal: 480,
+    fatsGoal: 75,
+  });
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -40,16 +44,23 @@ export function useUserSettings(): UseUserSettingsResult {
         }
 
         const { data, error: fetchError } = await supabase
-          .from("user_settings")
-          .select(
-            "daily_calorie_goal, daily_protein, daily_carbs, daily_fats, weight, height"
-          )
+          .from("user_profile_view")
+          .select("*")
           .eq("user_id", user.id)
           .single();
         if (fetchError) {
           throw fetchError;
         }
-        if (data) setSettings(data);
+        if (data)
+          setSettings({
+            weight: data.weight,
+            height: data.height,
+            gender: data.gender,
+            caloriesGoal: data.calories_goal,
+            proteinGoal: data.protein_goal,
+            carbsGoal: data.carbs_goal,
+            fatsGoal: data.fats_goal,
+          });
       } catch (err: any) {
         setError(err);
       } finally {

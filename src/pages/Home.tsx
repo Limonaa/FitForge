@@ -5,15 +5,14 @@ import NotificationCard from "../components/NotificationCard";
 import MacroBarChart from "../components/MacroDonutChart";
 import CalorieProgressChart from "../components/CalorieProgressChart";
 import MacroHistoryChart from "../components/MacroHistoryChart";
-import DailyTip from "../components/DailyTip";
 import { useTodayMacros } from "../hooks/useTodayMacros";
 import { useTrainings } from "../hooks/useTrainings";
 import { useUserSettings } from "../hooks/useUserSettings";
 
 interface Training {
+  id: number;
   title: string;
   nextTraining: string;
-  lastDone: string;
 }
 
 const Home = () => {
@@ -27,16 +26,16 @@ const Home = () => {
 
   // Macros
   const {
-    calories,
-    protein,
-    carbs,
-    fats,
+    totalCalories,
+    totalProtein,
+    totalCarbs,
+    totalFats,
     loading: macrosLoading,
     error: macrosError,
   } = useTodayMacros();
 
   const {
-    daily_calorie_goal,
+    caloriesGoal,
     loading: settingsLoading,
     error: settingsError,
   } = useUserSettings();
@@ -102,10 +101,10 @@ const Home = () => {
           <div className="flex flex-wrap gap-8 m-2">
             {trainings.map((training, index) => (
               <TrainingCard
+                id={training.id}
                 key={index}
                 title={training.title}
                 nextTraining={training.nextTraining}
-                lastDone={training.lastDone}
                 onClick={() => handleCardClick(training)}
               />
             ))}
@@ -124,10 +123,10 @@ const Home = () => {
             </p>
           ) : (
             <MacroBarChart
-              calories={calories}
-              protein={protein}
-              carbs={carbs}
-              fats={fats}
+              calories={totalCalories}
+              protein={totalProtein}
+              carbs={totalCarbs}
+              fats={totalFats}
             />
           )}
           {settingsLoading ? (
@@ -136,8 +135,8 @@ const Home = () => {
             </p>
           ) : (
             <CalorieProgressChart
-              calories={calories}
-              goal={daily_calorie_goal}
+              calories={totalCalories}
+              goal={caloriesGoal}
             />
           )}
           <MacroHistoryChart />
