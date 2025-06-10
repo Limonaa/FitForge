@@ -9,6 +9,7 @@ interface UserSettings {
   proteinGoal: number;
   carbsGoal: number;
   fatsGoal: number;
+  name: string;
 }
 
 interface UseUserSettingsResult extends UserSettings {
@@ -25,6 +26,7 @@ export function useUserSettings(): UseUserSettingsResult {
     proteinGoal: 120,
     carbsGoal: 480,
     fatsGoal: 75,
+    name: "error",
   });
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
@@ -60,6 +62,7 @@ export function useUserSettings(): UseUserSettingsResult {
             proteinGoal: data.protein_goal,
             carbsGoal: data.carbs_goal,
             fatsGoal: data.fats_goal,
+            name: data.name,
           });
       } catch (err: any) {
         setError(err);

@@ -10,16 +10,23 @@ const CaloriesPage: React.FC = () => {
   const groupByMealType = (mealType: string) =>
     entries.filter((e) => e.meal_type === mealType);
   const {
-    calories,
-    protein,
-    carbs,
-    fats,
+    totalCalories,
+    totalProtein,
+    totalCarbs,
+    totalFats,
     loading: macrosLoading,
     error: macrosError,
   } = useTodayMacros();
 
-  const { daily_calorie_goal, daily_protein, daily_carbs, daily_fats } =
-    useUserSettings();
+  const {
+    weight,
+    height,
+    gender,
+    caloriesGoal,
+    proteinGoal,
+    carbsGoal,
+    fatsGoal,
+  } = useUserSettings();
   if (loading) return <p>Ładowanie...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
@@ -54,26 +61,26 @@ const CaloriesPage: React.FC = () => {
       <div className="flex flex-row w-full justify-center items-center gap-6 px-6">
         <MacroProgress
           label="Calories"
-          current={calories}
-          target={daily_calorie_goal}
+          current={totalCalories}
+          target={caloriesGoal}
           color="blue-500"
         />
         <MacroProgress
           label="Proteins"
-          current={protein}
-          target={daily_protein}
+          current={totalProtein}
+          target={proteinGoal}
           color="blue-500"
         />
         <MacroProgress
           label="Carbs"
-          current={carbs}
-          target={daily_carbs}
+          current={totalCarbs}
+          target={carbsGoal}
           color="blue-500"
         />
         <MacroProgress
           label="Fats"
-          current={fats}
-          target={daily_fats}
+          current={totalFats}
+          target={fatsGoal}
           color="blue-500"
         />
       </div>
