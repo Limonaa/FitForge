@@ -8,6 +8,7 @@ import Navbar from "./components/NavBar";
 import CaloriesPage from "./pages/CaloriesPage";
 import { Outlet } from "react-router-dom";
 import AccountPage from "./pages/AccountPage";
+import HistoryPage from "./pages/HistoryPage";
 
 const Layout = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
           <Route index element={<Home />} />
           <Route path="/calories" element={<CaloriesPage />} />
           <Route path="/account" element={<AccountPage />} />
+          <Route path="/history" element={<HistoryPage />} />
         </Route>
 
         <Route path="/register" element={<Register />} />
