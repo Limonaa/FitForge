@@ -10,6 +10,9 @@ interface UserSettings {
   carbsGoal: number;
   fatsGoal: number;
   name: string;
+  birthdate: string;
+  activityLevel: string;
+  goalType: string;
 }
 
 interface UseUserSettingsResult extends UserSettings {
@@ -26,10 +29,30 @@ export function useUserSettings(): UseUserSettingsResult {
     proteinGoal: 120,
     carbsGoal: 480,
     fatsGoal: 75,
-    name: "error",
+    name: "",
+    birthdate: "",
+    activityLevel: "",
+    goalType: "",
   });
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
+
+  // Map data from database for UsersSettings' structure
+  function mapDbToUserSettings(data: any): UserSettings {
+    return {
+      weight: data.weight,
+      height: data.height,
+      gender: data.gender,
+      caloriesGoal: data.calories_goal,
+      proteinGoal: data.protein_goal,
+      carbsGoal: data.carbs_goal,
+      fatsGoal: data.fats_goal,
+      name: data.name,
+      birthdate: data.birthdate,
+      activityLevel: data.activity_level,
+      goalType: data.goal_type,
+    };
+  }
 
   useEffect(() => {
     const fetchUserSettings = async () => {
@@ -42,7 +65,7 @@ export function useUserSettings(): UseUserSettingsResult {
           error: userError,
         } = await supabase.auth.getUser();
         if (!user || userError) {
-          throw new Error("Not authenticated");
+          throw new Error("User not authenticated");
         }
 
         const { data, error: fetchError } = await supabase
@@ -53,17 +76,7 @@ export function useUserSettings(): UseUserSettingsResult {
         if (fetchError) {
           throw fetchError;
         }
-        if (data)
-          setSettings({
-            weight: data.weight,
-            height: data.height,
-            gender: data.gender,
-            caloriesGoal: data.calories_goal,
-            proteinGoal: data.protein_goal,
-            carbsGoal: data.carbs_goal,
-            fatsGoal: data.fats_goal,
-            name: data.name,
-          });
+        if (data) setSettings(mapDbToUserSettings(data));
       } catch (err: any) {
         setError(err);
       } finally {
