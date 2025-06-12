@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
-import TrainingCard from "../components/TrainingCard";
-import AddTrainingCard from "../components/AddTrainingCard";
 import NotificationCard from "../components/NotificationCard";
-import MacroBarChart from "../components/MacroDonutChart";
-import CalorieProgressChart from "../components/CalorieProgressChart";
-import MacroHistoryChart from "../components/MacroHistoryChart";
 import { useTodayMacros } from "../hooks/useTodayMacros";
 import { useTrainings } from "../hooks/useTrainings";
 import { useUserSettings } from "../hooks/useUserSettings";
+import { Flame, Beef, Croissant, Hamburger } from "lucide-react";
+import MacroCard from "../components/MacroCard";
+import WeeklyChart from "../components/WeeklyChart";
 
 interface Training {
   id: number;
@@ -34,8 +32,12 @@ const Home = () => {
     error: macrosError,
   } = useTodayMacros();
 
+  // User settings
   const {
     caloriesGoal,
+    proteinGoal,
+    carbsGoal,
+    fatsGoal,
     loading: settingsLoading,
     error: settingsError,
   } = useUserSettings();
@@ -90,57 +92,46 @@ const Home = () => {
         />
       )}
       <div className="flex flex-col items-start justify-center">
-        <p className="text-3xl font-bold tracking-wide w-full text-center mb-2">
-          UPCOMING TRAINING
+        <p className="text-3xl font-bold tracking-wide w-full mb-2">
+          Dashboard
         </p>
-        {trainingsLoading ? (
-          <p className="text-xl font-bold tracking-wide w-full text-center mt-6">
-            Loading trainings...
-          </p>
-        ) : (
-          <div className="flex flex-wrap gap-8 m-2">
-            {trainings.map((training, index) => (
-              <TrainingCard
-                id={training.id}
-                key={index}
-                title={training.title}
-                nextTraining={training.nextTraining}
-                onClick={() => handleCardClick(training)}
-              />
-            ))}
-            {trainings.length < 3 && <AddTrainingCard />}
-            {/* TODO resposnible */}
-          </div>
-        )}
+        <p className="text-sm text-gray-500">
+          Welcome back! Here's your fitness
+        </p>
 
-        <p className="text-3xl font-bold tracking-wide w-full text-center mt-6">
-          STATISTICS
-        </p>
-        <div className="flex flex-row items-center justify-center w-full mt-4 mb-6 gap-4">
-          {macrosLoading ? (
-            <p className="text-xl font-bold tracking-wide w-full text-center mt-6">
-              Loading macros...
-            </p>
-          ) : (
-            <MacroBarChart
-              calories={totalCalories}
-              protein={totalProtein}
-              carbs={totalCarbs}
-              fats={totalFats}
-            />
-          )}
-          {settingsLoading ? (
-            <p className="text-xl font-bold tracking-wide w-full text-center mt-6">
-              Loading calories...
-            </p>
-          ) : (
-            <CalorieProgressChart
-              calories={totalCalories}
-              goal={caloriesGoal}
-            />
-          )}
-          <MacroHistoryChart />
+        {/* Calories and macros cards */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 w-full">
+          <MacroCard
+            title="Calories Today"
+            icon={Flame}
+            current={totalCalories}
+            goal={caloriesGoal}
+            type="calories"
+          />
+          <MacroCard
+            title="Calories Today"
+            icon={Beef}
+            current={totalProtein}
+            goal={proteinGoal}
+            type="protein"
+          />
+          <MacroCard
+            title="Carbs Today"
+            icon={Croissant}
+            current={totalCarbs}
+            goal={carbsGoal}
+            type="carbs"
+          />
+          <MacroCard
+            title="Fats Today"
+            icon={Hamburger}
+            current={totalFats}
+            goal={fatsGoal}
+            type="fats"
+          />
         </div>
+
+        <WeeklyChart />
       </div>
     </>
   );

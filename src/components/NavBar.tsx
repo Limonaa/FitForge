@@ -4,40 +4,36 @@ import { NavLink, Link } from "react-router-dom";
 const Navbar = () => {
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     isActive
-      ? "text-white font-semibold border-b-2 border-gray-300 pb-1 transition"
-      : "text-white hover:text-gray-200 transition";
+      ? "text-white font-semibold bg-indigo-700 rounded-lg px-4 py-2"
+      : "text-white hover:bg-indigo-500 rounded-lg px-4 py-2 transition";
 
   return (
-    <nav className="bg-indigo-600 shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          <div className="flex items-center">
-            <Link
-              to="/home"
-              className="text-white font-semibold pb-1 transition text-2xl"
-            >
-              FitForge
-            </Link>
-          </div>
+    <nav className="bg-indigo-600 h-screen w-64 fixed top-0 left-0 flex flex-col justify-start px-6 py-8 shadow-lg">
+      <div className="mb-10">
+        <Link to="/home" className="text-3xl text-white font-semibold">
+          FitForge
+        </Link>
+        <p className="text-sm text-indigo-200 mt-1">
+          Track your fitness journey
+        </p>
+      </div>
 
-          <div className="hidden md:flex space-x-6">
-            <NavLink to="/home" className={linkClass}>
-              Home
-            </NavLink>
-            <NavLink to="/training" className={linkClass}>
-              Training
-            </NavLink>
-            <NavLink to="/calories" className={linkClass}>
-              Calories
-            </NavLink>
-            <NavLink to="/history" className={linkClass}>
-              History
-            </NavLink>
-            <NavLink to="/account" className={linkClass}>
-              Account
-            </NavLink>
-          </div>
-        </div>
+      <div className="flex flex-col space-y-3">
+        <NavLink to="/home" className={linkClass}>
+          Home
+        </NavLink>
+        <NavLink to="/training" className={linkClass}>
+          Training
+        </NavLink>
+        <NavLink to="/calories" className={linkClass}>
+          Calories
+        </NavLink>
+        <NavLink to="/history" className={linkClass}>
+          History
+        </NavLink>
+        <NavLink to="/account" className={linkClass}>
+          Account
+        </NavLink>
       </div>
     </nav>
   );

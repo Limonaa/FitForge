@@ -15,7 +15,7 @@ const Layout = () => {
     <>
       <Navbar />
       <Wrapper>
-        <main className="py-6 px-4">
+        <main className="ml-64 py-6 px-4">
           <Outlet />
         </main>
       </Wrapper>

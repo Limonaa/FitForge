@@ -9,7 +9,7 @@ interface MacroEntry {
   fats: number;
 }
 
-export function useMacroHistory(days: number = 3) {
+export function useMacroHistory(days: number = 7) {
   const [data, setData] = useState<MacroEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
