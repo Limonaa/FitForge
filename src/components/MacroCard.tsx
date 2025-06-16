@@ -60,7 +60,7 @@ const MacroCard = ({
         </p>
         <div className="w-full h-3 mt-3 bg-white rounded-full overflow-hidden">
           <div
-            className={`${barColorClasses} h-full transition-all duration-300`}
+            className={`${barColorClasses[type]} h-full transition-all duration-300`}
             style={{ width: `${percentage}%` }}
           />
         </div>

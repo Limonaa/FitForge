@@ -6,6 +6,7 @@ import { useUserSettings } from "../hooks/useUserSettings";
 import { Flame, Beef, Croissant, Hamburger } from "lucide-react";
 import MacroCard from "../components/MacroCard";
 import WeeklyChart from "../components/WeeklyChart";
+import UpcomingWorkouts from "../components/UpcomingWorkouts";
 
 interface Training {
   id: number;
@@ -91,7 +92,7 @@ const Home = () => {
           onClose={() => setNotification(null)}
         />
       )}
-      <div className="flex flex-col items-start justify-center">
+      <div className="flex flex-col items-start justify-center border-bla">
         <p className="text-3xl font-bold tracking-wide w-full mb-2">
           Dashboard
         </p>
@@ -130,8 +131,10 @@ const Home = () => {
             type="fats"
           />
         </div>
-
-        <WeeklyChart />
+        <div className="flex flex-row gap-4 w-full">
+          <WeeklyChart />
+          <UpcomingWorkouts workouts={trainings} />
+        </div>
       </div>
     </>
   );

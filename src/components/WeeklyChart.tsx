@@ -37,7 +37,7 @@ const WeeklyChart = () => {
         <p className="text-sm text-gray-500 font-normal">(last 7 days)</p>
       </h2>
 
-      <ResponsiveContainer width="100%" height={200}>
+      <ResponsiveContainer width="100%" height={250}>
         <AreaChart data={formattedData}>
           <defs>
             <linearGradient id="colorFill" x1="0" y1="0" x2="0" y2="1">

@@ -37,20 +37,6 @@ export function useTodayMacros(): UseTodayMacrosResult {
           throw new Error(userError?.message || "Not authenticated");
 
         const today = new Date().toISOString().slice(0, 10);
-        await supabase.from("today_macros_view").upsert(
-          {
-            user_id: user.id,
-            date: today,
-            total_calories: 0,
-            total_protein: 0,
-            total_carbs: 0,
-            total_fats: 0,
-          },
-          {
-            onConflict: "user_id,date",
-            ignoreDuplicates: true,
-          }
-        );
 
         const { data, error } = await supabase
           .from("today_macros_view")

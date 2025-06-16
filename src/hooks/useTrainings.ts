@@ -33,6 +33,7 @@ export function useTrainings(): UseTrainingsResult[] {
         const { data, error: fetchError } = await supabase
           .from("upcomming_trainings")
           .select("*")
+          .order("next_workout", { ascending: true })
           .limit(3);
         if (fetchError) throw fetchError;
         if (data) {
