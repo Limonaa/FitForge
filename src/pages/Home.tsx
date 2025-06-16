@@ -100,7 +100,6 @@ const Home = () => {
           Welcome back! Here's your fitness
         </p>
 
-        {/* Calories and macros cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 w-full">
           <MacroCard
             title="Calories Today"
