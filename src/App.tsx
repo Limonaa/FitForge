@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Register from "./pages/authentication/Register";
 import Login from "./pages/authentication/Login";
 import Home from "./pages/Home";
@@ -29,7 +29,7 @@ const App = () => {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/home" element={<Home />} />
-          <Route index element={<Home />} />
+          <Route index element={<Navigate to="/home" replace />} />
           <Route path="/calories" element={<CaloriesPage />} />
           <Route path="/account" element={<AccountPage />} />
           <Route path="/history" element={<HistoryPage />} />
