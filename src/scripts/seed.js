@@ -44,7 +44,7 @@ async function seed() {
     const foodEntries = Array.from({ length: 20 }, () => ({
       user_id: loginData.user.id,
       name: faker.food.dish(),
-      calories: faker.number.int({ min: 50, max: 1000 }),
+      calories: faker.number.int({ min: 400, max: 2200 }),
       protein: faker.number.int({ min: 10, max: 130 }),
       carbs: faker.number.int({ min: 10, max: 500 }),
       fats: faker.number.int({ min: 1, max: 120 }),

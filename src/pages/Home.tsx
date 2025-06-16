@@ -92,12 +92,12 @@ const Home = () => {
           onClose={() => setNotification(null)}
         />
       )}
-      <div className="flex flex-col items-start justify-center border-bla">
+      <div className="flex flex-col items-start justify-center">
         <p className="text-3xl font-bold tracking-wide w-full mb-2">
           Dashboard
         </p>
         <p className="text-sm text-gray-500">
-          Welcome back! Here's your fitness
+          Welcome back! Here's your fitness summary
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 w-full">

@@ -4,6 +4,8 @@ import { useUserSettings } from "../hooks/useUserSettings";
 import { useTodayMacros } from "../hooks/useTodayMacros";
 import FoodColumn from "../components/FoodColumn";
 import MacroProgress from "../components/MacroProgressChart";
+import TodaySummary from "../components/TodaySummary";
+import TodayMeals from "../components/TodayMeals";
 
 const CaloriesPage: React.FC = () => {
   const { entries, loading, error, refetch } = useFoodEntries();
@@ -18,20 +20,38 @@ const CaloriesPage: React.FC = () => {
     error: macrosError,
   } = useTodayMacros();
 
-  const {
-    weight,
-    height,
-    gender,
-    caloriesGoal,
-    proteinGoal,
-    carbsGoal,
-    fatsGoal,
-  } = useUserSettings();
+  const { caloriesGoal, proteinGoal, carbsGoal, fatsGoal } = useUserSettings();
   if (loading) return <p>Ładowanie...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
   return (
     <>
+      <div className="flex flex-col items-start justify-center">
+        <p className="text-3xl font-bold tracking-wide w-full mb-2">
+          Nutrition Tracker
+        </p>
+        <p className="text-sm text-gray-500">
+          Track your daily calories and macronutrients
+        </p>
+        <div className="w-full flex flex-row gap-6">
+          <div className="flex-[5]">
+            <TodaySummary
+              calories={totalCalories}
+              protein={totalProtein}
+              carbs={totalCarbs}
+              fats={totalFats}
+              goalCalories={caloriesGoal}
+              goalProtein={proteinGoal}
+              goalCarbs={carbsGoal}
+              goalFats={fatsGoal}
+            />
+          </div>
+          <div className="flex-[3]">
+            <TodayMeals />
+          </div>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
         <FoodColumn
           title="Breakfast"
