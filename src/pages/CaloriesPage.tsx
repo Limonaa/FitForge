@@ -2,15 +2,11 @@ import React from "react";
 import { useFoodEntries } from "../hooks/useFoodEntries";
 import { useUserSettings } from "../hooks/useUserSettings";
 import { useTodayMacros } from "../hooks/useTodayMacros";
-import FoodColumn from "../components/FoodColumn";
-import MacroProgress from "../components/MacroProgressChart";
 import TodaySummary from "../components/TodaySummary";
-import TodayMeals from "../components/TodayMeals";
+import MealTable from "../components/MealTable";
 
 const CaloriesPage: React.FC = () => {
   const { entries, loading, error, refetch } = useFoodEntries();
-  const groupByMealType = (mealType: string) =>
-    entries.filter((e) => e.meal_type === mealType);
   const {
     totalCalories,
     totalProtein,
@@ -33,76 +29,19 @@ const CaloriesPage: React.FC = () => {
         <p className="text-sm text-gray-500">
           Track your daily calories and macronutrients
         </p>
-        <div className="w-full flex flex-row gap-6">
-          <div className="flex-[5]">
-            <TodaySummary
-              calories={totalCalories}
-              protein={totalProtein}
-              carbs={totalCarbs}
-              fats={totalFats}
-              goalCalories={caloriesGoal}
-              goalProtein={proteinGoal}
-              goalCarbs={carbsGoal}
-              goalFats={fatsGoal}
-            />
-          </div>
-          <div className="flex-[3]">
-            <TodayMeals />
-          </div>
+        <MealTable entries={entries} />
+        <div className="w-full flex flex-row gap-6 mb-2 sticky bottom-0 z-10 pb-2">
+          <TodaySummary
+            calories={totalCalories}
+            protein={totalProtein}
+            carbs={totalCarbs}
+            fats={totalFats}
+            goalCalories={caloriesGoal}
+            goalProtein={proteinGoal}
+            goalCarbs={carbsGoal}
+            goalFats={fatsGoal}
+          />
         </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
-        <FoodColumn
-          title="Breakfast"
-          entries={groupByMealType("breakfast")}
-          mealType="breakfast"
-          onAddSuccess={refetch}
-        />
-        <FoodColumn
-          title="Lunch"
-          entries={groupByMealType("lunch")}
-          mealType="lunch"
-          onAddSuccess={refetch}
-        />
-        <FoodColumn
-          title="Dinner"
-          entries={groupByMealType("dinner")}
-          mealType="dinner"
-          onAddSuccess={refetch}
-        />
-        <FoodColumn
-          title="Snack"
-          entries={groupByMealType("snack")}
-          mealType="snack"
-          onAddSuccess={refetch}
-        />
-      </div>
-      <div className="flex flex-row w-full justify-center items-center gap-6 px-6">
-        <MacroProgress
-          label="Calories"
-          current={totalCalories}
-          target={caloriesGoal}
-          color="blue-500"
-        />
-        <MacroProgress
-          label="Proteins"
-          current={totalProtein}
-          target={proteinGoal}
-          color="blue-500"
-        />
-        <MacroProgress
-          label="Carbs"
-          current={totalCarbs}
-          target={carbsGoal}
-          color="blue-500"
-        />
-        <MacroProgress
-          label="Fats"
-          current={totalFats}
-          target={fatsGoal}
-          color="blue-500"
-        />
       </div>
     </>
   );

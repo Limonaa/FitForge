@@ -41,10 +41,10 @@ async function seed() {
       .delete()
       .eq("user_id", loginData.user.id);
 
-    const foodEntries = Array.from({ length: 20 }, () => ({
+    const foodEntries = Array.from({ length: 10 }, () => ({
       user_id: loginData.user.id,
       name: faker.food.dish(),
-      calories: faker.number.int({ min: 400, max: 2200 }),
+      calories: faker.number.int({ min: 100, max: 300 }),
       protein: faker.number.int({ min: 10, max: 130 }),
       carbs: faker.number.int({ min: 10, max: 500 }),
       fats: faker.number.int({ min: 1, max: 120 }),

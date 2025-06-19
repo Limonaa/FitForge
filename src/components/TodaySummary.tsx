@@ -25,7 +25,7 @@ const TodaySummary: React.FC<TodaySummaryProps> = ({
 }) => {
   return (
     <div className="bg-white shadow-md rounded-xl justify-center items-center p-2 w-full">
-      <h2 className="text-lg font-semibold">Today's summary</h2>
+      <h2 className="text-lg font-semibold mb-2">Today's summary</h2>
       <div className="flex flex-row justify-between gap-4">
         <TodaySummaryItem
           title="calories"
@@ -36,9 +36,9 @@ const TodaySummary: React.FC<TodaySummaryProps> = ({
         <TodaySummaryItem title="carbs" value={carbs} goal={goalCarbs} />
         <TodaySummaryItem title="fats" value={fats} goal={goalFats} />
       </div>
-      <div className="w-full flex justify-center items-center">
+      {/* <div className="w-full flex justify-center items-center">
         <MacroPieChart protein={protein} carbs={carbs} fats={fats} />
-      </div>
+      </div> */}
     </div>
   );
 };

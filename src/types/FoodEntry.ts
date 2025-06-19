@@ -1,4 +1,4 @@
-export type MealType = "breakfast" | "lunch" | "dinner" | "snack";
+import { MealType } from "./meals";
 
 export interface FoodEntry {
   id: string;
@@ -8,5 +8,4 @@ export interface FoodEntry {
   carbs: number;
   fats: number;
   meal_type: MealType;
-  date: string;
 }
