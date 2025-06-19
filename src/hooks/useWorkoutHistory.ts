@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../services/supabaseService";
-import { type Workout } from "../types/Workouts";
+import { type Workout } from "../types/Workout";
 
 interface UseWorkoutHistoryResult {
   workouts: Workout[];
@@ -8,7 +8,7 @@ interface UseWorkoutHistoryResult {
   error: Error | null;
 }
 
-export function useWorkoutHistory(): UseWorkoutHistoryResult {
+export function useWorkoutHistory(filter?: string): UseWorkoutHistoryResult {
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -27,15 +27,19 @@ export function useWorkoutHistory(): UseWorkoutHistoryResult {
         if (!user || userError)
           throw new Error(userError?.message || "user not authenticated");
 
-        const { data, error: fetchError } = await supabase
+        let query = supabase
           .from("workout_history")
           .select("*")
           .eq("user_id", user.id)
           .order("date", { ascending: false });
 
+        if (filter) {
+          query = query.ilike("name", `%${filter}%`);
+        }
+
+        const { data, error: fetchError } = await query;
         if (fetchError) throw fetchError;
 
-        console.log(data);
         setWorkouts(data as Workout[]);
       } catch (err: any) {
         setError(err);
@@ -44,7 +48,7 @@ export function useWorkoutHistory(): UseWorkoutHistoryResult {
       }
     };
     fetchHistory();
-  }, []);
+  }, [filter]);
 
   return { workouts, loading, error };
 }
