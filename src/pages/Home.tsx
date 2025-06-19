@@ -7,6 +7,7 @@ import { Flame, Beef, Croissant, Hamburger } from "lucide-react";
 import MacroCard from "../components/MacroCard";
 import WeeklyChart from "../components/WeeklyChart";
 import UpcomingWorkouts from "../components/UpcomingWorkouts";
+import DailyTip from "../components/DailyTip";
 
 interface Training {
   id: number;
@@ -100,7 +101,7 @@ const Home = () => {
           Welcome back! Here's your fitness summary
         </p>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 w-full">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4 w-full">
           <MacroCard
             title="Calories Today"
             icon={Flame}
@@ -133,6 +134,9 @@ const Home = () => {
         <div className="flex flex-row gap-4 w-full">
           <WeeklyChart />
           <UpcomingWorkouts workouts={trainings} />
+        </div>
+        <div className="flex justify-center w-full mt-4">
+          <DailyTip />
         </div>
       </div>
     </>
