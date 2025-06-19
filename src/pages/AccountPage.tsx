@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { User, Weight, TrendingUp, Settings } from "lucide-react";
+import { User, Weight, TrendingUp, Settings, Pencil } from "lucide-react";
 import { useUserSettings } from "../hooks/useUserSettings";
 import ProfileInformations from "../components/ProfileInformation";
 import MeasurementsInfo from "../components/MeasurementsInfo";
@@ -63,8 +63,13 @@ const AccountPage = () => {
       <p className="text-gray-500 mx-6">Manage your profile and preferences</p>
       <div className="flex flex-row w-full">
         <div className="bg-white shadow-md rounded-xl flex flex-col justify-center items-center w-1/4 m-6">
-          <div className="bg-blue-200 rounded-full w-24 h-24 flex justify-center items-center m-4">
-            <User width={40} height={40} className="text-blue-400" />
+          <div className="relative group m-4 w-24 h-24">
+            <div className="bg-blue-200 rounded-full w-full h-full flex justify-center items-center">
+              <User width={40} height={40} className="text-blue-400" />
+            </div>
+            <div className="absolute inset-0 flex justify-center items-center bg-black/30 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer">
+              <Pencil className="text-white" size={24} />
+            </div>
           </div>
           <p className="text-xl font-semibold">{name}</p>
           <div className="my-2 w-3/4">
