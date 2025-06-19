@@ -24,7 +24,7 @@ const TodaySummary: React.FC<TodaySummaryProps> = ({
   goalFats,
 }) => {
   return (
-    <div className="bg-white shadow-md rounded-xl justify-center items-center p-2 w-full">
+    <div className="bg-white shadow-md rounded-xl justify-center items-center p-2 w-full border-t-2">
       <h2 className="text-lg font-semibold mb-2">Today's summary</h2>
       <div className="flex flex-row justify-between gap-4">
         <TodaySummaryItem
