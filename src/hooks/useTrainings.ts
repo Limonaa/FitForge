@@ -5,6 +5,7 @@ interface Training {
   id: number;
   title: string;
   nextTraining: string;
+  duration: number;
 }
 
 interface UseTrainingsResult extends Training {
@@ -44,6 +45,7 @@ export function useTrainings(): UseTrainingsResult[] {
               nextTraining: trainings.next_workout
                 ? new Date(trainings.next_workout).toLocaleDateString()
                 : "Not scheduled",
+              duration: trainings.duration,
             }))
           );
         }

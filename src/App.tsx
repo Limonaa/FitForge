@@ -9,6 +9,7 @@ import CaloriesPage from "./pages/CaloriesPage";
 import { Outlet } from "react-router-dom";
 import AccountPage from "./pages/AccountPage";
 import HistoryPage from "./pages/HistoryPage";
+import WorkoutsPage from "./pages/WorkoutsPage";
 
 const Layout = () => {
   return (
@@ -31,8 +32,9 @@ const App = () => {
           <Route path="/home" element={<Home />} />
           <Route index element={<Navigate to="/home" replace />} />
           <Route path="/calories" element={<CaloriesPage />} />
-          <Route path="/account" element={<AccountPage />} />
+          <Route path="/workouts" element={<WorkoutsPage />} />
           <Route path="/history" element={<HistoryPage />} />
+          <Route path="/account" element={<AccountPage />} />
         </Route>
 
         <Route path="/register" element={<Register />} />
