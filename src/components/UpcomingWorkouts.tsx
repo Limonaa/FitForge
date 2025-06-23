@@ -9,7 +9,7 @@ interface UpcomingWorkoutProps {
 
 const UpcomingWorkouts: React.FC<UpcomingWorkoutProps> = ({ workouts }) => {
   return (
-    <div className="bg-white rounded-xl shadow-md p-6 w-full max-w-3xl flex flex-col justify-between">
+    <div className="bg-white rounded-xl shadow-md p-6 w-full max-w-3xl flex flex-col justify-between h-full">
       <div>
         <div className="flex flex-row justify-between items-center mb-2">
           <h2 className="text-xl font-semibold mb-2">Upcoming workouts</h2>
