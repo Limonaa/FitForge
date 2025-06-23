@@ -31,7 +31,7 @@ const WorkoutsPage = () => {
   };
 
   return (
-    <div>
+    <div className="w-full">
       <>
         {notification && (
           <NotificationCard
