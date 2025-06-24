@@ -40,7 +40,7 @@ const EditWorkoutPage = () => {
         </button>
       </div>
 
-      <div className="w-full mt-4">
+      <div className="w-full mt-6">
         <EditableWorkoutHeader
           title={workout.title}
           onTitleChange={updateTitle}
@@ -50,12 +50,14 @@ const EditWorkoutPage = () => {
           onUpdate={updateExercise}
           onRemove={deleteExercise}
         />
-        <button
-          onClick={addExercise}
-          className="mt-4 px-4 py-2 rounded-md bg-green-600 text-white hover:bg-green-700"
-        >
-          + Add Exercise
-        </button>
+        <div className="flex justify-end w-full">
+          <button
+            onClick={addExercise}
+            className="mt-4 px-4 py-2 rounded-md bg-green-600 text-white hover:bg-green-700"
+          >
+            + Add Exercise
+          </button>
+        </div>
       </div>
     </div>
   );

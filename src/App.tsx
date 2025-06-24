@@ -34,7 +34,7 @@ const App = () => {
           <Route index element={<Navigate to="/home" replace />} />
           <Route path="/calories" element={<CaloriesPage />} />
           <Route path="/workouts" element={<WorkoutsPage />} />
-          <Route path="/workouts/:id" element={<EditWorkoutPage />} />
+          <Route path="/workouts/edit/:id" element={<EditWorkoutPage />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/account" element={<AccountPage />} />
         </Route>
