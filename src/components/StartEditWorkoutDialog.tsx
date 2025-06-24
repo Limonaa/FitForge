@@ -18,7 +18,7 @@ const StartEditWorkoutDialog: React.FC<StartEditDialogProps> = ({
   const navigate = useNavigate();
 
   const handleStartWorkout = (id: number) => {
-    // TODO Navigate to workout session
+    navigate(`/workouts/session/${id}`);
   };
   const handleEditWorkout = (id: number) => {
     navigate(`/workouts/edit/${id}`);

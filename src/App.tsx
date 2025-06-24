@@ -11,6 +11,7 @@ import AccountPage from "./pages/AccountPage";
 import HistoryPage from "./pages/HistoryPage";
 import WorkoutsPage from "./pages/WorkoutsPage";
 import EditWorkoutPage from "./pages/EditWorkoutPage";
+import WorkoutSessionPage from "./pages/WorkoutSessionPage";
 
 const Layout = () => {
   return (
@@ -35,6 +36,10 @@ const App = () => {
           <Route path="/calories" element={<CaloriesPage />} />
           <Route path="/workouts" element={<WorkoutsPage />} />
           <Route path="/workouts/edit/:id" element={<EditWorkoutPage />} />
+          <Route
+            path="/workouts/session/:id"
+            element={<WorkoutSessionPage />}
+          />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/account" element={<AccountPage />} />
         </Route>
