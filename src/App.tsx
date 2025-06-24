@@ -10,6 +10,7 @@ import { Outlet } from "react-router-dom";
 import AccountPage from "./pages/AccountPage";
 import HistoryPage from "./pages/HistoryPage";
 import WorkoutsPage from "./pages/WorkoutsPage";
+import EditWorkoutPage from "./pages/EditWorkoutPage";
 
 const Layout = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
           <Route index element={<Navigate to="/home" replace />} />
           <Route path="/calories" element={<CaloriesPage />} />
           <Route path="/workouts" element={<WorkoutsPage />} />
+          <Route path="/workouts/:id" element={<EditWorkoutPage />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/account" element={<AccountPage />} />
         </Route>

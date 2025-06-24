@@ -15,7 +15,10 @@ const WorkoutCard: React.FC<WorkoutCardProps> = ({
   onClick,
 }) => {
   return (
-    <div className="p-4 border rounded-lg" onClick={onClick}>
+    <div
+      className="p-4 border rounded-lg hover:cursor-pointer"
+      onClick={onClick}
+    >
       <div className="flex flex-row justify-between">
         <p className="text-lg font-semibold">{name}</p>
         <div className="bg-indigo-200 flex flex-row gap-3 p-2 rounded-xl text-indigo-600">
