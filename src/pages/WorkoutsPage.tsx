@@ -11,7 +11,7 @@ const WorkoutsPage = () => {
     type: "success" | "error" | "info";
   } | null>(null);
 
-  const trainingsWithState = useTrainings();
+  const trainingsWithState = useTrainings(4);
   const trainings = trainingsWithState.map(
     ({ loading, error, ...rest }) => rest
   );
@@ -70,7 +70,13 @@ const WorkoutsPage = () => {
               <MyWorkouts />
             </div>
             <div className="flex-[2]">
-              <UpcomingWorkouts workouts={trainings} />
+              <UpcomingWorkouts
+                workouts={trainings.map((training) => ({
+                  ...training,
+                  onClick: () => {},
+                }))}
+                showButton={false}
+              />
             </div>
           </div>
         </div>

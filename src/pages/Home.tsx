@@ -133,7 +133,7 @@ const Home = () => {
         </div>
         <div className="flex flex-row gap-4 w-full">
           <WeeklyChart />
-          <UpcomingWorkouts workouts={trainings} />
+          <UpcomingWorkouts workouts={trainings} showButton={true} />
         </div>
         <div className="flex justify-center w-full mt-4">
           <DailyTip />

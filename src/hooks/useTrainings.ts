@@ -13,7 +13,7 @@ interface UseTrainingsResult extends Training {
   error: Error | null;
 }
 
-export function useTrainings(): UseTrainingsResult[] {
+export function useTrainings(limit: number = 3): UseTrainingsResult[] {
   const [trainings, setTrainings] = useState<Training[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -28,7 +28,7 @@ export function useTrainings(): UseTrainingsResult[] {
           .from("upcomming_trainings")
           .select("*")
           .order("next_workout", { ascending: true })
-          .limit(3);
+          .limit(limit);
         if (fetchError) throw fetchError;
         if (data) {
           setTrainings(
