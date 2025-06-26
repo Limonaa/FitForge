@@ -2,12 +2,15 @@ import React from "react";
 import UpcomingWorkoutItem from "./UpcomingWorkoutItem";
 import { Dumbbell } from "lucide-react";
 import { type UpcomingWorkoutItemProps } from "./UpcomingWorkoutItem";
+import { useNavigate } from "react-router-dom";
 
 interface UpcomingWorkoutProps {
   workouts: UpcomingWorkoutItemProps[];
 }
 
 const UpcomingWorkouts: React.FC<UpcomingWorkoutProps> = ({ workouts }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="bg-white rounded-xl shadow-md p-6 w-full max-w-3xl flex flex-col justify-between h-full">
       <div>
@@ -26,7 +29,10 @@ const UpcomingWorkouts: React.FC<UpcomingWorkoutProps> = ({ workouts }) => {
           ))}
         </div>
       </div>
-      <button className="w-full bg-indigo-200 p-3 rounded-xl mt-4">
+      <button
+        className="w-full bg-indigo-200 p-3 rounded-xl mt-4"
+        onClick={() => navigate("/workouts")}
+      >
         <p className="text-center text-indigo-600 font-semibold text-lg">
           View all workouts
         </p>

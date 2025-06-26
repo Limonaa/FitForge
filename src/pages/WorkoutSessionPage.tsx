@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../services/supabaseService";
 import { Timer } from "lucide-react";
 import type { utimes } from "fs";
+import WorkoutButtons from "../components/WorkoutButtons";
 
 const WorkoutSessionPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -64,6 +65,33 @@ const WorkoutSessionPage = () => {
       return {
         ...prev,
         [currentIndex]: newSets,
+      };
+    });
+  };
+
+  const removeLastSet = () => {
+    setCompletedSetsMap((prev) => {
+      const currentSets = prev[currentIndex] || [];
+      if (currentSets.length === 0) return prev;
+
+      const newSets = currentSets.slice(0, -1);
+      return {
+        ...prev,
+        [currentIndex]: newSets,
+      };
+    });
+  };
+
+  const addNextSet = () => {
+    setCompletedSetsMap((prev) => {
+      const currentSets = prev[currentIndex] || [];
+      const nextIndex = currentSets.length;
+
+      if (nextIndex >= exercises[currentIndex].sets) return prev;
+
+      return {
+        ...prev,
+        [currentIndex]: [...currentSets, nextIndex],
       };
     });
   };
@@ -210,33 +238,46 @@ const WorkoutSessionPage = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex text-center text-gray-600 gap-2">
-        <Timer />
-        {Math.floor(elapsed / 60)}:{String(elapsed % 60).padStart(2, "0")}
+      <div className="grid grid-cols-3">
+        <p className="text-2xl font-bold text-start">{workout.title}</p>
+        <div className="flex justify-center items-center text-gray-600 gap-2 text-3xl">
+          <Timer className="w-8 h-8" />
+          {Math.floor(elapsed / 60)}:{String(elapsed % 60).padStart(2, "0")}
+        </div>
       </div>
-      <p className="text-2xl font-bold text-center">{workout.title}</p>
 
       <div className="bg-white p-6 rounded-xl shadow-md space-y-6 text-center">
-        <h2 className="text-2xl font-bold">{currentExercise.name}</h2>
+        <h2 className="text-2xl font-semibold">{currentExercise.name}</h2>
 
         <div className="grid grid-cols-3 gap-4 justify-center text-center">
           <div className="bg-gray-100 rounded-xl py-4">
-            <p className="text-sm text-gray-500">Reps</p>
+            <p className="text-md text-gray-500">Reps</p>
             <p className="text-xl font-bold">{currentExercise.reps}</p>
           </div>
           <div className="bg-gray-100 rounded-xl py-4">
-            <p className="text-sm text-gray-500">Sets</p>
+            <p className="text-md text-gray-500">Sets</p>
             <p className="text-xl font-bold">{currentExercise.sets}</p>
           </div>
           {currentExercise.weight > 0 && (
             <div className="bg-gray-100 rounded-xl py-4">
-              <p className="text-sm text-gray-500">Weight (kg)</p>
+              <p className="text-md text-gray-500">Weight (kg)</p>
               <p className="text-xl font-bold">{currentExercise.weight}</p>
             </div>
           )}
         </div>
 
         <div className="flex justify-center flex-wrap gap-3 mt-4">
+          <button
+            onClick={removeLastSet}
+            disabled={(completedSetsMap[currentIndex]?.length || 0) === 0}
+            className={`w-14 h-10 flex items-center justify-center rounded-full font-semibold border-2 transition-all ${
+              (completedSetsMap[currentIndex]?.length || 0) > 0
+                ? "bg-red-600 text-white border-red-600"
+                : "bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed"
+            }`}
+          >
+            –
+          </button>
           {Array.from({ length: currentExercise.sets }).map((_, i) => {
             const currentCompletedSets = completedSetsMap[currentIndex] || [];
             const isCompleted = currentCompletedSets.includes(i);
@@ -255,51 +296,33 @@ const WorkoutSessionPage = () => {
               </button>
             );
           })}
+          <button
+            onClick={addNextSet}
+            disabled={
+              (completedSetsMap[currentIndex]?.length || 0) >=
+              exercises[currentIndex].sets
+            }
+            className={`w-14 h-10 flex items-center justify-center rounded-full font-semibold border-2 transition-all ${
+              (completedSetsMap[currentIndex]?.length || 0) <
+              exercises[currentIndex].sets
+                ? "bg-green-600 text-white border-green-600"
+                : "bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed"
+            }`}
+          >
+            +
+          </button>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-4">
-        <button
-          onClick={prevExercise}
-          disabled={currentIndex === 0}
-          className={`py-3 rounded-xl font-medium transition-colors duration-300 ease-in-out ${
-            currentIndex === 0
-              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-              : "bg-amber-500 text-white"
-          }`}
-        >
-          Prev
-        </button>
-        <button
-          onClick={skipExercise}
-          disabled={currentIndex >= exercises.length - 1}
-          className={`text-sm py-3 rounded-xl font-medium transition-colors duration-300 ease-in-out ${
-            currentIndex >= exercises.length - 1
-              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-              : "bg-gray-400 text-white"
-          }`}
-        >
-          Skip
-        </button>
-        <button
-          onClick={nextExercise}
-          disabled={currentIndex >= exercises.length - 1}
-          className={`text-sm py-3 rounded-xl font-medium transition-colors duration-300 ease-in-out ${
-            currentIndex >= exercises.length - 1
-              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-              : "bg-blue-600 text-white"
-          }`}
-        >
-          Next
-        </button>
-        <button
-          onClick={finishWorkout}
-          className="bg-red-500 text-white text-sm py-3 rounded-xl font-medium"
-        >
-          End
-        </button>
-      </div>
+      <WorkoutButtons
+        currentIndex={currentIndex}
+        totalExercises={exercises.length}
+        onPrev={prevExercise}
+        onSkip={skipExercise}
+        onNext={nextExercise}
+        onFinish={finishWorkout}
+      />
 
-      <div className="text-center text-sm text-gray-500 mt-2">
+      <div className="text-center text-gray-500 mt-2">
         Exercise {currentIndex + 1} of {exercises.length}
       </div>
     </div>
