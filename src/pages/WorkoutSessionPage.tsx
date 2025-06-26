@@ -2,6 +2,7 @@ import React, { use, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../services/supabaseService";
 import { Timer } from "lucide-react";
+import type { utimes } from "fs";
 
 const WorkoutSessionPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -9,9 +10,13 @@ const WorkoutSessionPage = () => {
   const [workout, setWorkout] = useState<any>(null);
   const [exercises, setExercises] = useState<any[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [completedSets, setCompletedSets] = useState<number[]>([]);
+  const [completedSetsMap, setCompletedSetsMap] = useState<
+    Record<number, number[]>
+  >({});
   const [startTime, setStartTime] = useState<Date | null>(null);
   const [elapsed, setElapsed] = useState(0);
+  const [showSummary, setShowSummary] = useState(false);
+  const [isWorkoutFinished, setIsWorkoutFinished] = useState(false);
 
   const currentExercise = exercises[currentIndex];
 
@@ -37,45 +42,171 @@ const WorkoutSessionPage = () => {
   }, [id]);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      if (startTime) {
-        const seconds = Math.floor(
-          (new Date().getTime() - startTime.getTime()) / 1000
-        );
-        setElapsed(seconds);
-      }
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [startTime]);
+    if (!startTime || isWorkoutFinished) return;
 
-  const toggleSet = (index: number) => {
-    setCompletedSets((prev) =>
-      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
-    );
+    const timer = setInterval(() => {
+      const seconds = Math.floor(
+        (new Date().getTime() - startTime.getTime()) / 1000
+      );
+      setElapsed(seconds);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [startTime, isWorkoutFinished]);
+
+  const toggleSet = (setIndex: number) => {
+    setCompletedSetsMap((prev) => {
+      const currentSets = prev[currentIndex] || [];
+      const newSets = currentSets.includes(setIndex)
+        ? currentSets.filter((i) => i !== setIndex)
+        : [...currentSets, setIndex];
+
+      return {
+        ...prev,
+        [currentIndex]: newSets,
+      };
+    });
   };
 
   const nextExercise = () => {
-    setCompletedSets([]);
     setCurrentIndex((i) => Math.min(i + 1, exercises.length - 1));
   };
 
   const skipExercise = () => nextExercise();
 
   const prevExercise = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex((i) => i - 1);
-      setCompletedSets([]);
-    }
+    setCurrentIndex((i) => (i > 0 ? i - 1 : 0));
   };
 
   const finishWorkout = () => {
-    if (confirm("Are you sure you want to ent the workout?")) {
-      navigate("/workouts");
-      // TODO summary, add to history
+    const confirmEnd = confirm("Na pewno chcesz zakończyć trening?");
+    if (!confirmEnd) return;
+
+    setIsWorkoutFinished(true);
+    setShowSummary(true);
+  };
+
+  const getSummaryData = () => {
+    let totalReps = 0;
+    let totalSets = 0;
+    let totalWeight = 0;
+
+    exercises.forEach((exercise, index) => {
+      const completedSetIndices = completedSetsMap[index] || [];
+      const completedCount = completedSetIndices.length;
+
+      const reps = exercise.reps;
+      const weight = exercise.weight || 0;
+
+      totalSets += completedCount;
+      totalReps += reps * completedCount;
+      totalWeight += weight * reps * completedCount;
+    });
+
+    return {
+      totalReps,
+      totalSets,
+      totalWeight,
+      duration: elapsed,
+    };
+  };
+
+  const handleSaveWorkout = async () => {
+    const { totalReps, totalSets, totalWeight, duration } = getSummaryData();
+
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+    if (!user || userError)
+      throw userError?.message || "User not authenticated";
+
+    const { error } = await supabase.from("workout_history").insert({
+      user_id: user.id,
+      workout_id: workout.id,
+      name: workout.title,
+      reps: totalReps,
+      sets: totalSets,
+      weight: totalWeight,
+      time: duration,
+      date: new Date().toISOString().split("T")[0],
+    });
+
+    if (error) {
+      alert("Błąd przy zapisie do historii" + error.message);
+      return;
+    }
+
+    navigate("/workouts");
+  };
+
+  const handleCancelSummary = () => {
+    const confirmBack = confirm("Na pewno chcesz wrócić bez zapisywania?");
+    if (confirmBack) {
+      setShowSummary(false);
     }
   };
 
   if (!workout || !currentExercise) return <p>Loading...</p>;
+
+  if (showSummary) {
+    const { totalReps, totalSets, totalWeight, duration } = getSummaryData();
+
+    return (
+      <div className="space-y-6">
+        <h2 className="text-2xl font-bold text-center">
+          Podsumowanie treningu
+        </h2>
+        <div className="space-y-2 text-center">
+          <p>
+            <strong>Trening:</strong> {workout.title}
+          </p>
+          <p>
+            <strong>Czas:</strong> {Math.floor(duration / 60)}:
+            {String(duration % 60).padStart(2, "0")}
+          </p>
+          <p>
+            <strong>Serie:</strong> {totalSets}
+          </p>
+          <p>
+            <strong>Powtórzenia:</strong> {totalReps}
+          </p>
+          <p>
+            <strong>Ciężar (kg):</strong> {totalWeight}
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          {exercises.map((exercise, index) => {
+            const completed = completedSetsMap[index]?.length || 0;
+            return (
+              <div key={exercise.id} className="bg-gray-100 rounded-xl p-4">
+                <p className="font-bold">{exercise.name}</p>
+                <p>
+                  {completed} / {exercise.sets} serii wykonano
+                </p>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 pt-4">
+          <button
+            onClick={handleSaveWorkout}
+            className="bg-green-600 text-white py-3 rounded-xl font-medium"
+          >
+            Zapisz trening
+          </button>
+          <button
+            onClick={handleCancelSummary}
+            className="bg-gray-300 text-gray-800 py-3 rounded-xl font-medium"
+          >
+            Kontynuuj trening
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -107,7 +238,9 @@ const WorkoutSessionPage = () => {
 
         <div className="flex justify-center flex-wrap gap-3 mt-4">
           {Array.from({ length: currentExercise.sets }).map((_, i) => {
-            const isCompleted = completedSets.includes(i);
+            const currentCompletedSets = completedSetsMap[currentIndex] || [];
+            const isCompleted = currentCompletedSets.includes(i);
+
             return (
               <button
                 key={i}
@@ -128,7 +261,7 @@ const WorkoutSessionPage = () => {
         <button
           onClick={prevExercise}
           disabled={currentIndex === 0}
-          className={`py-3 rounded-xl font-medium ${
+          className={`py-3 rounded-xl font-medium transition-colors duration-300 ease-in-out ${
             currentIndex === 0
               ? "bg-gray-200 text-gray-400 cursor-not-allowed"
               : "bg-amber-500 text-white"
@@ -138,13 +271,23 @@ const WorkoutSessionPage = () => {
         </button>
         <button
           onClick={skipExercise}
-          className="bg-gray-300 text-sm py-3 rounded-xl font-medium"
+          disabled={currentIndex >= exercises.length - 1}
+          className={`text-sm py-3 rounded-xl font-medium transition-colors duration-300 ease-in-out ${
+            currentIndex >= exercises.length - 1
+              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+              : "bg-gray-400 text-white"
+          }`}
         >
           Skip
         </button>
         <button
           onClick={nextExercise}
-          className="bg-blue-600 text-white text-sm py-3 rounded-xl font-medium"
+          disabled={currentIndex >= exercises.length - 1}
+          className={`text-sm py-3 rounded-xl font-medium transition-colors duration-300 ease-in-out ${
+            currentIndex >= exercises.length - 1
+              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+              : "bg-blue-600 text-white"
+          }`}
         >
           Next
         </button>
