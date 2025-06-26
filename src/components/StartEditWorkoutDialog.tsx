@@ -27,11 +27,11 @@ const StartEditWorkoutDialog: React.FC<StartEditDialogProps> = ({
   return (
     <Dialog open={isOpen} onClose={onClose} className="fixed z-50 inset-0">
       <div className="flex items-center justify-center min-h-screen bg-black bg-opacity-50">
-        <Dialog.Panel className="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
-          <Dialog.Title className="text-xl font-semibold mb-4">
+        <Dialog.Panel className="bg-white rounded-xl shadow-lg w-72 max-w-md p-6">
+          <Dialog.Title className="text-2xl font-bold mb-4 text-center tracking-wide">
             {title}
           </Dialog.Title>
-          <div className="flex justify-between items-center">
+          <div className="grid grid-cols-3">
             <button
               className="bg-green-600 text-white text-lg font-semibold px-4 py-2 rounded-xl"
               onClick={() => handleStartWorkout(id)}
@@ -39,7 +39,7 @@ const StartEditWorkoutDialog: React.FC<StartEditDialogProps> = ({
               Start
             </button>
             <button
-              className="bg-amber-500 text-white text-lg font-semibold px-4 py-2 rounded-xl"
+              className="bg-amber-500 text-white text-lg font-semibold px-4 py-2 rounded-xl col-start-3"
               onClick={() => handleEditWorkout(id)}
             >
               Edit
