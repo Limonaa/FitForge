@@ -12,7 +12,7 @@ const Navbar = () => {
     <nav className="bg-indigo-600 h-screen w-64 fixed top-0 left-0 flex flex-col justify-start px-6 py-8 shadow-lg">
       <div className="mb-10">
         <Link to="/home" className="text-3xl text-white font-semibold">
-          FitForge
+          <img src="../../public/fitforge_logo.png" alt="Fitforge logo" />
         </Link>
         <p className="text-sm text-indigo-200 mt-1">
           Track your fitness journey
