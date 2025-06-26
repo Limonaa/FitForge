@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Save } from "lucide-react";
 import { supabase } from "../services/supabaseService";
+import { useUser } from "../context/UserContext";
 
 interface MeasInfoProps {
   height: number;
@@ -15,6 +16,7 @@ const MeasurementsInfo: React.FC<MeasInfoProps> = ({ height, weight }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const { userId, loading: userLoading } = useUser();
 
   useEffect(() => {
     setFormData({ height, weight });
@@ -28,27 +30,21 @@ const MeasurementsInfo: React.FC<MeasInfoProps> = ({ height, weight }) => {
     }));
   };
   const handleSubmit = async (e: React.FormEvent) => {
+    if (userLoading || !userId) return;
+
     e.preventDefault();
     setLoading(true);
     setError(null);
     setSuccess(false);
 
     try {
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
-      if (!user || userError) {
-        throw new Error(userError?.message || "Not authenticated");
-      }
-
       const { error: updateError } = await supabase
         .from("user_settings")
         .update({
           weight: formData.weight,
           height: formData.height,
         })
-        .eq("user_id", user.id);
+        .eq("user_id", userId);
 
       if (updateError) {
         throw updateError;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../services/supabaseService";
 import { Save } from "lucide-react";
+import { useUser } from "../context/UserContext";
 
 interface GoalsInfoProps {
   caloriesGoal: number;
@@ -31,6 +32,7 @@ const GoalsInformation: React.FC<GoalsInfoProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const { userId } = useUser();
 
   useEffect(() => {
     setFormData({
@@ -62,14 +64,6 @@ const GoalsInformation: React.FC<GoalsInfoProps> = ({
     setSuccess(false);
 
     try {
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
-      if (!user || userError) {
-        throw new Error(userError?.message || "Not authenticated");
-      }
-
       const { error: updateError } = await supabase
         .from("user_settings")
         .update({
@@ -80,7 +74,7 @@ const GoalsInformation: React.FC<GoalsInfoProps> = ({
           activity_level: formData.activityLevel,
           goal_type: formData.goalType,
         })
-        .eq("user_id", user.id);
+        .eq("user_id", userId);
 
       if (updateError) {
         throw updateError;

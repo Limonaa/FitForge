@@ -1,9 +1,9 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../services/supabaseService";
 import { Timer } from "lucide-react";
-import type { utimes } from "fs";
 import WorkoutButtons from "../components/WorkoutButtons";
+import { useUser } from "../context/UserContext";
 
 const WorkoutSessionPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -18,10 +18,13 @@ const WorkoutSessionPage = () => {
   const [elapsed, setElapsed] = useState(0);
   const [showSummary, setShowSummary] = useState(false);
   const [isWorkoutFinished, setIsWorkoutFinished] = useState(false);
+  const { userId, loading: userLoading } = useUser();
 
   const currentExercise = exercises[currentIndex];
 
   useEffect(() => {
+    if (userLoading || !userId) return;
+
     const fetchWorkout = async () => {
       const { data: workout } = await supabase
         .from("workouts")
@@ -142,15 +145,8 @@ const WorkoutSessionPage = () => {
   const handleSaveWorkout = async () => {
     const { totalReps, totalSets, totalWeight, duration } = getSummaryData();
 
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
-    if (!user || userError)
-      throw userError?.message || "User not authenticated";
-
     const { error } = await supabase.from("workout_history").insert({
-      user_id: user.id,
+      user_id: userId,
       workout_id: workout.id,
       name: workout.title,
       reps: totalReps,

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../services/supabaseService";
+import { useUser } from "../context/UserContext";
 
 interface Workout {
   id: number;
@@ -27,21 +28,24 @@ export function useWorkoutEdit(workoutId: number) {
     duration: 0,
   });
   const [exercises, setExercises] = useState<Exercise[]>([]);
+  const { userId, loading: userLoading } = useUser();
 
   useEffect(() => {
+    if (userLoading || !userId) return;
+
     const fetchData = async () => {
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
-      if (userError || !user)
-        throw new Error(userError?.message || "User not authenticated");
+      // const {
+      //   data: { user },
+      //   error: userError,
+      // } = await supabase.auth.getUser();
+      // if (userError || !user)
+      //   throw new Error(userError?.message || "User not authenticated");
 
       const { data: workout } = await supabase
         .from("workouts")
         .select("*")
         .eq("id", workoutId)
-        .eq("user_id", user.id)
+        .eq("user_id", userId)
         .single();
       setWorkout(workout);
 
@@ -55,7 +59,7 @@ export function useWorkoutEdit(workoutId: number) {
     };
 
     fetchData();
-  }, [workoutId]);
+  }, [workoutId, userId, userLoading]);
 
   const updateTitle = async (title: string) => {
     await supabase.from("workouts").update({ title }).eq("id", workoutId);
@@ -87,20 +91,20 @@ export function useWorkoutEdit(workoutId: number) {
   };
 
   const addExercise = async () => {
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
-    if (userError || !user) {
-      console.error("User not authenticated");
-      return;
-    }
+    // const {
+    //   data: { user },
+    //   error: userError,
+    // } = await supabase.auth.getUser();
+    // if (userError || !user) {
+    //   console.error("User not authenticated");
+    //   return;
+    // }
 
     const order = exercises.length + 1;
 
     const newExercise = {
       workout_id: workoutId,
-      user_id: user.id,
+      user_id: userId,
       name: "",
       sets: 3,
       reps: 10,

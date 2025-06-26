@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { MealType } from "../types/meals";
 import { supabase } from "../services/supabaseService";
+import { useUser } from "../context/UserContext";
 
 interface AddFoodDialogProps {
   isOpen: boolean;
@@ -23,24 +24,24 @@ const AddFoodDialog: React.FC<AddFoodDialogProps> = ({
   const [fats, setFats] = useState<number | "">("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { userId, loading: userLoading } = useUser();
 
   const handleSubmit = async (e: React.FormEvent) => {
+    if (userLoading) return;
+    if (!userId) {
+      setLoading(false);
+      return;
+    }
+
     e.preventDefault();
     setError("");
     setLoading(true);
-
     const today = new Date().toISOString().slice(0, 10);
 
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
-    if (userError) throw userError;
-
-    if (user) {
+    if (userId) {
       const { error } = await supabase.from("food_entries").insert([
         {
-          user_id: user.id,
+          user_id: userId,
           name,
           calories: Number(calories),
           protein: Number(protein),

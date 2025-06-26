@@ -24,13 +24,6 @@ export function useTrainings(): UseTrainingsResult[] {
       setError(null);
 
       try {
-        const {
-          data: { user },
-          error: userError,
-        } = await supabase.auth.getUser();
-        if (userError || !user)
-          throw new Error(userError?.message || "Not authenticated");
-
         const { data, error: fetchError } = await supabase
           .from("upcomming_trainings")
           .select("*")

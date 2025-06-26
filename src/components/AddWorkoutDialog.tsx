@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { supabase } from "../services/supabaseService";
+import { useUser } from "../context/UserContext";
 
 interface AddWorkoutDialogProps {
   isOpen: boolean;
@@ -26,6 +27,7 @@ const AddWorkoutDialog: React.FC<AddWorkoutDialogProps> = ({
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { userId, loading: userLoading } = useUser();
 
   const handleExerciseChange = (
     index: number,
@@ -60,26 +62,21 @@ const AddWorkoutDialog: React.FC<AddWorkoutDialogProps> = ({
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
-
-    if (userError || !user) {
-      setError(userError?.message || "User not authenticated");
+    if (userLoading) return;
+    if (!userId) {
       setLoading(false);
       return;
     }
+
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
     const { data: workoutData, error: workoutError } = await supabase
       .from("workouts")
       .insert([
         {
-          user_id: user.id,
+          user_id: userId,
           title,
           next_workout: new Date().toISOString().slice(0, 10),
           duration: duration * 60,
@@ -97,7 +94,7 @@ const AddWorkoutDialog: React.FC<AddWorkoutDialogProps> = ({
     const exercisesToInsert = exercises.map((ex) => ({
       ...ex,
       workout_id: workoutData.id,
-      user_id: user.id,
+      user_id: userId,
     }));
 
     const { error: exerciseError } = await supabase

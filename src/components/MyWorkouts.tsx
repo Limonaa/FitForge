@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import WorkoutCard from "./WorkoutCard";
 import { supabase } from "../services/supabaseService";
 import StartEditWorkoutDialog from "./StartEditWorkoutDialog";
+import { useUser } from "../context/UserContext";
 
 const ITEMS_PER_PAGE = 3;
 
@@ -24,22 +25,17 @@ const MyWorkouts = () => {
     startIndex,
     startIndex + ITEMS_PER_PAGE
   );
+  const { userId, loading: userLoading } = useUser();
 
   useEffect(() => {
+    if (userLoading || !userId) return;
+
     const fetchWorkouts = async () => {
       try {
-        const {
-          data: { user },
-          error: userError,
-        } = await supabase.auth.getUser();
-
-        if (userError || !user)
-          throw new Error(userError?.message || "User not authenticated");
-
         const { data, error: fetchError } = await supabase
           .from("workouts")
           .select("*")
-          .eq("user_id", user.id)
+          .eq("user_id", userId)
           .order("next_workout");
 
         if (fetchError) throw fetchError;
@@ -59,10 +55,9 @@ const MyWorkouts = () => {
     };
 
     fetchWorkouts();
-  }, []);
+  }, [userId, userLoading]);
 
   const handleOpenWorkoutDialog = () => {
-    // TODO: display dialog to start or edit workout.
     setOpenDialog(true);
   };
 

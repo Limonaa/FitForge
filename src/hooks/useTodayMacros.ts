@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../services/supabaseService";
+import { useUser } from "../context/UserContext";
 
 interface Macros {
   totalCalories: number;
@@ -22,26 +23,26 @@ export function useTodayMacros(): UseTodayMacrosResult {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const { userId, loading: userLoading } = useUser();
 
   useEffect(() => {
+    if (userLoading) return;
+    if (!userId) {
+      setLoading(false);
+      return;
+    }
+
     const fetchOrCreate = async () => {
       setLoading(true);
       setError(null);
 
       try {
-        const {
-          data: { user },
-          error: userError,
-        } = await supabase.auth.getUser();
-        if (userError || !user)
-          throw new Error(userError?.message || "Not authenticated");
-
         const today = new Date().toISOString().slice(0, 10);
 
         const { data, error } = await supabase
           .from("today_macros_view")
           .select("total_calories, total_protein, total_carbs, total_fats")
-          .eq("user_id", user.id)
+          .eq("user_id", userId)
           .eq("date", today)
           .maybeSingle();
 
@@ -61,7 +62,7 @@ export function useTodayMacros(): UseTodayMacrosResult {
     };
 
     fetchOrCreate();
-  }, []);
+  }, [userId, userLoading]);
 
   return { ...macros, loading, error };
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../services/supabaseService";
+import { useUser } from "../context/UserContext";
 
 interface UserSettings {
   weight: number;
@@ -36,6 +37,7 @@ export function useUserSettings(): UseUserSettingsResult {
   });
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
+  const { userId, loading: userLoading } = useUser();
 
   // Map data from database for UsersSettings' structure
   function mapDbToUserSettings(data: any): UserSettings {
@@ -55,23 +57,29 @@ export function useUserSettings(): UseUserSettingsResult {
   }
 
   useEffect(() => {
+    if (userLoading) return;
+    if (!userId) {
+      setLoading(false);
+      return;
+    }
+
     const fetchUserSettings = async () => {
       setLoading(true);
       setError(null);
 
       try {
-        const {
-          data: { user },
-          error: userError,
-        } = await supabase.auth.getUser();
-        if (!user || userError) {
-          throw new Error("User not authenticated");
-        }
+        // const {
+        //   data: { user },
+        //   error: userError,
+        // } = await supabase.auth.getUser();
+        // if (!user || userError) {
+        //   throw new Error("User not authenticated");
+        // }
 
         const { data, error: fetchError } = await supabase
           .from("user_profile_view")
           .select("*")
-          .eq("user_id", user.id)
+          .eq("user_id", userId)
           .single();
         if (fetchError) {
           throw fetchError;
@@ -85,7 +93,7 @@ export function useUserSettings(): UseUserSettingsResult {
     };
 
     fetchUserSettings();
-  }, []);
+  }, [userId, userLoading]);
 
   return { ...settings, loading, error };
 }
