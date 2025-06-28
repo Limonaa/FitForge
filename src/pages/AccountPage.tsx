@@ -80,64 +80,68 @@ const AccountPage = () => {
           }}
         />
       )}
-      <p className="text-2xl font-bold mx-6">Account</p>
-      <p className="text-gray-500 mx-6">Manage your profile and preferences</p>
-      <div className="flex flex-row w-full">
-        <div className="bg-white shadow-md rounded-xl flex flex-col justify-start items-center w-1/4 m-6">
-          <div className="relative group m-4 w-24 h-24">
-            <div className="bg-blue-200 rounded-full w-full h-full overflow-hidden">
-              {avatarUrl ? (
-                <img
-                  src={avatarUrl}
-                  alt="Profile"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="flex justify-center items-center h-full">
-                  <User width={40} height={40} className="text-blue-400" />
-                </div>
-              )}
+      <div className="flex flex-col items-start justify-center">
+        <p className="text-3xl font-bold tracking-wide w-full mb-2">Account</p>
+        <p className="text-sm text-gray-500">
+          Manage your profile and preferences
+        </p>
+        <div className="flex flex-row w-full py-4">
+          <div className="bg-white shadow-md rounded-xl flex flex-col justify-start items-center w-1/4 m-6">
+            <div className="relative group m-4 w-24 h-24">
+              <div className="bg-blue-200 rounded-full w-full h-full overflow-hidden">
+                {avatarUrl ? (
+                  <img
+                    src={avatarUrl}
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="flex justify-center items-center h-full">
+                    <User width={40} height={40} className="text-blue-400" />
+                  </div>
+                )}
+              </div>
+              <div
+                className="absolute inset-0 flex justify-center items-center bg-black/30 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
+                onClick={() => setShowUploader(true)}
+              >
+                <Pencil className="text-white" size={24} />
+              </div>
             </div>
-            <div
-              className="absolute inset-0 flex justify-center items-center bg-black/30 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
-              onClick={() => setShowUploader(true)}
-            >
-              <Pencil className="text-white" size={24} />
+            <p className="text-xl font-bold tracking-wide">{name}</p>
+            <div className="my-2 w-3/4">
+              <SidebarItem
+                label="Profile"
+                icon={<User width={18} height={18} />}
+                value="prof"
+                selected={selected}
+                onSelect={setSelected}
+              />
+              <SidebarItem
+                label="Measurements"
+                icon={<Weight width={18} height={18} />}
+                value="meas"
+                selected={selected}
+                onSelect={setSelected}
+              />
+              <SidebarItem
+                label="Goals"
+                icon={<TrendingUp width={18} height={18} />}
+                value="goals"
+                selected={selected}
+                onSelect={setSelected}
+              />
+              <SidebarItem
+                label="Settings"
+                icon={<Settings width={18} height={18} />}
+                value="set"
+                selected={selected}
+                onSelect={setSelected}
+              />
             </div>
           </div>
-          <p className="text-xl font-bold tracking-wide">{name}</p>
-          <div className="my-2 w-3/4">
-            <SidebarItem
-              label="Profile"
-              icon={<User width={18} height={18} />}
-              value="prof"
-              selected={selected}
-              onSelect={setSelected}
-            />
-            <SidebarItem
-              label="Measurements"
-              icon={<Weight width={18} height={18} />}
-              value="meas"
-              selected={selected}
-              onSelect={setSelected}
-            />
-            <SidebarItem
-              label="Goals"
-              icon={<TrendingUp width={18} height={18} />}
-              value="goals"
-              selected={selected}
-              onSelect={setSelected}
-            />
-            <SidebarItem
-              label="Settings"
-              icon={<Settings width={18} height={18} />}
-              value="set"
-              selected={selected}
-              onSelect={setSelected}
-            />
-          </div>
+          <div className="flex">{renderSelectedComponent()}</div>
         </div>
-        <div className="flex">{renderSelectedComponent()}</div>
       </div>
     </>
   );
