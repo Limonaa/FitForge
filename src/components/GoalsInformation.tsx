@@ -45,7 +45,9 @@ const GoalsInformation: React.FC<GoalsInfoProps> = ({
     });
   }, [caloriesGoal, proteinGoal, carbsGoal, fatsGoal, activityLevel, goalType]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -137,23 +139,29 @@ const GoalsInformation: React.FC<GoalsInfoProps> = ({
         </div>
         <div className="flex flex-col">
           <label className="text-gray-700">Activity level</label>
-          <input
+          <select
             name="activityLevel"
-            type="text"
+            className="border border-black rounded-md px-2 py-1"
             value={formData.activityLevel}
             onChange={handleChange}
-            className="border border-black rounded-md px-2 py-1 placeholder:text-gray-500 placeholder:capitalize"
-          />
+          >
+            <option value="Sedentary">Sedentary</option>
+            <option value="Moderately">Moderately</option>
+            <option value="Very active">Very active</option>
+          </select>
         </div>
         <div className="flex flex-col">
           <label className="text-gray-700">Goal type</label>
-          <input
+          <select
             name="goalType"
-            type="text"
+            className="border border-black rounded-md px-2 py-1"
             value={formData.goalType}
             onChange={handleChange}
-            className="border border-black rounded-md px-2 py-1 placeholder:text-gray-500 placeholder:capitalize"
-          />
+          >
+            <option value="Stay">Stay</option>
+            <option value="Gain">Gain</option>
+            <option value="Lose">Lose</option>
+          </select>
         </div>
         <button
           type="submit"

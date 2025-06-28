@@ -23,7 +23,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
     <button
       type="button"
       onClick={() => onSelect(value)}
-      className={`flex flex-row items-center justify-start rounded-xl px-4 py-3 gap-5 mt-1 w-full hover:cursor-pointer
+      className={`flex flex-row items-center justify-start rounded-xl px-4 py-3 font-semibold gap-5 mt-1 w-full hover:cursor-pointer
         transition duration-300 ease-in-out
         ${isActive ? "bg-blue-100 bg-opacity-75" : "bg-white"}`}
     >

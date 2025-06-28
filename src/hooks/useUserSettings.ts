@@ -14,6 +14,7 @@ interface UserSettings {
   birthdate: string;
   activityLevel: string;
   goalType: string;
+  avatarUrl: string;
 }
 
 interface UseUserSettingsResult extends UserSettings {
@@ -34,6 +35,7 @@ export function useUserSettings(): UseUserSettingsResult {
     birthdate: "",
     activityLevel: "",
     goalType: "",
+    avatarUrl: "",
   });
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
@@ -53,6 +55,7 @@ export function useUserSettings(): UseUserSettingsResult {
       birthdate: data.birthdate,
       activityLevel: data.activity_level,
       goalType: data.goal_type,
+      avatarUrl: data.avatar_url,
     };
   }
 
@@ -68,14 +71,6 @@ export function useUserSettings(): UseUserSettingsResult {
       setError(null);
 
       try {
-        // const {
-        //   data: { user },
-        //   error: userError,
-        // } = await supabase.auth.getUser();
-        // if (!user || userError) {
-        //   throw new Error("User not authenticated");
-        // }
-
         const { data, error: fetchError } = await supabase
           .from("user_profile_view")
           .select("*")
