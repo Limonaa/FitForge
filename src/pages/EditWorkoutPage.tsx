@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useWorkoutEdit } from "../hooks/useWorkoutEdit";
 import EditableWorkoutHeader from "../components/EditableWorkoutHeader";
 import ExerciseEditorTable from "../components/ExerciseEditorTable";
+import { ChevronLeft } from "lucide-react";
 
 const EditWorkoutPage = () => {
   const navigate = useNavigate();
@@ -33,10 +34,11 @@ const EditWorkoutPage = () => {
           <p className="text-sm text-gray-500">Personalize your exercises</p>
         </div>
         <button
-          className="bg-red-600 px-4 py-2 text-white font-semibold rounded-lg"
-          onClick={() => handleGoBack()}
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-1 text-md text-gray-600 hover:text-black transition"
         >
-          Go back
+          <ChevronLeft size={18} />
+          Back
         </button>
       </div>
 

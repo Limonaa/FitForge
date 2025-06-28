@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Register from "./pages/authentication/Register";
 import Login from "./pages/authentication/Login";
-import Home from "./pages/Home";
+import Home from "./pages/HomePage";
 import Wrapper from "./pages/Wrapper";
 import Navbar from "./components/NavBar";
 import CaloriesPage from "./pages/CaloriesPage";
@@ -12,6 +12,7 @@ import HistoryPage from "./pages/HistoryPage";
 import WorkoutsPage from "./pages/WorkoutsPage";
 import EditWorkoutPage from "./pages/EditWorkoutPage";
 import WorkoutSessionPage from "./pages/WorkoutSessionPage";
+import WorkoutDetails from "./pages/WorkoutDetailsPage";
 
 const Layout = () => {
   return (
@@ -41,6 +42,7 @@ const App = () => {
             element={<WorkoutSessionPage />}
           />
           <Route path="/history" element={<HistoryPage />} />
+          <Route path="/history/:id" element={<WorkoutDetails />} />
           <Route path="/account" element={<AccountPage />} />
         </Route>
 

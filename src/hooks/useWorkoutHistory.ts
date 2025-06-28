@@ -27,14 +27,6 @@ export function useWorkoutHistory(filter?: string): UseWorkoutHistoryResult {
       setError(null);
 
       try {
-        // const {
-        //   data: { user },
-        //   error: userError,
-        // } = await supabase.auth.getUser();
-
-        // if (!user || userError)
-        //   throw new Error(userError?.message || "user not authenticated");
-
         let query = supabase
           .from("workout_history")
           .select("*")
