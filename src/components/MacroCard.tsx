@@ -10,28 +10,28 @@ interface MacroCardProps {
 }
 
 const barColorClasses: Record<string, string> = {
-  calories: "bg-orange-500",
+  calories: "bg-red-500",
   protein: "bg-purple-400",
   carbs: "bg-blue-500",
   fats: "bg-amber-400",
 };
 
 const bgColorClasses: Record<string, string> = {
-  calories: "bg-orange-100",
+  calories: "bg-red-100",
   protein: "bg-purple-100",
   carbs: "bg-blue-100",
   fats: "bg-amber-100",
 };
 
 const iconColorClasses: Record<string, string> = {
-  calories: "text-orange-500",
+  calories: "text-red-500",
   protein: "text-purple-400",
   carbs: "text-blue-500",
   fats: "text-amber-400",
 };
 
 const textColorClasses: Record<string, string> = {
-  calories: "text-orange-700",
+  calories: "text-red-700",
   protein: "text-purple-600",
   carbs: "text-blue-700",
   fats: "text-amber-600",

@@ -66,7 +66,7 @@ const SettingsInformation = () => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-xl justify-center items-center m-6 p-4">
+    <div className="bg-white shadow-md rounded-xl justify-center items-center m-6 p-4 min-w-80">
       <p className="text-xl font-semibold mb-4">Account settings</p>
 
       <form onSubmit={handleChangeEmail} className="mb-6 flex flex-col">
@@ -139,20 +139,13 @@ const SettingsInformation = () => {
         )}
       </form>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="w-full">
         <button
-          className="bg-blue-700 px-4 py-2 flex flex-row justify-center items-center gap-2 rounded-xl text-white"
+          className="bg-blue-700 px-4 py-2 flex flex-row justify-center items-center gap-2 rounded-xl text-white w-full"
           onClick={handleSignOut}
         >
           <LogOut width={18} height={18} />
           Log Out
-        </button>
-        <button
-          className="bg-blue-700 px-4 py-2 flex flex-row justify-center items-center gap-2 rounded-xl text-white"
-          onClick={() => alert("TODO: Handle password reset")}
-        >
-          <KeyRound width={18} height={18} />
-          Change Password
         </button>
       </div>
     </div>

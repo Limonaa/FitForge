@@ -3,6 +3,15 @@ import { Dialog } from "@headlessui/react";
 import { MealType } from "../types/meals";
 import { supabase } from "../services/supabaseService";
 import { useUser } from "../context/UserContext";
+import {
+  Beef,
+  CirclePlus,
+  Croissant,
+  Egg,
+  Flame,
+  UtensilsCrossed,
+  X,
+} from "lucide-react";
 
 interface AddFoodDialogProps {
   isOpen: boolean;
@@ -70,65 +79,94 @@ const AddFoodDialog: React.FC<AddFoodDialogProps> = ({
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="fixed z-50 inset-0">
-      <div className="flex items-center justify-center min-h-screen bg-black bg-opacity-50">
-        <Dialog.Panel className="bg-white rounded-xl shadow-lg w-full max-w-md p-6">
-          <Dialog.Title className="text-xl font-semibold mb-4">
-            Add Food to {mealType}
+      <div className="flex items-center justify-center min-h-screen bg-black/50">
+        <Dialog.Panel className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 relative">
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+          >
+            <X size={20} />
+          </button>
+          <Dialog.Title className="text-2xl font-bold text-indigo-700 mb-6 flex items-center gap-2">
+            <CirclePlus size={24} /> Add Food to{" "}
+            <span className="capitalize">{mealType}</span>
           </Dialog.Title>
+
           <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              placeholder="Food name"
-              className="w-full border px-3 py-2 rounded-md"
-            />
-            <input
-              type="number"
-              value={calories}
-              onChange={(e) => setCalories(Number(e.target.value))}
-              required
-              placeholder="Calories"
-              className="w-full border px-3 py-2 rounded-md"
-            />
-            <input
-              type="number"
-              value={protein}
-              onChange={(e) => setProtein(Number(e.target.value))}
-              required
-              placeholder="Protein (g)"
-              className="w-full border px-3 py-2 rounded-md"
-            />
-            <input
-              type="number"
-              value={carbs}
-              onChange={(e) => setCarbs(Number(e.target.value))}
-              required
-              placeholder="Carbs (g)"
-              className="w-full border px-3 py-2 rounded-md"
-            />
-            <input
-              type="number"
-              value={fats}
-              onChange={(e) => setFats(Number(e.target.value))}
-              required
-              placeholder="Fats (g)"
-              className="w-full border px-3 py-2 rounded-md"
-            />
+            <div className="flex items-center border rounded-md px-3 py-2 bg-gray-50">
+              <UtensilsCrossed className="text-indigo-500 mr-2" size={18} />
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                placeholder="Food name"
+                className="w-full bg-transparent outline-none text-sm"
+              />
+            </div>
+
+            <div className="flex items-center border rounded-md px-3 py-2 bg-gray-50">
+              <Flame className="text-red-500 mr-2" size={18} />
+              <input
+                type="number"
+                value={calories}
+                onChange={(e) => setCalories(Number(e.target.value))}
+                required
+                placeholder="Calories"
+                className="w-full bg-transparent outline-none text-sm"
+              />
+            </div>
+
+            <div className="flex items-center border rounded-md px-3 py-2 bg-gray-50">
+              <Beef className="text-purple-500 mr-2" size={18} />
+              <input
+                type="number"
+                value={protein}
+                onChange={(e) => setProtein(Number(e.target.value))}
+                required
+                placeholder="Protein (g)"
+                className="w-full bg-transparent outline-none text-sm"
+              />
+            </div>
+
+            <div className="flex items-center border rounded-md px-3 py-2 bg-gray-50">
+              <Croissant className="text-blue-500 mr-2" size={18} />
+              <input
+                type="number"
+                value={carbs}
+                onChange={(e) => setCarbs(Number(e.target.value))}
+                required
+                placeholder="Carbs (g)"
+                className="w-full bg-transparent outline-none text-sm"
+              />
+            </div>
+
+            <div className="flex items-center border rounded-md px-3 py-2 bg-gray-50">
+              <Egg className="text-amber-500 mr-2" size={18} />
+              <input
+                type="number"
+                value={fats}
+                onChange={(e) => setFats(Number(e.target.value))}
+                required
+                placeholder="Fats (g)"
+                className="w-full bg-transparent outline-none text-sm"
+              />
+            </div>
+
             {error && <p className="text-red-500 text-sm">{error}</p>}
-            <div className="flex justify-end gap-2">
+
+            <div className="flex justify-end gap-2 pt-2">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300"
+                className="px-4 py-2 rounded-md border text-gray-600 hover:bg-gray-100"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700"
+                className="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-60"
               >
                 {loading ? "Adding..." : "Add"}
               </button>

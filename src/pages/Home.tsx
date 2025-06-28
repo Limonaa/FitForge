@@ -3,7 +3,7 @@ import NotificationCard from "../components/NotificationCard";
 import { useTodayMacros } from "../hooks/useTodayMacros";
 import { useTrainings } from "../hooks/useTrainings";
 import { useUserSettings } from "../hooks/useUserSettings";
-import { Flame, Beef, Croissant, Hamburger } from "lucide-react";
+import { Flame, Beef, Croissant, Egg } from "lucide-react";
 import MacroCard from "../components/MacroCard";
 import WeeklyChart from "../components/WeeklyChart";
 import UpcomingWorkouts from "../components/UpcomingWorkouts";
@@ -110,7 +110,7 @@ const Home = () => {
             type="calories"
           />
           <MacroCard
-            title="Calories Today"
+            title="Protein Today"
             icon={Beef}
             current={totalProtein}
             goal={proteinGoal}
@@ -125,21 +125,25 @@ const Home = () => {
           />
           <MacroCard
             title="Fats Today"
-            icon={Hamburger}
+            icon={Egg}
             current={totalFats}
             goal={fatsGoal}
             type="fats"
           />
         </div>
         <div className="flex flex-row gap-4 w-full">
-          <WeeklyChart />
-          <UpcomingWorkouts
-            workouts={trainings.map((training) => ({
-              ...training,
-              onClick: () => {},
-            }))}
-            showButton={false}
-          />
+          <div className="flex-[3]">
+            <WeeklyChart />
+          </div>
+          <div className="flex-[2]">
+            <UpcomingWorkouts
+              workouts={trainings.map((training) => ({
+                ...training,
+                onClick: () => {},
+              }))}
+              showButton={false}
+            />
+          </div>
         </div>
         <div className="flex justify-center w-full mt-4">
           <DailyTip />

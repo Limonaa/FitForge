@@ -83,7 +83,7 @@ const AccountPage = () => {
       <p className="text-2xl font-bold mx-6">Account</p>
       <p className="text-gray-500 mx-6">Manage your profile and preferences</p>
       <div className="flex flex-row w-full">
-        <div className="bg-white shadow-md rounded-xl flex flex-col justify-center items-center w-1/4 m-6">
+        <div className="bg-white shadow-md rounded-xl flex flex-col justify-start items-center w-1/4 m-6">
           <div className="relative group m-4 w-24 h-24">
             <div className="bg-blue-200 rounded-full w-full h-full overflow-hidden">
               {avatarUrl ? (
@@ -137,7 +137,7 @@ const AccountPage = () => {
             />
           </div>
         </div>
-        {renderSelectedComponent()}
+        <div className="flex">{renderSelectedComponent()}</div>
       </div>
     </>
   );
