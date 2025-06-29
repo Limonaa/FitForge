@@ -3,6 +3,7 @@ import { supabase as authService } from "../../services/supabaseService";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import NotificationCard from "../../components/NotificationCard";
+import Button from "../../components/Button";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -98,17 +99,16 @@ const Login = () => {
                 </button>
               </div>
             </div>
-            <button
+            <Button
+              variant="primary"
               type="submit"
+              className="w-full bg-indigo-600"
               disabled={isSubmitting}
-              className={`w-full py-2 rounded-xl font-semibold transition ${
-                isSubmitting
-                  ? "bg-indigo-400 cursor-not-allowed"
-                  : "bg-indigo-600 hover:bg-indigo-700 text-white"
-              }`}
+              loading={isSubmitting}
+              loadingText="Logging in..."
             >
-              {isSubmitting ? "Logging in..." : "Log in"}
-            </button>
+              Log in
+            </Button>
           </form>
           <p className="text-sm text-center text-gray-500 mt-4">
             Don't have an account yet?{" "}

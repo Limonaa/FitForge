@@ -3,6 +3,7 @@ import { supabase as authService } from "../../services/supabaseService";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import NotificationCard from "../../components/NotificationCard";
+import Button from "../../components/Button";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -164,12 +165,16 @@ const Register = () => {
                 </li>
               </ul>
             </div>
-            <button
+            <Button
+              variant="primary"
               type="submit"
-              className="w-full bg-indigo-600 text-white py-2 rounded-xl font-semibold hover:bg-indigo-700 transition"
+              className="w-full bg-indigo-600"
+              disabled={isSubmitting}
+              loading={isSubmitting}
+              loadingText="Logging in..."
             >
               Register
-            </button>
+            </Button>
           </form>
           <p className="text-sm text-center text-gray-500 mt-4">
             Already have an account?{" "}

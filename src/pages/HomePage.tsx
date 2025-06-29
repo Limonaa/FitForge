@@ -94,7 +94,7 @@ const Home = () => {
           onClose={() => setNotification(null)}
         />
       )}
-      <div className="flex flex-col items-start justify-center px-4 sm:px-6">
+      <div className="flex flex-col items-start justify-center">
         <p className="text-2xl sm:text-3xl font-bold tracking-wide w-full mb-1 sm:mb-2">
           Dashboard
         </p>
