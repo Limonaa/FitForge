@@ -25,10 +25,7 @@ const WorkoutsHistoryTable: React.FC<WorkoutsHistoryTableProps> = ({
   return (
     <div className="bg-white shadow-md rounded-xl p-4 sm:p-6 w-full">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
-        <div>
-          <p className="text-lg font-semibold">Recent Workouts</p>
-          <p className="text-sm text-gray-500">View and review your sessions</p>
-        </div>
+        <p className="text-lg font-semibold">Recent Workouts</p>
         <input
           type="text"
           placeholder="Filter by name..."

@@ -10,6 +10,7 @@ import {
   Trash2,
   X,
 } from "lucide-react";
+import Button from "./Button";
 
 interface AddWorkoutDialogProps {
   isOpen: boolean;
@@ -283,20 +284,19 @@ const AddWorkoutDialog: React.FC<AddWorkoutDialogProps> = ({
             {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
 
             <div className="flex justify-end gap-2 mt-4">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-700"
-              >
+              <Button variant="secondary" onClick={onClose}>
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="primary"
                 type="submit"
                 disabled={loading}
-                className="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-60"
+                loading={loading}
+                loadingText="Adding..."
+                onClick={onClose}
               >
-                {loading ? "Adding..." : "Add"}
-              </button>
+                Add
+              </Button>
             </div>
           </form>
         </Dialog.Panel>

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { supabase } from "../services/supabaseService";
-import { LogOut, KeyRound, Mail, Lock } from "lucide-react";
+import { LogOut, Mail, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Button from "./Button";
 
 const SettingsInformation = () => {
   const navigate = useNavigate();
@@ -82,13 +83,15 @@ const SettingsInformation = () => {
             required
           />
         </div>
-        <button
+        <Button
           type="submit"
-          className="bg-blue-700 text-white px-4 py-2 rounded mt-2 rounded-xl"
-          disabled={loading}
+          variant="primary"
+          loading={loading}
+          loadingText="Changing email..."
+          className="mt-2"
         >
-          {loading ? "Sending..." : "Change Email"}
-        </button>
+          Change email
+        </Button>
         {emailMessage && (
           <p className="text-green-600 mt-2 text-sm">{emailMessage}</p>
         )}
@@ -124,12 +127,9 @@ const SettingsInformation = () => {
           />
         </div>
 
-        <button
-          type="submit"
-          className="bg-blue-700 text-white px-4 py-2 rounded-xl"
-        >
-          Change Password
-        </button>
+        <Button type="submit" variant="primary">
+          Change password
+        </Button>
 
         {passwordMessage && (
           <p className="text-green-600 mt-2 text-sm">{passwordMessage}</p>
@@ -139,15 +139,17 @@ const SettingsInformation = () => {
         )}
       </form>
 
-      <div className="w-full">
-        <button
-          className="bg-blue-700 px-4 py-2 flex flex-row justify-center items-center gap-2 rounded-xl text-white w-full"
-          onClick={handleSignOut}
-        >
-          <LogOut width={18} height={18} />
-          Log Out
-        </button>
-      </div>
+      <Button
+        type="submit"
+        variant="primary"
+        loading={loading}
+        loadingText="Saving..."
+        iconLeft={<LogOut className="w-4 h-4" />}
+        onClick={handleSignOut}
+        className="w-full"
+      >
+        Log Out
+      </Button>
     </div>
   );
 };

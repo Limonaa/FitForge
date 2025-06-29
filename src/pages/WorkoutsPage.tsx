@@ -4,6 +4,8 @@ import MyWorkouts from "../components/MyWorkouts";
 import UpcomingWorkouts from "../components/UpcomingWorkouts";
 import { useTrainings } from "../hooks/useTrainings";
 import AddWorkoutDialog from "../components/AddWorkoutDialog";
+import Button from "../components/Button";
+import { CirclePlus } from "lucide-react";
 
 const WorkoutsPage = () => {
   const [notification, setNotification] = useState<{
@@ -56,12 +58,13 @@ const WorkoutsPage = () => {
               Plan and schedule your workouts
             </p>
           </div>
-          <button
-            className="bg-indigo-600 text-white font-semibold text-base md:text-lg px-4 h-min py-2 rounded-xl w-full md:w-auto"
+          <Button
+            variant="primary"
+            className=""
             onClick={() => handleOpenDialog()}
           >
             New workout
-          </button>
+          </Button>
         </div>
 
         <div className="flex flex-col md:flex-row gap-6 w-full">

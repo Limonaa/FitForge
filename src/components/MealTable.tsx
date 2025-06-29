@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { type FoodEntry } from "../types/FoodEntry";
 import { MealType } from "../types/meals";
 import AddFoodDialog from "./AddFoodDialog";
+import Button from "./Button";
 
 interface MealTableProps {
   entries: FoodEntry[];
@@ -59,12 +60,13 @@ const MealTable: React.FC<MealTableProps> = ({ entries }) => {
               <h2 className="text-xl font-semibold mb-2">
                 {mealTypeLabels[type as MealType]}
               </h2>
-              <button
-                className="px-4 py-2 bg-blue-500 text-white font-semibold tracking-wide rounded-xl my-2"
+              <Button
+                variant="primary"
                 onClick={() => handleOpenDialog(type as MealType)}
+                className="my-2"
               >
                 Add
-              </button>
+              </Button>
             </div>
             <div className="overflow-x-auto rounded-lg shadow">
               <table className="min-w-full bg-white border border-gray-200">

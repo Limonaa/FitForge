@@ -3,11 +3,12 @@ import NotificationCard from "../components/NotificationCard";
 import { useTodayMacros } from "../hooks/useTodayMacros";
 import { useTrainings } from "../hooks/useTrainings";
 import { useUserSettings } from "../hooks/useUserSettings";
-import { Flame, Beef, Croissant, Egg } from "lucide-react";
+import { Flame, Beef, Croissant, Egg, Send } from "lucide-react";
 import MacroCard from "../components/MacroCard";
 import WeeklyChart from "../components/WeeklyChart";
 import UpcomingWorkouts from "../components/UpcomingWorkouts";
 import DailyTip from "../components/DailyTip";
+import Button from "../components/Button";
 
 interface Training {
   id: number;

@@ -12,6 +12,7 @@ import {
   UtensilsCrossed,
   X,
 } from "lucide-react";
+import Button from "./Button";
 
 interface AddFoodDialogProps {
   isOpen: boolean;
@@ -156,20 +157,18 @@ const AddFoodDialog: React.FC<AddFoodDialogProps> = ({
             {error && <p className="text-red-500 text-sm">{error}</p>}
 
             <div className="flex justify-end gap-2 pt-2">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-4 py-2 rounded-md border text-gray-600 hover:bg-gray-100"
-              >
+              <Button variant="secondary" onClick={onClose}>
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="primary"
                 type="submit"
+                loading={loading}
+                loadingText="Adding..."
                 disabled={loading}
-                className="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-60"
               >
-                {loading ? "Adding..." : "Add"}
-              </button>
+                Add
+              </Button>
             </div>
           </form>
         </Dialog.Panel>

@@ -4,7 +4,8 @@ import { useParams } from "react-router-dom";
 import { useWorkoutEdit } from "../hooks/useWorkoutEdit";
 import EditableWorkoutHeader from "../components/EditableWorkoutHeader";
 import ExerciseEditorTable from "../components/ExerciseEditorTable";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, CirclePlus } from "lucide-react";
+import Button from "../components/Button";
 
 const EditWorkoutPage = () => {
   const navigate = useNavigate();
@@ -53,12 +54,9 @@ const EditWorkoutPage = () => {
           onRemove={deleteExercise}
         />
         <div className="flex justify-end w-full">
-          <button
-            onClick={addExercise}
-            className="mt-4 px-4 py-2 rounded-md bg-green-600 text-white hover:bg-green-700"
-          >
-            + Add Exercise
-          </button>
+          <Button variant="green" onClick={addExercise} className="mt-2">
+            Add Exercise
+          </Button>
         </div>
       </div>
     </div>

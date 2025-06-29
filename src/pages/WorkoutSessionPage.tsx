@@ -4,6 +4,7 @@ import { supabase } from "../services/supabaseService";
 import { Timer } from "lucide-react";
 import WorkoutButtons from "../components/WorkoutButtons";
 import { useUser } from "../context/UserContext";
+import Button from "../components/Button";
 
 const WorkoutSessionPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -119,6 +120,7 @@ const WorkoutSessionPage = () => {
     const confirmEnd = confirm("Are you sure to end workout?");
     if (!confirmEnd) return;
 
+    localStorage.removeItem(`workout_start_${id}`);
     setIsWorkoutFinished(true);
     setShowSummary(true);
   };
@@ -170,8 +172,16 @@ const WorkoutSessionPage = () => {
     navigate("/workouts");
   };
 
-  const handleCancelSummary = () => {
+  const handleContinueWorkout = () => {
+    const now = new Date();
+    setStartTime(now);
+    localStorage.setItem(`workout_start_${id}`, now.toISOString());
     setShowSummary(false);
+    setIsWorkoutFinished(false);
+  };
+
+  const handleQuit = () => {
+    navigate("/workouts");
   };
 
   if (!workout || !currentExercise) return <p>Loading...</p>;
@@ -215,19 +225,16 @@ const WorkoutSessionPage = () => {
           })}
         </div>
 
-        <div className="grid grid-cols-2 gap-4 pt-4">
-          <button
-            onClick={handleSaveWorkout}
-            className="bg-green-600 text-white py-3 rounded-xl font-medium"
-          >
-            Save workout
-          </button>
-          <button
-            onClick={handleCancelSummary}
-            className="bg-gray-300 text-gray-800 py-3 rounded-xl font-medium"
-          >
+        <div className="grid grid-cols-3 gap-4 pt-4">
+          <Button variant="red" onClick={handleQuit}>
+            Quit without saving
+          </Button>
+          <Button variant="primary" onClick={handleContinueWorkout}>
             Continue workout
-          </button>
+          </Button>
+          <Button variant="green" onClick={handleSaveWorkout}>
+            Save workout
+          </Button>
         </div>
       </div>
     );

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { supabase } from "../services/supabaseService";
 import { Save } from "lucide-react";
 import { useUser } from "../context/UserContext";
+import Button from "./Button";
 
 interface GoalsInfoProps {
   caloriesGoal: number;
@@ -163,14 +164,16 @@ const GoalsInformation: React.FC<GoalsInfoProps> = ({
             <option value="Lose">Lose</option>
           </select>
         </div>
-        <button
+        <Button
           type="submit"
-          disabled={loading}
-          className="bg-blue-700 px-4 py-2 flex flex-row justify-center items-center w-full gap-1 rounded-xl sm:col-start-2 col-span-2 sm:col-span-1"
+          variant="primary"
+          loading={loading}
+          loadingText="Saving..."
+          iconLeft={<Save className="w-4 h-4" />}
+          className="sm:col-start-2 col-span-2 sm:col-span-1"
         >
-          <Save width={18} height={18} className="text-white" />
-          <p className="text-white text-sm tracking-wide">Save Changes</p>
-        </button>
+          Save changes
+        </Button>
       </form>
 
       {error && <p className="text-red-500 mt-2">{error}</p>}

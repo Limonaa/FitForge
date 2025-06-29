@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "./Button";
 
 interface WorkoutButtonsProps {
   currentIndex: number;
@@ -19,42 +20,26 @@ const WorkoutButtons: React.FC<WorkoutButtonsProps> = ({
 }) => {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-      <button
-        onClick={onPrev}
-        disabled={currentIndex === 0}
-        className="py-3 rounded-xl font-medium transition-colors duration-300 ease-in-out
-          bg-amber-500 text-white
-          disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
-      >
+      <Button variant="amber" onClick={onPrev} disabled={currentIndex === 0}>
         Prev
-      </button>
-
-      <button
+      </Button>
+      <Button
+        variant="secondary"
         onClick={onSkip}
         disabled={currentIndex >= totalExercises - 1}
-        className="text-sm py-3 rounded-xl font-medium transition-colors duration-300 ease-in-out
-          bg-gray-400 text-white
-          disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
       >
         Skip
-      </button>
-
-      <button
+      </Button>
+      <Button
+        variant="primary"
         onClick={onNext}
         disabled={currentIndex >= totalExercises - 1}
-        className="text-sm py-3 rounded-xl font-medium transition-colors duration-300 ease-in-out
-          bg-blue-600 text-white
-          disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
       >
         Next
-      </button>
-
-      <button
-        onClick={onFinish}
-        className="bg-red-500 text-white text-sm py-3 rounded-xl font-medium"
-      >
+      </Button>
+      <Button variant="red" onClick={onFinish}>
         End
-      </button>
+      </Button>
     </div>
   );
 };
