@@ -93,15 +93,15 @@ const Home = () => {
           onClose={() => setNotification(null)}
         />
       )}
-      <div className="flex flex-col items-start justify-center">
-        <p className="text-3xl font-bold tracking-wide w-full mb-2">
+      <div className="flex flex-col items-start justify-center px-4 sm:px-6">
+        <p className="text-2xl sm:text-3xl font-bold tracking-wide w-full mb-1 sm:mb-2">
           Dashboard
         </p>
         <p className="text-sm text-gray-500">
           Welcome back! Here's your fitness summary
         </p>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 py-4 w-full">
           <MacroCard
             title="Calories Today"
             icon={Flame}
@@ -131,11 +131,11 @@ const Home = () => {
             type="fats"
           />
         </div>
-        <div className="flex flex-row gap-4 w-full">
-          <div className="flex-[3]">
+        <div className="flex flex-col md:flex-row gap-4 w-full">
+          <div className="md:flex-[3]">
             <WeeklyChart />
           </div>
-          <div className="flex-[2]">
+          <div className="md:flex-[2]">
             <UpcomingWorkouts
               workouts={trainings.map((training) => ({
                 ...training,

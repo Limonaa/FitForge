@@ -37,11 +37,13 @@ const UpcomingWorkouts: React.FC<UpcomingWorkoutProps> = ({
           title={clickedTitle}
         />
       )}
-      <div className="bg-white rounded-xl shadow-md p-6 w-full max-w-3xl flex flex-col justify-between h-full">
+      <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 w-full max-w-3xl flex flex-col justify-between h-full">
         <div>
           <div className="flex flex-row justify-between items-center mb-2">
-            <h2 className="text-xl font-semibold mb-2">Upcoming workouts</h2>
-            <Dumbbell className="w-8 h-8 text-indigo-500 rotate-90" />
+            <h2 className="text-lg sm:text-xl font-semibold mb-2">
+              Upcoming workouts
+            </h2>
+            <Dumbbell className="w-6 h-6 sm:w-8 sm:h-8 text-indigo-500 rotate-90" />
           </div>
           <div className="flex flex-col gap-4">
             {workouts.map((workout, index) => (
@@ -61,10 +63,10 @@ const UpcomingWorkouts: React.FC<UpcomingWorkoutProps> = ({
         </div>
         {showButton && (
           <button
-            className="w-full bg-indigo-200 p-3 rounded-xl mt-4"
+            className="w-full bg-indigo-200 p-3 rounded-xl mt-3 sm:mt-4"
             onClick={() => navigate("/workouts")}
           >
-            <p className="text-center text-indigo-600 font-semibold text-lg">
+            <p className="text-center text-indigo-600 font-semibold text-base sm:text-lg">
               View all workouts
             </p>
           </button>

@@ -75,8 +75,8 @@ const MyWorkouts = () => {
           title={clickedTitle}
         />
       )}
-      <div className="bg-white shadow-md rounded-xl justify-center items-center p-6 w-full h-full">
-        <p className="text-xl font-semibold mb-2">My workouts</p>
+      <div className="bg-white shadow-md rounded-xl justify-center items-center p-4 md:p-6 w-full h-full">
+        <p className="text-lg md:text-xl font-semibold mb-2">My workouts</p>
         <div className="flex flex-col gap-4">
           {currentTrainings.map((workout) => (
             <WorkoutCard

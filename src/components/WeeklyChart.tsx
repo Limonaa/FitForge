@@ -31,8 +31,8 @@ const WeeklyChart = () => {
   if (error) return <p>Error loading data</p>;
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-6 w-full max-w-3xl">
-      <h2 className="text-xl font-semibold mb-2 first-letter:capitalize">
+    <div className="bg-white rounded-xl shadow-md p-4 sm:p-6 w-full max-w-3xl">
+      <h2 className="text-lg sm:text-xl font-semibold mb-2 first-letter:capitalize">
         {selected}
         <p className="text-sm text-gray-500 font-normal">(last 7 days)</p>
       </h2>
@@ -67,7 +67,7 @@ const WeeklyChart = () => {
         </AreaChart>
       </ResponsiveContainer>
 
-      <div className="flex justify-start gap-6 mt-4 text-sm font-medium ">
+      <div className="flex justify-start gap-4 sm:gap-6 mt-4 text-sm font-medium ">
         {["calories", "protein", "carbs", "fats"].map((key) => (
           <button
             key={key}

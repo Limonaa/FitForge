@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Register from "./pages/authentication/Register";
 import Login from "./pages/authentication/Login";
@@ -15,15 +15,23 @@ import WorkoutSessionPage from "./pages/WorkoutSessionPage";
 import WorkoutDetails from "./pages/WorkoutDetailsPage";
 
 const Layout = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
-    <>
-      <Navbar />
-      <Wrapper>
-        <main className="ml-64 py-6 px-4">
-          <Outlet />
-        </main>
-      </Wrapper>
-    </>
+    <div className="min-h-screen flex flex-col md:flex-row">
+      <Navbar isOpen={menuOpen} setIsOpen={setMenuOpen} />
+
+      {menuOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-40 z-40 md:hidden"
+          onClick={() => setMenuOpen(false)}
+        />
+      )}
+
+      <main className="flex-1 p-4 pt-20 md:pt-6 overflow-x-hidden">
+        <Outlet />
+      </main>
+    </div>
   );
 };
 

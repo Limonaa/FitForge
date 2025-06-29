@@ -48,17 +48,21 @@ const MacroCard = ({
 
   return (
     <div
-      className={`rounded-2xl shadow-md p-6 min-h-40 w-full flex flex-col justify-between ${bgColorClasses[type]}`}
+      className={`rounded-2xl shadow-md p-4 sm:p-6 min-h-36 sm:min-h-40 w-full flex flex-col justify-between ${bgColorClasses[type]}`}
     >
       <div className="flex justify-between items-center">
-        <p className="text-lg font-semibold text-gray-700">{title}</p>
-        <Icon className={`w-8 h-8 ${iconColorClasses[type]}`} />
+        <p className="text-base sm:text-lg font-semibold text-gray-700">
+          {title}
+        </p>
+        <Icon className={`w-6 h-6 sm:w-8 sm:h-8 ${iconColorClasses[type]}`} />
       </div>
       <div>
-        <p className={`text-lg font-bold mt-2 ${textColorClasses[type]}`}>
+        <p
+          className={`text-base sm:text-lg font-bold mt-2 ${textColorClasses[type]}`}
+        >
           {current}/{goal}
         </p>
-        <div className="w-full h-3 mt-3 bg-white rounded-full overflow-hidden">
+        <div className="w-full h-2 sm:h-3 mt-3 bg-white rounded-full overflow-hidden">
           <div
             className={`${barColorClasses[type]} h-full transition-all duration-300`}
             style={{ width: `${percentage}%` }}
