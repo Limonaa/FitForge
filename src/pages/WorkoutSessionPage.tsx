@@ -39,19 +39,25 @@ const WorkoutSessionPage = () => {
         .eq("workout_id", id)
         .order("order_in_workout");
       setExercises(exercises || []);
-      setStartTime(new Date());
+
+      const storedStart = localStorage.getItem(`workout_start_${id}`);
+      if (storedStart) {
+        setStartTime(new Date(storedStart));
+      } else {
+        const now = new Date();
+        setStartTime(now);
+        localStorage.setItem(`workout_start_${id}`, now.toISOString());
+      }
     };
 
     fetchWorkout();
-  }, [id]);
+  }, [id, userId, userLoading]);
 
   useEffect(() => {
     if (!startTime || isWorkoutFinished) return;
 
     const timer = setInterval(() => {
-      const seconds = Math.floor(
-        (new Date().getTime() - startTime.getTime()) / 1000
-      );
+      const seconds = Math.floor((Date.now() - startTime.getTime()) / 1000);
       setElapsed(seconds);
     }, 1000);
 
@@ -110,7 +116,7 @@ const WorkoutSessionPage = () => {
   };
 
   const finishWorkout = () => {
-    const confirmEnd = confirm("Na pewno chcesz zakończyć trening?");
+    const confirmEnd = confirm("Are you sure to end workout?");
     if (!confirmEnd) return;
 
     setIsWorkoutFinished(true);
@@ -157,7 +163,7 @@ const WorkoutSessionPage = () => {
     });
 
     if (error) {
-      alert("Błąd przy zapisie do historii" + error.message);
+      alert(error.message);
       return;
     }
 
@@ -165,10 +171,7 @@ const WorkoutSessionPage = () => {
   };
 
   const handleCancelSummary = () => {
-    const confirmBack = confirm("Na pewno chcesz wrócić bez zapisywania?");
-    if (confirmBack) {
-      setShowSummary(false);
-    }
+    setShowSummary(false);
   };
 
   if (!workout || !currentExercise) return <p>Loading...</p>;
@@ -178,25 +181,23 @@ const WorkoutSessionPage = () => {
 
     return (
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold text-center">
-          Podsumowanie treningu
-        </h2>
+        <h2 className="text-2xl font-bold text-center">Workout summary</h2>
         <div className="space-y-2 text-center">
           <p>
-            <strong>Trening:</strong> {workout.title}
+            <strong>Workout:</strong> {workout.title}
           </p>
           <p>
-            <strong>Czas:</strong> {Math.floor(duration / 60)}:
+            <strong>Time:</strong> {Math.floor(duration / 60)}:
             {String(duration % 60).padStart(2, "0")}
           </p>
           <p>
-            <strong>Serie:</strong> {totalSets}
+            <strong>Total sets:</strong> {totalSets}
           </p>
           <p>
-            <strong>Powtórzenia:</strong> {totalReps}
+            <strong>Total reps:</strong> {totalReps}
           </p>
           <p>
-            <strong>Ciężar (kg):</strong> {totalWeight}
+            <strong>Total weight (kg):</strong> {totalWeight}
           </p>
         </div>
 
@@ -207,7 +208,7 @@ const WorkoutSessionPage = () => {
               <div key={exercise.id} className="bg-gray-100 rounded-xl p-4">
                 <p className="font-bold">{exercise.name}</p>
                 <p>
-                  {completed} / {exercise.sets} serii wykonano
+                  {completed} / {exercise.sets} sets done
                 </p>
               </div>
             );
@@ -219,13 +220,13 @@ const WorkoutSessionPage = () => {
             onClick={handleSaveWorkout}
             className="bg-green-600 text-white py-3 rounded-xl font-medium"
           >
-            Zapisz trening
+            Save workout
           </button>
           <button
             onClick={handleCancelSummary}
             className="bg-gray-300 text-gray-800 py-3 rounded-xl font-medium"
           >
-            Kontynuuj trening
+            Continue workout
           </button>
         </div>
       </div>
@@ -234,8 +235,10 @@ const WorkoutSessionPage = () => {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-3">
-        <p className="text-2xl font-bold text-start">{workout.title}</p>
+      <div className="grid grid-cols-3 items-center">
+        <p className="sm:text-2xl text-lg sm:font-bold font-semibold text-start truncate">
+          {workout.title}
+        </p>
         <div className="flex justify-center items-center text-gray-600 gap-2 text-3xl">
           <Timer className="w-8 h-8" />
           {Math.floor(elapsed / 60)}:{String(elapsed % 60).padStart(2, "0")}
@@ -248,25 +251,31 @@ const WorkoutSessionPage = () => {
         <div className="grid grid-cols-3 gap-4 justify-center text-center">
           <div className="bg-gray-100 rounded-xl py-4">
             <p className="text-md text-gray-500">Reps</p>
-            <p className="text-xl font-bold">{currentExercise.reps}</p>
+            <p className="text-xl font-semibold sm:font-bold">
+              {currentExercise.reps}
+            </p>
           </div>
           <div className="bg-gray-100 rounded-xl py-4">
             <p className="text-md text-gray-500">Sets</p>
-            <p className="text-xl font-bold">{currentExercise.sets}</p>
+            <p className="text-xl font-semibold sm:font-bold">
+              {currentExercise.sets}
+            </p>
           </div>
           {currentExercise.weight > 0 && (
             <div className="bg-gray-100 rounded-xl py-4">
               <p className="text-md text-gray-500">Weight (kg)</p>
-              <p className="text-xl font-bold">{currentExercise.weight}</p>
+              <p className="text-xl font-semibold sm:font-bold">
+                {currentExercise.weight}
+              </p>
             </div>
           )}
         </div>
 
-        <div className="flex justify-center flex-wrap gap-3 mt-4">
+        <div className="grid grid-cols-3 sm:flex justify-center gap-3 mt-4 w-full max-w-md mx-auto">
           <button
             onClick={removeLastSet}
             disabled={(completedSetsMap[currentIndex]?.length || 0) === 0}
-            className={`w-14 h-10 flex items-center justify-center rounded-full font-semibold border-2 transition-all ${
+            className={`w-full sm:w-14 h-10 flex items-center justify-center rounded-full font-semibold border-2 col-start-1 transition-all ${
               (completedSetsMap[currentIndex]?.length || 0) > 0
                 ? "bg-red-600 text-white border-red-600"
                 : "bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed"
@@ -282,7 +291,7 @@ const WorkoutSessionPage = () => {
               <button
                 key={i}
                 onClick={() => toggleSet(i)}
-                className={`w-10 h-10 flex items-center justify-center rounded-full font-semibold border-2 transition-all ${
+                className={`w-full sm:w-10 h-10 flex items-center justify-center rounded-full font-semibold border-2 transition-all ${
                   isCompleted
                     ? "bg-green-600 text-white border-green-600"
                     : "bg-gray-200 text-gray-700 border-gray-300"
@@ -298,7 +307,7 @@ const WorkoutSessionPage = () => {
               (completedSetsMap[currentIndex]?.length || 0) >=
               exercises[currentIndex].sets
             }
-            className={`w-14 h-10 flex items-center justify-center rounded-full font-semibold border-2 transition-all ${
+            className={`w-full sm:w-14 h-10 flex items-center justify-center rounded-full font-semibold border-2 col-start-3 sm:col-start-1 transition-all ${
               (completedSetsMap[currentIndex]?.length || 0) <
               exercises[currentIndex].sets
                 ? "bg-green-600 text-white border-green-600"

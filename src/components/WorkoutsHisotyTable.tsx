@@ -23,8 +23,8 @@ const WorkoutsHistoryTable: React.FC<WorkoutsHistoryTableProps> = ({
   };
 
   return (
-    <div className="bg-white shadow-md rounded-xl p-6 w-full">
-      <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
+    <div className="bg-white shadow-md rounded-xl p-4 sm:p-6 w-full">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
         <div>
           <p className="text-lg font-semibold">Recent Workouts</p>
           <p className="text-sm text-gray-500">View and review your sessions</p>
@@ -34,7 +34,7 @@ const WorkoutsHistoryTable: React.FC<WorkoutsHistoryTableProps> = ({
           placeholder="Filter by name..."
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className="border border-gray-300 rounded-md px-3 py-2 text-sm w-full md:w-64"
+          className="border border-gray-300 rounded-md px-3 py-2 text-sm w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
       </div>
 
@@ -42,21 +42,38 @@ const WorkoutsHistoryTable: React.FC<WorkoutsHistoryTableProps> = ({
         <p className="text-sm text-gray-500 mt-4">No workouts found.</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="min-w-full text-sm text-left text-gray-900">
+          <table className="min-w-[600px] w-full text-sm text-left text-gray-900">
             <thead>
-              <tr className="border-b border-gray-200">
-                <th className="px-4 py-3 font-medium">Workout</th>
-                <th className="px-4 py-3 font-medium flex gap-1">Date</th>
-                <th className="px-4 py-3 font-medium">Duration</th>
-                <th className="px-4 py-3 font-medium">Reps/Sets</th>
-                <th className="px-4 py-3 font-medium text-end">Actions</th>
+              <tr className="border-b border-gray-200 bg-gray-50">
+                <th className="px-4 py-3 font-medium whitespace-nowrap">
+                  Workout
+                </th>
+                <th className="px-4 py-3 font-medium whitespace-nowrap">
+                  Date
+                </th>
+                <th className="px-4 py-3 font-medium whitespace-nowrap">
+                  Duration
+                </th>
+                <th className="px-4 py-3 font-medium whitespace-nowrap">
+                  Reps/Sets
+                </th>
+                <th className="px-4 py-3 font-medium text-end whitespace-nowrap">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
               {filteredWorkouts.map((item) => (
                 <tr
                   key={item.id}
-                  className="hover:bg-gray-50 border-b last:border-none transition-colors"
+                  onClick={() => {
+                    if (window.innerWidth < 640) {
+                      handleWorkoutDetails(item.id);
+                    }
+                  }}
+                  className="border-b last:border-none transition-colors 
+             sm:cursor-default sm:hover:bg-transparent 
+             hover:bg-gray-100 cursor-pointer"
                 >
                   <td className="px-4 py-3">{item.name}</td>
                   <td className="px-4 py-3">
@@ -68,7 +85,10 @@ const WorkoutsHistoryTable: React.FC<WorkoutsHistoryTableProps> = ({
                   </td>
                   <td className="px-4 py-3 text-end">
                     <button
-                      onClick={() => handleWorkoutDetails(item.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleWorkoutDetails(item.id);
+                      }}
                       className="text-indigo-600 hover:text-indigo-800 font-medium transition"
                     >
                       Details →

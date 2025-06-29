@@ -1,6 +1,7 @@
 import React from "react";
 import { Dialog } from "@headlessui/react";
 import { useNavigate } from "react-router-dom";
+import { X } from "lucide-react";
 
 interface StartEditDialogProps {
   id: number;
@@ -28,8 +29,9 @@ const StartEditWorkoutDialog: React.FC<StartEditDialogProps> = ({
     <Dialog open={isOpen} onClose={onClose} className="fixed z-50 inset-0">
       <div className="flex items-center justify-center min-h-screen bg-black bg-opacity-50">
         <Dialog.Panel className="bg-white rounded-xl shadow-lg w-72 max-w-md p-6">
-          <Dialog.Title className="text-2xl font-bold mb-4 text-center tracking-wide">
+          <Dialog.Title className="text-2xl font-bold mb-4 text-center tracking-wide flex justify-between">
             {title}
+            <X onClick={onClose} />
           </Dialog.Title>
           <div className="grid grid-cols-3">
             <button

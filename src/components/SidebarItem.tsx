@@ -35,7 +35,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
         {icon}
       </div>
       <p
-        className={`transition duration-300 ease-in-out ${
+        className={`transition duration-300 ease-in-out truncate ${
           isActive ? "text-purple-500" : "text-gray-600"
         }`}
       >

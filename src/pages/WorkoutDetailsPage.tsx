@@ -79,7 +79,7 @@ const WorkoutHistoryDetailsPage = () => {
                 {new Date(workoutInfo.date).toLocaleDateString()}
               </div>
               <div className="flex items-center gap-1">
-                <Timer size={16} /> {workoutInfo.time / 60} min
+                <Timer size={16} /> {Math.round(workoutInfo.time / 60)} min
               </div>
             </div>
           </>
@@ -109,7 +109,7 @@ const WorkoutHistoryDetailsPage = () => {
                   <Dumbbell size={18} />
                   {exercise.name}
                 </h4>
-                <div className="grid grid-cols-3 gap-4 text-md text-gray-700">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-md text-gray-700">
                   <div className="flex items-center gap-1">
                     <Repeat size={16} className="text-blue-500" />
                     Sets: {exercise.sets}

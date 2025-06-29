@@ -91,7 +91,7 @@ const MeasurementsInfo: React.FC<MeasInfoProps> = ({ height, weight }) => {
         <button
           type="submit"
           disabled={loading}
-          className="bg-blue-700 px-4 py-2 flex flex-row justify-center items-center w-full gap-1 rounded-xl col-start-2"
+          className="bg-blue-700 px-4 py-2 flex flex-row justify-center items-center w-full gap-1 rounded-xl sm:col-start-2 col-span-2 sm:col-span-1"
         >
           <Save width={18} height={18} className="text-white" />
           <p className="text-white text-sm tracking-wide">Save Changes</p>

@@ -84,7 +84,7 @@ const SettingsInformation = () => {
         </div>
         <button
           type="submit"
-          className="bg-blue-700 text-white px-4 py-2 rounded mt-2"
+          className="bg-blue-700 text-white px-4 py-2 rounded mt-2 rounded-xl"
           disabled={loading}
         >
           {loading ? "Sending..." : "Change Email"}
@@ -126,7 +126,7 @@ const SettingsInformation = () => {
 
         <button
           type="submit"
-          className="bg-blue-700 text-white px-4 py-2 rounded"
+          className="bg-blue-700 text-white px-4 py-2 rounded-xl"
         >
           Change Password
         </button>
