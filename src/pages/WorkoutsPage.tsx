@@ -51,7 +51,7 @@ const WorkoutsPage = () => {
       <div className="flex flex-col items-start justify-center">
         <div className="flex flex-col md:flex-row md:justify-between w-full gap-4 mb-4">
           <div>
-            <p className="text-2xl md:text-3xl font-bold tracking-wide mb-1">
+            <p className="text-2xl md:text-3xl font-bold tracking-wide mb-1 sm:mb-2">
               Workout planner
             </p>
             <p className="text-sm text-gray-500">
