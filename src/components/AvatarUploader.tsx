@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { supabase } from "../services/supabaseService";
-import { useUser } from "../context/UserContext";
 import { X } from "lucide-react";
 
 export function AvatarUploader({

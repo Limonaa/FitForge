@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { supabase as authService } from "../../services/supabaseService";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import NotificationCard from "../../components/NotificationCard";
 import Button from "../../components/Button";

@@ -7,8 +7,7 @@ import GoalsInformation from "../components/GoalsInformation";
 import SettingsInformation from "../components/SettingsInformation";
 import SidebarItem from "../components/SidebarItem";
 import { AvatarUploader } from "../components/AvatarUploader";
-import { supabase } from "../services/supabaseService";
-import { useUser } from "../context/UserContext";
+import PageHeader from "../components/PageHeader";
 
 type SelectType = "prof" | "meas" | "goals" | "set";
 
@@ -80,12 +79,10 @@ const AccountPage = () => {
           }}
         />
       )}
-      <div className="flex flex-col items-start justify-center w-full">
-        <p className="text-3xl font-bold tracking-wide w-full mb-2">Account</p>
-        <p className="text-sm text-gray-500 mb-4">
-          Manage your profile and preferences
-        </p>
-
+      <PageHeader
+        title="Account"
+        subtitle="Manage your profile and preferences"
+      >
         <div className="flex flex-col sm:hidden w-full">
           <div className="flex flex-row items-center gap-4 mb-4">
             <div className="relative group w-16 h-16">
@@ -209,7 +206,7 @@ const AccountPage = () => {
 
           <div className="flex flex-grow">{renderSelectedComponent()}</div>
         </div>
-      </div>
+      </PageHeader>
     </>
   );
 };

@@ -3,18 +3,12 @@ import NotificationCard from "../components/NotificationCard";
 import { useTodayMacros } from "../hooks/useTodayMacros";
 import { useTrainings } from "../hooks/useTrainings";
 import { useUserSettings } from "../hooks/useUserSettings";
-import { Flame, Beef, Croissant, Egg, Send } from "lucide-react";
+import { Flame, Beef, Croissant, Egg } from "lucide-react";
 import MacroCard from "../components/MacroCard";
 import WeeklyChart from "../components/WeeklyChart";
 import UpcomingWorkouts from "../components/UpcomingWorkouts";
 import DailyTip from "../components/DailyTip";
-import Button from "../components/Button";
-
-interface Training {
-  id: number;
-  title: string;
-  nextTraining: string;
-}
+import PageHeader from "../components/PageHeader";
 
 const Home = () => {
   // Trainings
@@ -81,10 +75,6 @@ const Home = () => {
     }
   }, [settingsError]);
 
-  const handleCardClick = (training: Training) => {
-    // TODO
-  };
-
   return (
     <>
       {notification && (
@@ -94,14 +84,10 @@ const Home = () => {
           onClose={() => setNotification(null)}
         />
       )}
-      <div className="flex flex-col items-start justify-center">
-        <p className="text-2xl sm:text-3xl font-bold tracking-wide w-full mb-1 sm:mb-2">
-          Dashboard
-        </p>
-        <p className="text-sm text-gray-500">
-          Welcome back! Here's your fitness summary
-        </p>
-
+      <PageHeader
+        title="Dashboard"
+        subtitle="Welcome back! Here's your fitness summary"
+      >
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 py-4 w-full">
           <MacroCard
             title="Calories Today"
@@ -149,7 +135,7 @@ const Home = () => {
         <div className="flex justify-center w-full mt-4">
           <DailyTip />
         </div>
-      </div>
+      </PageHeader>
     </>
   );
 };

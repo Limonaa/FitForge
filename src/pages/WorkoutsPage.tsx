@@ -5,7 +5,7 @@ import UpcomingWorkouts from "../components/UpcomingWorkouts";
 import { useTrainings } from "../hooks/useTrainings";
 import AddWorkoutDialog from "../components/AddWorkoutDialog";
 import Button from "../components/Button";
-import { CirclePlus } from "lucide-react";
+import PageHeader from "../components/PageHeader";
 
 const WorkoutsPage = () => {
   const [notification, setNotification] = useState<{
@@ -48,16 +48,10 @@ const WorkoutsPage = () => {
           onSuccess={handleSuccess}
         />
       )}
-      <div className="flex flex-col items-start justify-center">
-        <div className="flex flex-col md:flex-row md:justify-between w-full gap-4 mb-4">
-          <div>
-            <p className="text-2xl md:text-3xl font-bold tracking-wide mb-1 sm:mb-2">
-              Workout planner
-            </p>
-            <p className="text-sm text-gray-500">
-              Plan and schedule your workouts
-            </p>
-          </div>
+      <PageHeader
+        title="Workout planner"
+        subtitle="Plan and schedule your workouts"
+        rightSlot={
           <Button
             variant="primary"
             className=""
@@ -65,8 +59,8 @@ const WorkoutsPage = () => {
           >
             New workout
           </Button>
-        </div>
-
+        }
+      >
         <div className="flex flex-col md:flex-row gap-6 w-full">
           <div className="w-full md:flex-[3]">
             <MyWorkouts />
@@ -81,7 +75,7 @@ const WorkoutsPage = () => {
             />
           </div>
         </div>
-      </div>
+      </PageHeader>
     </>
   );
 };
