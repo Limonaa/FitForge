@@ -41,7 +41,10 @@ const Navbar: React.FC<NavbarProps> = ({ isOpen, setIsOpen }) => {
   `}
       >
         <div className="px-6 py-6 hidden md:block">
-          <Link to="/home" className="text-3xl text-white font-semibold">
+          <Link
+            to="/home"
+            className="text-3xl text-white font-semibold flex justify-center"
+          >
             <img
               src="/fitforge_logo.png"
               alt="Fitforge logo"
@@ -51,7 +54,10 @@ const Navbar: React.FC<NavbarProps> = ({ isOpen, setIsOpen }) => {
         </div>
 
         <div className="px-6 py-6 md:hidden">
-          <Link to="/home" className="text-3xl text-white font-semibold">
+          <Link
+            to="/home"
+            className="text-3xl text-white font-semibold flex justify-center"
+          >
             <img
               src="/fitforge_logo.png"
               alt="Fitforge logo"
