@@ -41,7 +41,6 @@ export function useUserSettings(): UseUserSettingsResult {
   const [error, setError] = useState<Error | null>(null);
   const { userId, loading: userLoading } = useUser();
 
-  // Map data from database for UsersSettings' structure
   function mapDbToUserSettings(data: any): UserSettings {
     return {
       weight: data.weight,

@@ -21,13 +21,13 @@ const Button: React.FC<ButtonProps> = ({
   iconLeft,
   iconRight,
   className,
-  ...props // ← ZACHOWAJ TO
+  ...props
 }) => {
   const baseStyles =
     "inline-flex items-center justify-center font-semibold rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
 
   const variantStyles = {
-    primary: "bg-blue-600 text-white hover:bg-blue-700",
+    primary: "bg-indigo-600 text-white hover:bg-indigo-700",
     secondary: "bg-gray-200 text-gray-600 hover:bg-gray-300",
     green: "bg-green-600 text-white hover:bg-green-700",
     amber: "bg-amber-600 text-white hover:bg-amber-700",

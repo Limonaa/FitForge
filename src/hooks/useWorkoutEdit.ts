@@ -34,13 +34,6 @@ export function useWorkoutEdit(workoutId: number) {
     if (userLoading || !userId) return;
 
     const fetchData = async () => {
-      // const {
-      //   data: { user },
-      //   error: userError,
-      // } = await supabase.auth.getUser();
-      // if (userError || !user)
-      //   throw new Error(userError?.message || "User not authenticated");
-
       const { data: workout } = await supabase
         .from("workouts")
         .select("*")
@@ -91,15 +84,6 @@ export function useWorkoutEdit(workoutId: number) {
   };
 
   const addExercise = async () => {
-    // const {
-    //   data: { user },
-    //   error: userError,
-    // } = await supabase.auth.getUser();
-    // if (userError || !user) {
-    //   console.error("User not authenticated");
-    //   return;
-    // }
-
     const order = exercises.length + 1;
 
     const newExercise = {
