@@ -29,14 +29,14 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
     >
       <div
         className={`transition duration-300 ease-in-out ${
-          isActive ? "text-purple-500" : "text-gray-600"
+          isActive ? "text-indigo-600" : "text-gray-600"
         }`}
       >
         {icon}
       </div>
       <p
         className={`transition duration-300 ease-in-out truncate ${
-          isActive ? "text-purple-500" : "text-gray-600"
+          isActive ? "text-indigo-600" : "text-gray-600"
         }`}
       >
         {label}

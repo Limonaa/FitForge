@@ -88,7 +88,7 @@ const AddFoodDialog: React.FC<AddFoodDialogProps> = ({
           >
             <X size={20} />
           </button>
-          <Dialog.Title className="text-2xl font-bold text-indigo-700 mb-6 flex items-center gap-2">
+          <Dialog.Title className="text-2xl font-bold text-indigo-600 mb-6 flex items-center gap-2">
             <CirclePlus size={24} /> Add Food to{" "}
             <span className="capitalize">{mealType}</span>
           </Dialog.Title>

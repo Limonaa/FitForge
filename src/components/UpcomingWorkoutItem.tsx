@@ -21,7 +21,7 @@ const UpcomingWorkoutItem: React.FC<UpcomingWorkoutItemProps> = ({
   const today = new Date().toISOString().slice(0, 10);
   const bColor =
     convertDotDateToISO(nextTraining) == today
-      ? "border-blue-500 bg-blue-50"
+      ? "border-indigo-500 bg-blue-50"
       : "border-gray-300 bg-white";
 
   return (

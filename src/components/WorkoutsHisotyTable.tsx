@@ -86,7 +86,7 @@ const WorkoutsHistoryTable: React.FC<WorkoutsHistoryTableProps> = ({
                         e.stopPropagation();
                         handleWorkoutDetails(item.id);
                       }}
-                      className="text-indigo-600 hover:text-indigo-800 font-medium transition"
+                      className="text-indigo-600 hover:text-indigo-700 font-medium transition"
                     >
                       Details →
                     </button>
