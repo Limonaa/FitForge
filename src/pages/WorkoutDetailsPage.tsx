@@ -9,7 +9,10 @@ import {
   Calendar,
   Timer,
   ChevronLeft,
+  ArrowDownUp,
 } from "lucide-react";
+import PageHeader from "../components/PageHeader";
+import WorkoutDetailsCard from "../components/WorkoutDetailsCard";
 
 const WorkoutHistoryDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -20,6 +23,9 @@ const WorkoutHistoryDetailsPage = () => {
     name: string;
     date: string;
     time: number;
+    weight: number;
+    reps: number;
+    sets: number;
   } | null>(null);
   const [loadingInfo, setLoadingInfo] = useState(true);
 
@@ -36,7 +42,7 @@ const WorkoutHistoryDetailsPage = () => {
       setLoadingInfo(true);
       const { data, error } = await supabase
         .from("workout_history")
-        .select("name, date, time")
+        .select("name, date, time, weight, reps, sets")
         .eq("workout_id", workoutId)
         .single();
 
@@ -50,27 +56,25 @@ const WorkoutHistoryDetailsPage = () => {
   }, [workoutId]);
 
   return (
-    <div className="w-full">
-      <div className="flex justify-between items-center mx-6 mt-4 mb-2">
-        <div>
-          <p className="text-2xl font-bold">Workout Summary</p>
-          <p className="text-gray-500">Detailed breakdown of your session</p>
-        </div>
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-1 text-md text-gray-600 hover:text-black transition"
-        >
-          <ChevronLeft size={18} />
-          Back
-        </button>
-      </div>
-
-      <div className="bg-white shadow-md rounded-xl mx-6 p-6">
+    <>
+      <PageHeader
+        title="Workout summary"
+        subtitle="Detailed breakdown of your session"
+        rightSlot={
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-1 text-md text-gray-600 hover:text-black transition"
+          >
+            <ChevronLeft size={18} />
+            Back
+          </button>
+        }
+      >
         {loadingInfo ? (
           <p className="text-gray-500">Loading workout info...</p>
         ) : workoutInfo ? (
           <>
-            <h2 className="text-2xl font-semibold tracking-wide text-indigo-700 mb-2">
+            <h2 className="text-3xl font-bold tracking-wide mb-2">
               {workoutInfo.name}
             </h2>
             <div className="flex gap-6 text-sm text-gray-600 mb-6">
@@ -87,9 +91,29 @@ const WorkoutHistoryDetailsPage = () => {
           <p className="text-red-500">Workout not found.</p>
         )}
 
-        <hr className="my-4" />
+        <div className="flex flex-col sm:flex-row gap-6 justify-between items-center mb-8">
+          <WorkoutDetailsCard
+            type="weight"
+            title="Total weight lifted"
+            icon={Dumbbell}
+            value={workoutInfo?.weight || 0}
+            unit={"kg"}
+          />
+          <WorkoutDetailsCard
+            type="reps"
+            title="Total reps"
+            icon={ArrowDownUp}
+            value={workoutInfo?.reps || 0}
+          />
+          <WorkoutDetailsCard
+            type="sets"
+            title="Total sets"
+            icon={Repeat}
+            value={workoutInfo?.sets || 0}
+          />
+        </div>
 
-        <h3 className="text-lg font-semibold mb-4 text-gray-700">Exercises</h3>
+        <h3 className="text-xl font-semibold mb-2">Exercises</h3>
 
         {loadingExercises ? (
           <p className="text-gray-500">Loading exercises...</p>
@@ -101,33 +125,19 @@ const WorkoutHistoryDetailsPage = () => {
           exercises
             .sort((a, b) => a.orderInWorkout - b.orderInWorkout)
             .map((exercise) => (
-              <div
-                key={exercise.id}
-                className="border rounded-lg p-4 mb-4 bg-gray-50 hover:bg-gray-100 transition"
-              >
-                <h4 className="text-lg font-medium text-indigo-600 flex items-center gap-2 mb-2">
-                  <Dumbbell size={18} />
+              <div key={exercise.id} className="p-4 mb-4">
+                <h4 className="text-xl font-semibold text-indigo-600 mb-2">
                   {exercise.name}
                 </h4>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-md text-gray-700">
-                  <div className="flex items-center gap-1">
-                    <Repeat size={16} className="text-blue-500" />
-                    Sets: {exercise.sets}
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Repeat size={16} className="text-green-500" />
-                    Reps: {exercise.reps}
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <GaugeCircle size={16} className="text-pink-500" />
-                    Weight: {exercise.weight} kg
-                  </div>
+                <div className="text-gray-600 text-md font-semibold border-b-2 w-max">
+                  {exercise.weight} kg · {exercise.reps} reps · {exercise.sets}{" "}
+                  sets
                 </div>
               </div>
             ))
         )}
-      </div>
-    </div>
+      </PageHeader>
+    </>
   );
 };
 
