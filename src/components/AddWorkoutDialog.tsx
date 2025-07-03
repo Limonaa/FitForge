@@ -293,7 +293,6 @@ const AddWorkoutDialog: React.FC<AddWorkoutDialogProps> = ({
                 disabled={loading}
                 loading={loading}
                 loadingText="Adding..."
-                onClick={onClose}
               >
                 Add
               </Button>

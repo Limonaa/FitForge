@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { supabase as authService } from "../../services/supabaseService";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import NotificationCard from "../../components/NotificationCard";
 import Button from "../../components/Button";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -70,6 +71,7 @@ const Register = () => {
       setEmail("");
       setPassword("");
       setIsSubmitting(false);
+      navigate("/login");
     }
     setIsSubmitting(false);
   };

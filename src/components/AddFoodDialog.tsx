@@ -28,23 +28,39 @@ const AddFoodDialog: React.FC<AddFoodDialogProps> = ({
   onSuccess,
 }) => {
   const [name, setName] = useState("");
-  const [calories, setCalories] = useState<number | "">("");
-  const [protein, setProtein] = useState<number | "">("");
-  const [carbs, setCarbs] = useState<number | "">("");
-  const [fats, setFats] = useState<number | "">("");
+  const [calories, setCalories] = useState<string>("");
+  const [protein, setProtein] = useState<string>("");
+  const [carbs, setCarbs] = useState<string>("");
+  const [fats, setFats] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { userId, loading: userLoading } = useUser();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    if (userLoading) return;
-    if (!userId) {
-      setLoading(false);
+    e.preventDefault();
+    setError("");
+    if (userLoading || !userId) return;
+
+    const cal = Number(calories);
+    const prot = Number(protein);
+    const carb = Number(carbs);
+    const fat = Number(fats);
+
+    if (
+      !name.trim() ||
+      isNaN(cal) ||
+      isNaN(prot) ||
+      isNaN(carb) ||
+      isNaN(fat) ||
+      cal < 0 ||
+      prot < 0 ||
+      carb < 0 ||
+      fat < 0
+    ) {
+      setError("Please enter valid, non-negative numbers for all fields.");
       return;
     }
 
-    e.preventDefault();
-    setError("");
     setLoading(true);
     const today = new Date().toISOString().slice(0, 10);
 
@@ -53,10 +69,10 @@ const AddFoodDialog: React.FC<AddFoodDialogProps> = ({
         {
           user_id: userId,
           name,
-          calories: Number(calories),
-          protein: Number(protein),
-          carbs: Number(carbs),
-          fats: Number(fats),
+          calories: cal,
+          protein: prot,
+          carbs: carb,
+          fats: fat,
           meal_type: mealType,
           date: today,
         },
@@ -111,7 +127,7 @@ const AddFoodDialog: React.FC<AddFoodDialogProps> = ({
               <input
                 type="number"
                 value={calories}
-                onChange={(e) => setCalories(Number(e.target.value))}
+                onChange={(e) => setCalories(e.target.value)}
                 required
                 placeholder="Calories"
                 className="w-full bg-transparent outline-none text-sm"
@@ -123,7 +139,7 @@ const AddFoodDialog: React.FC<AddFoodDialogProps> = ({
               <input
                 type="number"
                 value={protein}
-                onChange={(e) => setProtein(Number(e.target.value))}
+                onChange={(e) => setProtein(e.target.value)}
                 required
                 placeholder="Protein (g)"
                 className="w-full bg-transparent outline-none text-sm"
@@ -135,7 +151,7 @@ const AddFoodDialog: React.FC<AddFoodDialogProps> = ({
               <input
                 type="number"
                 value={carbs}
-                onChange={(e) => setCarbs(Number(e.target.value))}
+                onChange={(e) => setCarbs(e.target.value)}
                 required
                 placeholder="Carbs (g)"
                 className="w-full bg-transparent outline-none text-sm"
@@ -147,7 +163,7 @@ const AddFoodDialog: React.FC<AddFoodDialogProps> = ({
               <input
                 type="number"
                 value={fats}
-                onChange={(e) => setFats(Number(e.target.value))}
+                onChange={(e) => setFats(e.target.value)}
                 required
                 placeholder="Fats (g)"
                 className="w-full bg-transparent outline-none text-sm"
