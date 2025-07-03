@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../services/supabaseService";
-import { Timer } from "lucide-react";
+import { ArrowUpDown, Dumbbell, Repeat, Timer } from "lucide-react";
 import WorkoutButtons from "../components/WorkoutButtons";
 import { useUser } from "../context/UserContext";
 import Button from "../components/Button";
+import WorkoutDetailsCard from "../components/WorkoutDetailsCard";
 
 const WorkoutSessionPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -252,30 +253,28 @@ const WorkoutSessionPage = () => {
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-xl shadow-md space-y-6 text-center">
+      <div className="rounded-xl space-y-6 text-center">
         <h2 className="text-2xl font-semibold">{currentExercise.name}</h2>
 
-        <div className="grid grid-cols-3 gap-4 justify-center text-center">
-          <div className="bg-gray-100 rounded-xl py-4">
-            <p className="text-md text-gray-500">Reps</p>
-            <p className="text-xl font-semibold sm:font-bold">
-              {currentExercise.reps}
-            </p>
-          </div>
-          <div className="bg-gray-100 rounded-xl py-4">
-            <p className="text-md text-gray-500">Sets</p>
-            <p className="text-xl font-semibold sm:font-bold">
-              {currentExercise.sets}
-            </p>
-          </div>
-          {currentExercise.weight > 0 && (
-            <div className="bg-gray-100 rounded-xl py-4">
-              <p className="text-md text-gray-500">Weight (kg)</p>
-              <p className="text-xl font-semibold sm:font-bold">
-                {currentExercise.weight}
-              </p>
-            </div>
-          )}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center text-center">
+          <WorkoutDetailsCard
+            title="Reps"
+            type="reps"
+            icon={ArrowUpDown}
+            value={currentExercise.reps}
+          />
+          <WorkoutDetailsCard
+            title="Sets"
+            type="sets"
+            icon={Repeat}
+            value={currentExercise.sets}
+          />
+          <WorkoutDetailsCard
+            title="Weight"
+            type="weight"
+            icon={Dumbbell}
+            value={currentExercise.weight || 0}
+          />
         </div>
 
         <div className="grid grid-cols-3 sm:flex justify-center gap-3 mt-4 w-full max-w-md mx-auto">

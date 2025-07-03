@@ -20,13 +20,19 @@ const WorkoutButtons: React.FC<WorkoutButtonsProps> = ({
 }) => {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-      <Button variant="amber" onClick={onPrev} disabled={currentIndex === 0}>
+      <Button
+        variant="amber"
+        onClick={onPrev}
+        disabled={currentIndex === 0}
+        size="lg"
+      >
         Prev
       </Button>
       <Button
         variant="secondary"
         onClick={onSkip}
         disabled={currentIndex >= totalExercises - 1}
+        size="lg"
       >
         Skip
       </Button>
@@ -34,10 +40,11 @@ const WorkoutButtons: React.FC<WorkoutButtonsProps> = ({
         variant="primary"
         onClick={onNext}
         disabled={currentIndex >= totalExercises - 1}
+        size="lg"
       >
         Next
       </Button>
-      <Button variant="red" onClick={onFinish}>
+      <Button variant="red" onClick={onFinish} size="lg">
         End
       </Button>
     </div>
