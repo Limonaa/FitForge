@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useWorkoutEdit } from "../hooks/useWorkoutEdit";
@@ -7,6 +7,7 @@ import ExerciseEditorTable from "../components/ExerciseEditorTable";
 import { ChevronLeft } from "lucide-react";
 import Button from "../components/Button";
 import PageHeader from "../components/PageHeader";
+import NotificationCard from "../components/NotificationCard";
 
 const EditWorkoutPage = () => {
   const navigate = useNavigate();
@@ -18,12 +19,31 @@ const EditWorkoutPage = () => {
     updateExercise,
     deleteExercise,
     addExercise,
+    error: workoutEditError,
   } = useWorkoutEdit(Number(id));
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: "success" | "error" | "info";
+  } | null>(null);
 
-  if (!workout) return <p>Loading...</p>;
+  useEffect(() => {
+    if (workoutEditError) {
+      setNotification({
+        message: workoutEditError.message || "Failed to fetch workout details",
+        type: "error",
+      });
+    }
+  }, [workoutEditError]);
 
   return (
     <>
+      {notification && (
+        <NotificationCard
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
       <PageHeader
         title="Edit workout"
         subtitle="Personalize your exercises"

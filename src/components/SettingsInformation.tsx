@@ -8,32 +8,44 @@ const SettingsInformation = () => {
   const navigate = useNavigate();
   const [newEmail, setNewEmail] = useState("");
   const [emailMessage, setEmailMessage] = useState<string | null>(null);
-  const [emailError, setEmailError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordMessage, setPasswordMessage] = useState<string | null>(null);
-  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: "success" | "error" | "info";
+  } | null>(null);
 
   const handleSignOut = async () => {
     const { error } = await supabase.auth.signOut();
-    if (error) throw error;
+    if (error) {
+      setNotification({
+        message: error.message || "Failed to sign out",
+        type: "error",
+      });
+    }
     navigate("/login");
   };
 
   const handleChangeEmail = async (e: React.FormEvent) => {
     e.preventDefault();
-    setEmailError(null);
+    setNotification(null);
     setEmailMessage(null);
     setLoading(true);
 
     const { error } = await supabase.auth.updateUser({ email: newEmail });
 
     if (error) {
-      setEmailError(error.message);
+      setNotification({
+        message: error.message || "Failed to update email",
+        type: "error",
+      });
     } else {
-      setEmailMessage("Confirmation link has been sent to your new email.");
+      setNotification({
+        message: "Confirmation link has been sent to your new email",
+        type: "info",
+      });
       setNewEmail("");
     }
 
@@ -42,24 +54,34 @@ const SettingsInformation = () => {
 
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    setPasswordError(null);
-    setPasswordMessage(null);
 
     if (newPassword !== confirmPassword) {
-      setPasswordError("New passwords do not match");
+      setNotification({
+        message: "New passwords do not match",
+        type: "error",
+      });
       return;
     }
     if (newPassword.length < 6) {
-      setPasswordError("Password must be at least 6 characters");
+      setNotification({
+        message: "Password must be at least 6 characters",
+        type: "error",
+      });
       return;
     }
 
     const { error } = await supabase.auth.updateUser({ password: newPassword });
 
     if (error) {
-      setPasswordError(error.message);
+      setNotification({
+        message: error.message || "Failed to update password",
+        type: "error",
+      });
     } else {
-      setPasswordMessage("Password updated successfully");
+      setNotification({
+        message: "Password updated successfully",
+        type: "info",
+      });
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
@@ -95,9 +117,6 @@ const SettingsInformation = () => {
         {emailMessage && (
           <p className="text-green-600 mt-2 text-sm">{emailMessage}</p>
         )}
-        {emailError && (
-          <p className="text-red-600 mt-2 text-sm">{emailError}</p>
-        )}
       </form>
 
       <form onSubmit={handleChangePassword} className="mb-6 flex flex-col">
@@ -130,13 +149,6 @@ const SettingsInformation = () => {
         <Button type="submit" variant="primary">
           Change password
         </Button>
-
-        {passwordMessage && (
-          <p className="text-green-600 mt-2 text-sm">{passwordMessage}</p>
-        )}
-        {passwordError && (
-          <p className="text-red-600 mt-2 text-sm">{passwordError}</p>
-        )}
       </form>
 
       <Button

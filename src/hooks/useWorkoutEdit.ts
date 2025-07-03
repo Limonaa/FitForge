@@ -28,25 +28,33 @@ export function useWorkoutEdit(workoutId: number) {
     duration: 0,
   });
   const [exercises, setExercises] = useState<Exercise[]>([]);
+  const [error, setError] = useState<Error | null>(null);
   const { userId, loading: userLoading } = useUser();
 
   useEffect(() => {
     if (userLoading || !userId) return;
 
     const fetchData = async () => {
-      const { data: workout } = await supabase
+      const { data: workout, error: fetchError } = await supabase
         .from("workouts")
         .select("*")
         .eq("id", workoutId)
         .eq("user_id", userId)
         .single();
+      if (fetchError) {
+        setError(fetchError);
+      }
+
       setWorkout(workout);
 
-      const { data: exercises } = await supabase
+      const { data: exercises, error: exercisesError } = await supabase
         .from("workout_exercises")
         .select("*")
         .eq("workout_id", workoutId)
         .order("order_in_workout");
+      if (exercisesError) {
+        setError(exercisesError);
+      }
 
       setExercises(exercises || []);
     };
@@ -105,7 +113,7 @@ export function useWorkoutEdit(workoutId: number) {
     if (!error && data) {
       setExercises((prev) => [...prev, data]);
     } else {
-      console.error("Error adding exercise", error);
+      setError(error);
     }
   };
 
@@ -116,5 +124,6 @@ export function useWorkoutEdit(workoutId: number) {
     updateExercise,
     deleteExercise,
     addExercise,
+    error,
   };
 }

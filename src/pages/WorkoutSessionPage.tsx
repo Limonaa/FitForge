@@ -21,6 +21,10 @@ const WorkoutSessionPage = () => {
   const [showSummary, setShowSummary] = useState(false);
   const [isWorkoutFinished, setIsWorkoutFinished] = useState(false);
   const { userId, loading: userLoading } = useUser();
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: "success" | "error" | "info";
+  } | null>(null);
 
   const currentExercise = exercises[currentIndex];
 
@@ -166,7 +170,10 @@ const WorkoutSessionPage = () => {
     });
 
     if (error) {
-      alert(error.message);
+      setNotification({
+        message: error.message || "Failed to insert data",
+        type: "error",
+      });
       return;
     }
 

@@ -43,7 +43,6 @@ export function useTrainings(limit: number = 3): UseTrainingsResult[] {
           );
         }
       } catch (err: any) {
-        console.error("Error fetching trainings:", err);
         setError(err);
       } finally {
         setLoading(false);

@@ -3,6 +3,7 @@ import { Save } from "lucide-react";
 import { supabase } from "../services/supabaseService";
 import { useUser } from "../context/UserContext";
 import Button from "./Button";
+import NotificationCard from "./NotificationCard";
 
 interface ProfileInforamtionsProps {
   name: string;
@@ -24,9 +25,12 @@ const ProfileInformations: React.FC<ProfileInforamtionsProps> = ({
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const { userId, loading: userLoading } = useUser();
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: "success" | "error" | "info";
+  } | null>(null);
 
   useEffect(() => {
     setFormData({
@@ -49,7 +53,7 @@ const ProfileInformations: React.FC<ProfileInforamtionsProps> = ({
 
     e.preventDefault();
     setLoading(true);
-    setError(null);
+    setNotification(null);
     setSuccess(false);
 
     try {
@@ -61,80 +65,97 @@ const ProfileInformations: React.FC<ProfileInforamtionsProps> = ({
           birthdate: formData.birthdate,
         })
         .eq("user_id", userId);
-      if (settingsError) throw settingsError;
+
+      if (settingsError) {
+        setNotification({
+          message: settingsError.message || "Failed to update data",
+          type: "error",
+        });
+      }
 
       setSuccess(true);
     } catch (err: any) {
-      setError(err.message ?? String(err));
+      setNotification({
+        message: err.message || "Something went wrong",
+        type: "error",
+      });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="bg-white shadow-md rounded-xl justify-center items-center m-6 p-2">
-      <p className="text-xl font-semibold">Profile informations</p>
-      <form
-        onSubmit={handleSubmit}
-        className="mt-2 grid grid-cols-2 grid-rows-2 gap-6"
-      >
-        <div className="flex flex-col">
-          <label className="text-gray-700">Name</label>
-          <input
-            name="name"
-            type="text"
-            value={formData.name}
-            onChange={handleChange}
-            className="border border-black rounded-md px-2 py-1 placeholder:text-gray-500"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label className="text-gray-700">Email Address</label>
-          <input
-            type="email"
-            disabled
-            placeholder={email}
-            className="border border-black rounded-md px-2 py-1 placeholder:text-gray-500"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label className="text-gray-700">Gender</label>
-          <select
-            className="border border-black rounded-md px-2 py-1"
-            name="gender"
-            value={formData.gender}
-            onChange={handleChange}
-          >
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-        </div>
-        <div className="flex flex-col">
-          <label className="text-gray-700">Birthdate</label>
-          <input
-            name="birthdate"
-            type="date"
-            value={formData.birthdate}
-            onChange={handleChange}
-            className="border border-black rounded-md px-2 py-1"
-          />
-        </div>
-
-        <Button
-          type="submit"
-          variant="primary"
-          loading={loading}
-          loadingText="Saving..."
-          iconLeft={<Save className="w-4 h-4" />}
-          className="sm:col-start-2 col-span-2 sm:col-span-1"
+    <>
+      {notification && (
+        <NotificationCard
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
+      <div className="bg-white shadow-md rounded-xl justify-center items-center m-6 p-2">
+        <p className="text-xl font-semibold">Profile informations</p>
+        <form
+          onSubmit={handleSubmit}
+          className="mt-2 grid grid-cols-2 grid-rows-2 gap-6"
         >
-          Save changes
-        </Button>
-      </form>
+          <div className="flex flex-col">
+            <label className="text-gray-700">Name</label>
+            <input
+              name="name"
+              type="text"
+              value={formData.name}
+              onChange={handleChange}
+              className="border border-black rounded-md px-2 py-1 placeholder:text-gray-500"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label className="text-gray-700">Email Address</label>
+            <input
+              type="email"
+              disabled
+              placeholder={email}
+              className="border border-black rounded-md px-2 py-1 placeholder:text-gray-500"
+            />
+          </div>
+          <div className="flex flex-col">
+            <label className="text-gray-700">Gender</label>
+            <select
+              className="border border-black rounded-md px-2 py-1"
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+            >
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+          <div className="flex flex-col">
+            <label className="text-gray-700">Birthdate</label>
+            <input
+              name="birthdate"
+              type="date"
+              value={formData.birthdate}
+              onChange={handleChange}
+              className="border border-black rounded-md px-2 py-1"
+            />
+          </div>
 
-      {error && <p className="text-red-500 mt-2">{error}</p>}
-      {success && <p className="text-green-500 mt-2">Saved successfully!</p>}
-    </div>
+          <Button
+            type="submit"
+            variant="primary"
+            loading={loading}
+            loadingText="Saving..."
+            iconLeft={<Save className="w-4 h-4" />}
+            className="sm:col-start-2 col-span-2 sm:col-span-1"
+          >
+            Save changes
+          </Button>
+        </form>
+
+        {success && <p className="text-green-500 mt-2">Saved successfully!</p>}
+      </div>
+    </>
   );
 };
 

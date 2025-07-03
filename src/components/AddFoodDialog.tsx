@@ -13,6 +13,7 @@ import {
   X,
 } from "lucide-react";
 import Button from "./Button";
+import NotificationCard from "./NotificationCard";
 
 interface AddFoodDialogProps {
   isOpen: boolean;
@@ -33,12 +34,15 @@ const AddFoodDialog: React.FC<AddFoodDialogProps> = ({
   const [carbs, setCarbs] = useState<string>("");
   const [fats, setFats] = useState<string>("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const { userId, loading: userLoading } = useUser();
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: "success" | "error" | "info";
+  } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setNotification(null);
     if (userLoading || !userId) return;
 
     const cal = Number(calories);
@@ -57,7 +61,10 @@ const AddFoodDialog: React.FC<AddFoodDialogProps> = ({
       carb < 0 ||
       fat < 0
     ) {
-      setError("Please enter valid, non-negative numbers for all fields.");
+      setNotification({
+        message: "Please enter valid, non-negative numbers for all fields.",
+        type: "error",
+      });
       return;
     }
 
@@ -81,8 +88,15 @@ const AddFoodDialog: React.FC<AddFoodDialogProps> = ({
       setLoading(false);
 
       if (error) {
-        setError(error.message);
+        setNotification({
+          message: error.message,
+          type: "error",
+        });
       } else {
+        setNotification({
+          message: "Food added succesfully",
+          type: "success",
+        });
         onSuccess();
         onClose();
         setName("");
@@ -95,101 +109,108 @@ const AddFoodDialog: React.FC<AddFoodDialogProps> = ({
   };
 
   return (
-    <Dialog open={isOpen} onClose={onClose} className="fixed z-50 inset-0">
-      <div className="flex items-center justify-center min-h-screen bg-black/50">
-        <Dialog.Panel className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 relative">
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
-          >
-            <X size={20} />
-          </button>
-          <Dialog.Title className="text-2xl font-bold text-indigo-600 mb-6 flex items-center gap-2">
-            <CirclePlus size={24} /> Add Food to{" "}
-            <span className="capitalize">{mealType}</span>
-          </Dialog.Title>
+    <>
+      {notification && (
+        <NotificationCard
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
+      <Dialog open={isOpen} onClose={onClose} className="fixed z-50 inset-0">
+        <div className="flex items-center justify-center min-h-screen bg-black/50">
+          <Dialog.Panel className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 relative">
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+            >
+              <X size={20} />
+            </button>
+            <Dialog.Title className="text-2xl font-bold text-indigo-600 mb-6 flex items-center gap-2">
+              <CirclePlus size={24} /> Add Food to{" "}
+              <span className="capitalize">{mealType}</span>
+            </Dialog.Title>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="flex items-center border rounded-md px-3 py-2 bg-gray-50">
-              <UtensilsCrossed className="text-indigo-500 mr-2" size={18} />
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                placeholder="Food name"
-                className="w-full bg-transparent outline-none text-sm"
-              />
-            </div>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="flex items-center border rounded-md px-3 py-2 bg-gray-50">
+                <UtensilsCrossed className="text-indigo-500 mr-2" size={18} />
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  placeholder="Food name"
+                  className="w-full bg-transparent outline-none text-sm"
+                />
+              </div>
 
-            <div className="flex items-center border rounded-md px-3 py-2 bg-gray-50">
-              <Flame className="text-red-500 mr-2" size={18} />
-              <input
-                type="number"
-                value={calories}
-                onChange={(e) => setCalories(e.target.value)}
-                required
-                placeholder="Calories"
-                className="w-full bg-transparent outline-none text-sm"
-              />
-            </div>
+              <div className="flex items-center border rounded-md px-3 py-2 bg-gray-50">
+                <Flame className="text-red-500 mr-2" size={18} />
+                <input
+                  type="number"
+                  value={calories}
+                  onChange={(e) => setCalories(e.target.value)}
+                  required
+                  placeholder="Calories"
+                  className="w-full bg-transparent outline-none text-sm"
+                />
+              </div>
 
-            <div className="flex items-center border rounded-md px-3 py-2 bg-gray-50">
-              <Beef className="text-purple-500 mr-2" size={18} />
-              <input
-                type="number"
-                value={protein}
-                onChange={(e) => setProtein(e.target.value)}
-                required
-                placeholder="Protein (g)"
-                className="w-full bg-transparent outline-none text-sm"
-              />
-            </div>
+              <div className="flex items-center border rounded-md px-3 py-2 bg-gray-50">
+                <Beef className="text-purple-500 mr-2" size={18} />
+                <input
+                  type="number"
+                  value={protein}
+                  onChange={(e) => setProtein(e.target.value)}
+                  required
+                  placeholder="Protein (g)"
+                  className="w-full bg-transparent outline-none text-sm"
+                />
+              </div>
 
-            <div className="flex items-center border rounded-md px-3 py-2 bg-gray-50">
-              <Croissant className="text-blue-500 mr-2" size={18} />
-              <input
-                type="number"
-                value={carbs}
-                onChange={(e) => setCarbs(e.target.value)}
-                required
-                placeholder="Carbs (g)"
-                className="w-full bg-transparent outline-none text-sm"
-              />
-            </div>
+              <div className="flex items-center border rounded-md px-3 py-2 bg-gray-50">
+                <Croissant className="text-blue-500 mr-2" size={18} />
+                <input
+                  type="number"
+                  value={carbs}
+                  onChange={(e) => setCarbs(e.target.value)}
+                  required
+                  placeholder="Carbs (g)"
+                  className="w-full bg-transparent outline-none text-sm"
+                />
+              </div>
 
-            <div className="flex items-center border rounded-md px-3 py-2 bg-gray-50">
-              <Egg className="text-amber-500 mr-2" size={18} />
-              <input
-                type="number"
-                value={fats}
-                onChange={(e) => setFats(e.target.value)}
-                required
-                placeholder="Fats (g)"
-                className="w-full bg-transparent outline-none text-sm"
-              />
-            </div>
+              <div className="flex items-center border rounded-md px-3 py-2 bg-gray-50">
+                <Egg className="text-amber-500 mr-2" size={18} />
+                <input
+                  type="number"
+                  value={fats}
+                  onChange={(e) => setFats(e.target.value)}
+                  required
+                  placeholder="Fats (g)"
+                  className="w-full bg-transparent outline-none text-sm"
+                />
+              </div>
 
-            {error && <p className="text-red-500 text-sm">{error}</p>}
-
-            <div className="flex justify-end gap-2 pt-2">
-              <Button variant="secondary" onClick={onClose}>
-                Cancel
-              </Button>
-              <Button
-                variant="primary"
-                type="submit"
-                loading={loading}
-                loadingText="Adding..."
-                disabled={loading}
-              >
-                Add
-              </Button>
-            </div>
-          </form>
-        </Dialog.Panel>
-      </div>
-    </Dialog>
+              <div className="flex justify-end gap-2 pt-2">
+                <Button variant="secondary" onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button
+                  variant="primary"
+                  type="submit"
+                  loading={loading}
+                  loadingText="Adding..."
+                  disabled={loading}
+                >
+                  Add
+                </Button>
+              </div>
+            </form>
+          </Dialog.Panel>
+        </div>
+      </Dialog>
+    </>
   );
 };
 

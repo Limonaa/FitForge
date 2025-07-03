@@ -3,6 +3,7 @@ import WorkoutCard from "./WorkoutCard";
 import { supabase } from "../services/supabaseService";
 import StartEditWorkoutDialog from "./StartEditWorkoutDialog";
 import { useUser } from "../context/UserContext";
+import NotificationCard from "./NotificationCard";
 
 const ITEMS_PER_PAGE = 3;
 
@@ -26,6 +27,10 @@ const MyWorkouts = () => {
     startIndex + ITEMS_PER_PAGE
   );
   const { userId, loading: userLoading } = useUser();
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: "success" | "error" | "info";
+  } | null>(null);
 
   useEffect(() => {
     if (userLoading || !userId) return;
@@ -38,7 +43,12 @@ const MyWorkouts = () => {
           .eq("user_id", userId)
           .order("next_workout");
 
-        if (fetchError) throw fetchError;
+        if (fetchError) {
+          setNotification({
+            message: fetchError.message || "Failed to fetch data",
+            type: "error",
+          });
+        }
         if (data) {
           setWorkouts(
             data.map((training: any) => ({
@@ -50,7 +60,10 @@ const MyWorkouts = () => {
           );
         }
       } catch (err: any) {
-        console.error(err);
+        setNotification({
+          message: err.message || "Something went wrong",
+          type: "error",
+        });
       }
     };
 
@@ -67,6 +80,13 @@ const MyWorkouts = () => {
 
   return (
     <>
+      {notification && (
+        <NotificationCard
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
       {openDialog && (
         <StartEditWorkoutDialog
           isOpen={true}

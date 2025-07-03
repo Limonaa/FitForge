@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import PageHeader from "../components/PageHeader";
 import WorkoutDetailsCard from "../components/WorkoutDetailsCard";
+import NotificationCard from "../components/NotificationCard";
 
 const WorkoutHistoryDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -32,8 +33,13 @@ const WorkoutHistoryDetailsPage = () => {
   const {
     exercises,
     loading: loadingExercises,
-    error,
+    error: detailsError,
   } = useWorkoutDetails(workoutId);
+
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: "success" | "error" | "info";
+  } | null>(null);
 
   useEffect(() => {
     if (!workoutId) return;
@@ -46,6 +52,13 @@ const WorkoutHistoryDetailsPage = () => {
         .eq("workout_id", workoutId)
         .single();
 
+      if (error) {
+        setNotification({
+          message: error.message || "Failed to fetch workout info",
+          type: "error",
+        });
+      }
+
       if (!error) {
         setWorkoutInfo(data);
       }
@@ -57,6 +70,13 @@ const WorkoutHistoryDetailsPage = () => {
 
   return (
     <>
+      {notification && (
+        <NotificationCard
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
       <PageHeader
         title="Workout summary"
         subtitle="Detailed breakdown of your session"
@@ -117,8 +137,6 @@ const WorkoutHistoryDetailsPage = () => {
 
         {loadingExercises ? (
           <p className="text-gray-500">Loading exercises...</p>
-        ) : error ? (
-          <p className="text-red-500">{error.message}</p>
         ) : exercises.length === 0 ? (
           <p className="text-gray-500">No exercises found for this workout.</p>
         ) : (

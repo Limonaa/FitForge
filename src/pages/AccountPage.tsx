@@ -25,11 +25,17 @@ const AccountPage = () => {
     activityLevel,
     goalType,
     avatarUrl: initialAvatarUrl,
+    loading: settingsLoading,
+    error: settingsError,
   } = useUserSettings();
 
   const [selected, setSelected] = useState<SelectType>("prof");
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [showUploader, setShowUploader] = useState(false);
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: "success" | "error" | "info";
+  } | null>(null);
 
   const renderSelectedComponent = () => {
     switch (selected) {
@@ -67,6 +73,16 @@ const AccountPage = () => {
       setAvatarUrl(initialAvatarUrl);
     }
   }, [initialAvatarUrl]);
+
+  // Settings Error Handler
+  useEffect(() => {
+    if (settingsError) {
+      setNotification({
+        message: settingsError.message || "Faile to fetch user settings",
+        type: "error",
+      });
+    }
+  }, [settingsError]);
 
   return (
     <>
