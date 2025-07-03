@@ -3,6 +3,7 @@ import { supabase } from "../services/supabaseService";
 import { LogOut, Mail, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Button from "./Button";
+import NotificationCard from "./NotificationCard";
 
 const SettingsInformation = () => {
   const navigate = useNavigate();
@@ -89,80 +90,89 @@ const SettingsInformation = () => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-xl justify-center items-center m-6 p-4 min-w-80">
-      <p className="text-xl font-semibold mb-4">Account settings</p>
+    <>
+      {notification && (
+        <NotificationCard
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
+      <div className="bg-white shadow-md rounded-xl justify-center items-center m-6 p-4 min-w-80">
+        <p className="text-xl font-semibold mb-4">Account settings</p>
 
-      <form onSubmit={handleChangeEmail} className="mb-6 flex flex-col">
-        <label className="block mb-2 font-medium">Change Email</label>
-        <div className="flex items-center gap-2">
-          <Mail width={18} height={18} className="text-gray-600" />
-          <input
-            type="email"
-            placeholder="New email"
-            value={newEmail}
-            onChange={(e) => setNewEmail(e.target.value)}
-            className="border rounded px-3 py-2 w-full"
-            required
-          />
-        </div>
+        <form onSubmit={handleChangeEmail} className="mb-6 flex flex-col">
+          <label className="block mb-2 font-medium">Change Email</label>
+          <div className="flex items-center gap-2">
+            <Mail width={18} height={18} className="text-gray-600" />
+            <input
+              type="email"
+              placeholder="New email"
+              value={newEmail}
+              onChange={(e) => setNewEmail(e.target.value)}
+              className="border rounded px-3 py-2 w-full"
+              required
+            />
+          </div>
+          <Button
+            type="submit"
+            variant="primary"
+            loading={loading}
+            loadingText="Changing email..."
+            className="mt-2"
+          >
+            Change email
+          </Button>
+          {emailMessage && (
+            <p className="text-green-600 mt-2 text-sm">{emailMessage}</p>
+          )}
+        </form>
+
+        <form onSubmit={handleChangePassword} className="mb-6 flex flex-col">
+          <label className="block mb-2 font-medium">Change Password</label>
+
+          <div className="flex items-center gap-2 mb-2">
+            <Lock width={18} height={18} className="text-gray-600" />
+            <input
+              type="password"
+              placeholder="New password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className="border rounded px-3 py-2 w-full"
+              required
+            />
+          </div>
+
+          <div className="flex items-center gap-2 mb-2">
+            <Lock width={18} height={18} className="text-gray-600" />
+            <input
+              type="password"
+              placeholder="Confirm new password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="border rounded px-3 py-2 w-full"
+              required
+            />
+          </div>
+
+          <Button type="submit" variant="primary">
+            Change password
+          </Button>
+        </form>
+
         <Button
           type="submit"
           variant="primary"
           loading={loading}
-          loadingText="Changing email..."
-          className="mt-2"
+          loadingText="Saving..."
+          iconLeft={<LogOut className="w-4 h-4" />}
+          onClick={handleSignOut}
+          className="w-full"
         >
-          Change email
+          Log Out
         </Button>
-        {emailMessage && (
-          <p className="text-green-600 mt-2 text-sm">{emailMessage}</p>
-        )}
-      </form>
-
-      <form onSubmit={handleChangePassword} className="mb-6 flex flex-col">
-        <label className="block mb-2 font-medium">Change Password</label>
-
-        <div className="flex items-center gap-2 mb-2">
-          <Lock width={18} height={18} className="text-gray-600" />
-          <input
-            type="password"
-            placeholder="New password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            className="border rounded px-3 py-2 w-full"
-            required
-          />
-        </div>
-
-        <div className="flex items-center gap-2 mb-2">
-          <Lock width={18} height={18} className="text-gray-600" />
-          <input
-            type="password"
-            placeholder="Confirm new password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className="border rounded px-3 py-2 w-full"
-            required
-          />
-        </div>
-
-        <Button type="submit" variant="primary">
-          Change password
-        </Button>
-      </form>
-
-      <Button
-        type="submit"
-        variant="primary"
-        loading={loading}
-        loadingText="Saving..."
-        iconLeft={<LogOut className="w-4 h-4" />}
-        onClick={handleSignOut}
-        className="w-full"
-      >
-        Log Out
-      </Button>
-    </div>
+      </div>
+    </>
   );
 };
 

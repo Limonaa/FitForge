@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import WorkoutCard from "./WorkoutCard";
 import { supabase } from "../services/supabaseService";
 import StartEditWorkoutDialog from "./StartEditWorkoutDialog";

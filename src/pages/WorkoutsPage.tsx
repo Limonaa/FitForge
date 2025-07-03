@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import NotificationCard from "../components/NotificationCard";
 import MyWorkouts from "../components/MyWorkouts";
 import UpcomingWorkouts from "../components/UpcomingWorkouts";

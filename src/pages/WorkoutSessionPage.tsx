@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../services/supabaseService";
 import { ArrowUpDown, Dumbbell, Repeat, Timer } from "lucide-react";
@@ -6,6 +6,7 @@ import WorkoutButtons from "../components/WorkoutButtons";
 import { useUser } from "../context/UserContext";
 import Button from "../components/Button";
 import WorkoutDetailsCard from "../components/WorkoutDetailsCard";
+import NotificationCard from "../components/NotificationCard";
 
 const WorkoutSessionPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -198,152 +199,170 @@ const WorkoutSessionPage = () => {
     const { totalReps, totalSets, totalWeight, duration } = getSummaryData();
 
     return (
-      <div className="space-y-6">
-        <h2 className="text-2xl font-bold text-center">Workout summary</h2>
-        <div className="space-y-2 text-center">
-          <p>
-            <strong>Workout:</strong> {workout.title}
-          </p>
-          <p>
-            <strong>Time:</strong> {Math.floor(duration / 60)}:
-            {String(duration % 60).padStart(2, "0")}
-          </p>
-          <p>
-            <strong>Total sets:</strong> {totalSets}
-          </p>
-          <p>
-            <strong>Total reps:</strong> {totalReps}
-          </p>
-          <p>
-            <strong>Total weight (kg):</strong> {totalWeight}
-          </p>
-        </div>
+      <>
+        {notification && (
+          <NotificationCard
+            message={notification.message}
+            type={notification.type}
+            onClose={() => setNotification(null)}
+          />
+        )}
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold text-center">Workout summary</h2>
+          <div className="space-y-2 text-center">
+            <p>
+              <strong>Workout:</strong> {workout.title}
+            </p>
+            <p>
+              <strong>Time:</strong> {Math.floor(duration / 60)}:
+              {String(duration % 60).padStart(2, "0")}
+            </p>
+            <p>
+              <strong>Total sets:</strong> {totalSets}
+            </p>
+            <p>
+              <strong>Total reps:</strong> {totalReps}
+            </p>
+            <p>
+              <strong>Total weight (kg):</strong> {totalWeight}
+            </p>
+          </div>
 
-        <div className="space-y-2">
-          {exercises.map((exercise, index) => {
-            const completed = completedSetsMap[index]?.length || 0;
-            return (
-              <div key={exercise.id} className="bg-gray-100 rounded-xl p-4">
-                <p className="font-bold">{exercise.name}</p>
-                <p>
-                  {completed} / {exercise.sets} sets done
-                </p>
-              </div>
-            );
-          })}
-        </div>
+          <div className="space-y-2">
+            {exercises.map((exercise, index) => {
+              const completed = completedSetsMap[index]?.length || 0;
+              return (
+                <div key={exercise.id} className="bg-gray-100 rounded-xl p-4">
+                  <p className="font-bold">{exercise.name}</p>
+                  <p>
+                    {completed} / {exercise.sets} sets done
+                  </p>
+                </div>
+              );
+            })}
+          </div>
 
-        <div className="grid grid-cols-3 gap-4 pt-4">
-          <Button variant="red" onClick={handleQuit}>
-            Quit without saving
-          </Button>
-          <Button variant="primary" onClick={handleContinueWorkout}>
-            Continue workout
-          </Button>
-          <Button variant="green" onClick={handleSaveWorkout}>
-            Save workout
-          </Button>
+          <div className="grid grid-cols-3 gap-4 pt-4">
+            <Button variant="red" onClick={handleQuit}>
+              Quit without saving
+            </Button>
+            <Button variant="primary" onClick={handleContinueWorkout}>
+              Continue workout
+            </Button>
+            <Button variant="green" onClick={handleSaveWorkout}>
+              Save workout
+            </Button>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-3 items-center">
-        <p className="sm:text-2xl text-lg sm:font-bold font-semibold text-start truncate">
-          {workout.title}
-        </p>
-        <div className="flex justify-center items-center text-gray-600 gap-2 text-3xl">
-          <Timer className="w-8 h-8" />
-          {Math.floor(elapsed / 60)}:{String(elapsed % 60).padStart(2, "0")}
-        </div>
-      </div>
-
-      <div className="rounded-xl space-y-6 text-center">
-        <h2 className="text-2xl font-semibold">{currentExercise.name}</h2>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center text-center">
-          <WorkoutDetailsCard
-            title="Reps"
-            type="reps"
-            icon={ArrowUpDown}
-            value={currentExercise.reps}
-          />
-          <WorkoutDetailsCard
-            title="Sets"
-            type="sets"
-            icon={Repeat}
-            value={currentExercise.sets}
-          />
-          <WorkoutDetailsCard
-            title="Weight"
-            type="weight"
-            icon={Dumbbell}
-            value={currentExercise.weight || 0}
-          />
+    <>
+      {notification && (
+        <NotificationCard
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
+      <div className="space-y-6">
+        <div className="grid grid-cols-3 items-center">
+          <p className="sm:text-2xl text-lg sm:font-bold font-semibold text-start truncate">
+            {workout.title}
+          </p>
+          <div className="flex justify-center items-center text-gray-600 gap-2 text-3xl">
+            <Timer className="w-8 h-8" />
+            {Math.floor(elapsed / 60)}:{String(elapsed % 60).padStart(2, "0")}
+          </div>
         </div>
 
-        <div className="grid grid-cols-3 sm:flex justify-center gap-3 mt-4 w-full max-w-md mx-auto">
-          <button
-            onClick={removeLastSet}
-            disabled={(completedSetsMap[currentIndex]?.length || 0) === 0}
-            className={`w-full sm:w-14 h-10 flex items-center justify-center rounded-full font-semibold border-2 col-start-1 transition-all ${
-              (completedSetsMap[currentIndex]?.length || 0) > 0
-                ? "bg-red-600 text-white border-red-600"
-                : "bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed"
-            }`}
-          >
-            –
-          </button>
-          {Array.from({ length: currentExercise.sets }).map((_, i) => {
-            const currentCompletedSets = completedSetsMap[currentIndex] || [];
-            const isCompleted = currentCompletedSets.includes(i);
+        <div className="rounded-xl space-y-6 text-center">
+          <h2 className="text-2xl font-semibold">{currentExercise.name}</h2>
 
-            return (
-              <button
-                key={i}
-                onClick={() => toggleSet(i)}
-                className={`w-full sm:w-10 h-10 flex items-center justify-center rounded-full font-semibold border-2 transition-all ${
-                  isCompleted
-                    ? "bg-green-600 text-white border-green-600"
-                    : "bg-gray-200 text-gray-700 border-gray-300"
-                }`}
-              >
-                {i + 1}
-              </button>
-            );
-          })}
-          <button
-            onClick={addNextSet}
-            disabled={
-              (completedSetsMap[currentIndex]?.length || 0) >=
-              exercises[currentIndex].sets
-            }
-            className={`w-full sm:w-14 h-10 flex items-center justify-center rounded-full font-semibold border-2 col-start-3 sm:col-start-1 transition-all ${
-              (completedSetsMap[currentIndex]?.length || 0) <
-              exercises[currentIndex].sets
-                ? "bg-green-600 text-white border-green-600"
-                : "bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed"
-            }`}
-          >
-            +
-          </button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center text-center">
+            <WorkoutDetailsCard
+              title="Reps"
+              type="reps"
+              icon={ArrowUpDown}
+              value={currentExercise.reps}
+            />
+            <WorkoutDetailsCard
+              title="Sets"
+              type="sets"
+              icon={Repeat}
+              value={currentExercise.sets}
+            />
+            <WorkoutDetailsCard
+              title="Weight"
+              type="weight"
+              icon={Dumbbell}
+              value={currentExercise.weight || 0}
+            />
+          </div>
+
+          <div className="grid grid-cols-3 sm:flex justify-center gap-3 mt-4 w-full max-w-md mx-auto">
+            <button
+              onClick={removeLastSet}
+              disabled={(completedSetsMap[currentIndex]?.length || 0) === 0}
+              className={`w-full sm:w-14 h-10 flex items-center justify-center rounded-full font-semibold border-2 col-start-1 transition-all ${
+                (completedSetsMap[currentIndex]?.length || 0) > 0
+                  ? "bg-red-600 text-white border-red-600"
+                  : "bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed"
+              }`}
+            >
+              –
+            </button>
+            {Array.from({ length: currentExercise.sets }).map((_, i) => {
+              const currentCompletedSets = completedSetsMap[currentIndex] || [];
+              const isCompleted = currentCompletedSets.includes(i);
+
+              return (
+                <button
+                  key={i}
+                  onClick={() => toggleSet(i)}
+                  className={`w-full sm:w-10 h-10 flex items-center justify-center rounded-full font-semibold border-2 transition-all ${
+                    isCompleted
+                      ? "bg-green-600 text-white border-green-600"
+                      : "bg-gray-200 text-gray-700 border-gray-300"
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              );
+            })}
+            <button
+              onClick={addNextSet}
+              disabled={
+                (completedSetsMap[currentIndex]?.length || 0) >=
+                exercises[currentIndex].sets
+              }
+              className={`w-full sm:w-14 h-10 flex items-center justify-center rounded-full font-semibold border-2 col-start-3 sm:col-start-1 transition-all ${
+                (completedSetsMap[currentIndex]?.length || 0) <
+                exercises[currentIndex].sets
+                  ? "bg-green-600 text-white border-green-600"
+                  : "bg-gray-200 text-gray-400 border-gray-300 cursor-not-allowed"
+              }`}
+            >
+              +
+            </button>
+          </div>
+        </div>
+        <WorkoutButtons
+          currentIndex={currentIndex}
+          totalExercises={exercises.length}
+          onPrev={prevExercise}
+          onSkip={skipExercise}
+          onNext={nextExercise}
+          onFinish={finishWorkout}
+        />
+
+        <div className="text-center text-gray-500 mt-2">
+          Exercise {currentIndex + 1} of {exercises.length}
         </div>
       </div>
-      <WorkoutButtons
-        currentIndex={currentIndex}
-        totalExercises={exercises.length}
-        onPrev={prevExercise}
-        onSkip={skipExercise}
-        onNext={nextExercise}
-        onFinish={finishWorkout}
-      />
-
-      <div className="text-center text-gray-500 mt-2">
-        Exercise {currentIndex + 1} of {exercises.length}
-      </div>
-    </div>
+    </>
   );
 };
 

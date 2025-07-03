@@ -5,7 +5,6 @@ import { supabase } from "../services/supabaseService";
 import {
   Dumbbell,
   Repeat,
-  GaugeCircle,
   Calendar,
   Timer,
   ChevronLeft,
@@ -67,6 +66,15 @@ const WorkoutHistoryDetailsPage = () => {
 
     fetchWorkoutInfo();
   }, [workoutId]);
+
+  useEffect(() => {
+    if (detailsError) {
+      setNotification({
+        message: detailsError.message || "Failed to fetch workout detais",
+        type: "error",
+      });
+    }
+  }, [detailsError]);
 
   return (
     <>

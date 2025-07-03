@@ -1,4 +1,3 @@
-import React from "react";
 import { Lightbulb } from "lucide-react";
 import { useDailyTip } from "../hooks/useDailyTip";
 

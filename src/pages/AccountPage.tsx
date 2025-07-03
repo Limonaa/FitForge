@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { User, Weight, TrendingUp, Settings, Pencil } from "lucide-react";
 import { useUserSettings } from "../hooks/useUserSettings";
 import ProfileInformations from "../components/ProfileInformation";
@@ -8,6 +8,7 @@ import SettingsInformation from "../components/SettingsInformation";
 import SidebarItem from "../components/SidebarItem";
 import { AvatarUploader } from "../components/AvatarUploader";
 import PageHeader from "../components/PageHeader";
+import NotificationCard from "../components/NotificationCard";
 
 type SelectType = "prof" | "meas" | "goals" | "set";
 
@@ -86,6 +87,13 @@ const AccountPage = () => {
 
   return (
     <>
+      {notification && (
+        <NotificationCard
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
       {showUploader && (
         <AvatarUploader
           onClose={() => setShowUploader(false)}
