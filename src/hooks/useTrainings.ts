@@ -8,12 +8,13 @@ interface Training {
   duration: number;
 }
 
-interface UseTrainingsResult extends Training {
+interface UseTrainingsResult {
+  trainings: Training[];
   loading: boolean;
   error: Error | null;
 }
 
-export function useTrainings(limit: number = 3): UseTrainingsResult[] {
+export function useTrainings(limit: number = 3): UseTrainingsResult {
   const [trainings, setTrainings] = useState<Training[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -22,7 +23,6 @@ export function useTrainings(limit: number = 3): UseTrainingsResult[] {
     const fetchTrainings = async () => {
       setLoading(true);
       setError(null);
-
       try {
         const { data, error: fetchError } = await supabase
           .from("upcomming_trainings")
@@ -30,15 +30,16 @@ export function useTrainings(limit: number = 3): UseTrainingsResult[] {
           .order("next_workout", { ascending: true })
           .limit(limit);
         if (fetchError) throw fetchError;
+
         if (data) {
           setTrainings(
-            data.map((trainings: any) => ({
-              id: trainings.id,
-              title: trainings.title,
-              nextTraining: trainings.next_workout
-                ? new Date(trainings.next_workout).toLocaleDateString()
+            data.map((t: any) => ({
+              id: t.id,
+              title: t.title,
+              nextTraining: t.next_workout
+                ? new Date(t.next_workout).toLocaleDateString()
                 : "Not scheduled",
-              duration: trainings.duration,
+              duration: t.duration,
             }))
           );
         }
@@ -50,11 +51,7 @@ export function useTrainings(limit: number = 3): UseTrainingsResult[] {
     };
 
     fetchTrainings();
-  }, []);
+  }, [limit]);
 
-  return trainings.map((training) => ({
-    ...training,
-    loading,
-    error,
-  }));
+  return { trainings, loading, error };
 }

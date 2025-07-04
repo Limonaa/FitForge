@@ -9,6 +9,7 @@ import SidebarItem from "../components/SidebarItem";
 import { AvatarUploader } from "../components/AvatarUploader";
 import PageHeader from "../components/PageHeader";
 import NotificationCard from "../components/NotificationCard";
+import LoadWrapper from "../components/LoadWrapper";
 
 type SelectType = "prof" | "meas" | "goals" | "set";
 
@@ -87,150 +88,158 @@ const AccountPage = () => {
 
   return (
     <>
-      {notification && (
-        <NotificationCard
-          message={notification.message}
-          type={notification.type}
-          onClose={() => setNotification(null)}
-        />
-      )}
-      {showUploader && (
-        <AvatarUploader
-          onClose={() => setShowUploader(false)}
-          onUploadSuccess={(url: string) => {
-            setAvatarUrl(url);
-            setShowUploader(false);
-          }}
-        />
-      )}
-      <PageHeader
-        title="Account"
-        subtitle="Manage your profile and preferences"
-      >
-        <div className="flex flex-col sm:hidden w-full">
-          <div className="flex flex-row items-center gap-4 mb-4">
-            <div className="relative group w-16 h-16">
-              <div className="bg-blue-200 rounded-full w-full h-full overflow-hidden">
-                {avatarUrl ? (
-                  <img
-                    src={avatarUrl}
-                    alt="Profile"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="flex justify-center items-center h-full">
-                    <User width={30} height={30} className="text-blue-400" />
-                  </div>
-                )}
+      <LoadWrapper loading={settingsLoading}>
+        {notification && (
+          <NotificationCard
+            message={notification.message}
+            type={notification.type}
+            onClose={() => setNotification(null)}
+          />
+        )}
+        {showUploader && (
+          <AvatarUploader
+            onClose={() => setShowUploader(false)}
+            onUploadSuccess={(url: string) => {
+              setAvatarUrl(url);
+              setShowUploader(false);
+            }}
+            onError={(error) =>
+              setNotification({
+                message: error.message,
+                type: "error",
+              })
+            }
+          />
+        )}
+        <PageHeader
+          title="Account"
+          subtitle="Manage your profile and preferences"
+        >
+          <div className="flex flex-col sm:hidden w-full">
+            <div className="flex flex-row items-center gap-4 mb-4">
+              <div className="relative group w-16 h-16">
+                <div className="bg-blue-200 rounded-full w-full h-full overflow-hidden">
+                  {avatarUrl ? (
+                    <img
+                      src={avatarUrl}
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex justify-center items-center h-full">
+                      <User width={30} height={30} className="text-blue-400" />
+                    </div>
+                  )}
+                </div>
+                <div
+                  className="absolute inset-0 flex justify-center items-center bg-black/30 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
+                  onClick={() => setShowUploader(true)}
+                >
+                  <Pencil className="text-white" size={20} />
+                </div>
               </div>
-              <div
-                className="absolute inset-0 flex justify-center items-center bg-black/30 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
-                onClick={() => setShowUploader(true)}
-              >
-                <Pencil className="text-white" size={20} />
-              </div>
-            </div>
-            <p className="text-xl font-bold tracking-wide">{name}</p>
-          </div>
-
-          <div className="flex flex-wrap gap-2 mb-4">
-            {[
-              {
-                label: "Profile",
-                icon: <User width={18} height={18} />,
-                value: "prof" as SelectType,
-              },
-              {
-                label: "Measurements",
-                icon: <Weight width={18} height={18} />,
-                value: "meas" as SelectType,
-              },
-              {
-                label: "Goals",
-                icon: <TrendingUp width={18} height={18} />,
-                value: "goals" as SelectType,
-              },
-              {
-                label: "Settings",
-                icon: <Settings width={18} height={18} />,
-                value: "set" as SelectType,
-              },
-            ].map((item) => (
-              <SidebarItem
-                key={item.value}
-                label={item.label}
-                icon={item.icon}
-                value={item.value}
-                selected={selected}
-                onSelect={setSelected}
-              />
-            ))}
-          </div>
-
-          <div className="w-full">{renderSelectedComponent()}</div>
-        </div>
-
-        <div className="hidden sm:flex flex-row w-full py-4">
-          <div className="bg-white shadow-md rounded-xl flex flex-col justify-start items-center w-1/4 m-6">
-            <div className="relative group m-4 w-24 h-24">
-              <div className="bg-blue-200 rounded-full w-full h-full overflow-hidden">
-                {avatarUrl ? (
-                  <img
-                    src={avatarUrl}
-                    alt="Profile"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="flex justify-center items-center h-full">
-                    <User width={40} height={40} className="text-blue-400" />
-                  </div>
-                )}
-              </div>
-              <div
-                className="absolute inset-0 flex justify-center items-center bg-black/30 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
-                onClick={() => setShowUploader(true)}
-              >
-                <Pencil className="text-white" size={24} />
-              </div>
+              <p className="text-xl font-bold tracking-wide">{name}</p>
             </div>
 
-            <p className="text-xl font-bold tracking-wide">{name}</p>
-
-            <div className="my-2 w-3/4">
-              <SidebarItem
-                label="Profile"
-                icon={<User width={18} height={18} />}
-                value="prof"
-                selected={selected}
-                onSelect={setSelected}
-              />
-              <SidebarItem
-                label="Measurements"
-                icon={<Weight width={18} height={18} />}
-                value="meas"
-                selected={selected}
-                onSelect={setSelected}
-              />
-              <SidebarItem
-                label="Goals"
-                icon={<TrendingUp width={18} height={18} />}
-                value="goals"
-                selected={selected}
-                onSelect={setSelected}
-              />
-              <SidebarItem
-                label="Settings"
-                icon={<Settings width={18} height={18} />}
-                value="set"
-                selected={selected}
-                onSelect={setSelected}
-              />
+            <div className="flex flex-wrap gap-2 mb-4">
+              {[
+                {
+                  label: "Profile",
+                  icon: <User width={18} height={18} />,
+                  value: "prof" as SelectType,
+                },
+                {
+                  label: "Measurements",
+                  icon: <Weight width={18} height={18} />,
+                  value: "meas" as SelectType,
+                },
+                {
+                  label: "Goals",
+                  icon: <TrendingUp width={18} height={18} />,
+                  value: "goals" as SelectType,
+                },
+                {
+                  label: "Settings",
+                  icon: <Settings width={18} height={18} />,
+                  value: "set" as SelectType,
+                },
+              ].map((item) => (
+                <SidebarItem
+                  key={item.value}
+                  label={item.label}
+                  icon={item.icon}
+                  value={item.value}
+                  selected={selected}
+                  onSelect={setSelected}
+                />
+              ))}
             </div>
+
+            <div className="w-full">{renderSelectedComponent()}</div>
           </div>
 
-          <div className="flex flex-grow">{renderSelectedComponent()}</div>
-        </div>
-      </PageHeader>
+          <div className="hidden sm:flex flex-row w-full py-4">
+            <div className="bg-white shadow-md rounded-xl flex flex-col justify-start items-center w-1/4 m-6">
+              <div className="relative group m-4 w-24 h-24">
+                <div className="bg-blue-200 rounded-full w-full h-full overflow-hidden">
+                  {avatarUrl ? (
+                    <img
+                      src={avatarUrl}
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex justify-center items-center h-full">
+                      <User width={40} height={40} className="text-blue-400" />
+                    </div>
+                  )}
+                </div>
+                <div
+                  className="absolute inset-0 flex justify-center items-center bg-black/30 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
+                  onClick={() => setShowUploader(true)}
+                >
+                  <Pencil className="text-white" size={24} />
+                </div>
+              </div>
+
+              <p className="text-xl font-bold tracking-wide">{name}</p>
+
+              <div className="my-2 w-3/4">
+                <SidebarItem
+                  label="Profile"
+                  icon={<User width={18} height={18} />}
+                  value="prof"
+                  selected={selected}
+                  onSelect={setSelected}
+                />
+                <SidebarItem
+                  label="Measurements"
+                  icon={<Weight width={18} height={18} />}
+                  value="meas"
+                  selected={selected}
+                  onSelect={setSelected}
+                />
+                <SidebarItem
+                  label="Goals"
+                  icon={<TrendingUp width={18} height={18} />}
+                  value="goals"
+                  selected={selected}
+                  onSelect={setSelected}
+                />
+                <SidebarItem
+                  label="Settings"
+                  icon={<Settings width={18} height={18} />}
+                  value="set"
+                  selected={selected}
+                  onSelect={setSelected}
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-grow">{renderSelectedComponent()}</div>
+          </div>
+        </PageHeader>
+      </LoadWrapper>
     </>
   );
 };

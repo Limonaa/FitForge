@@ -3,6 +3,7 @@ import NotificationCard from "../components/NotificationCard";
 import PageHeader from "../components/PageHeader";
 import WorkoutsHisotyTable from "../components/WorkoutsHisotyTable";
 import { useWorkoutHistory } from "../hooks/useWorkoutHistory";
+import LoadWrapper from "../components/LoadWrapper";
 
 const HistoryPage = () => {
   const { workouts, loading, error } = useWorkoutHistory();
@@ -22,19 +23,21 @@ const HistoryPage = () => {
 
   return (
     <>
-      {notification && (
-        <NotificationCard
-          message={notification.message}
-          type={notification.type}
-          onClose={() => setNotification(null)}
-        />
-      )}
-      <PageHeader
-        title="Workout history"
-        subtitle="Track your progress over time"
-      >
-        <WorkoutsHisotyTable workouts={workouts} />
-      </PageHeader>
+      <LoadWrapper loading={loading}>
+        {notification && (
+          <NotificationCard
+            message={notification.message}
+            type={notification.type}
+            onClose={() => setNotification(null)}
+          />
+        )}
+        <PageHeader
+          title="Workout history"
+          subtitle="Track your progress over time"
+        >
+          <WorkoutsHisotyTable workouts={workouts} />
+        </PageHeader>
+      </LoadWrapper>
     </>
   );
 };

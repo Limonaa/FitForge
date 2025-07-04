@@ -6,6 +6,7 @@ import { useTrainings } from "../hooks/useTrainings";
 import AddWorkoutDialog from "../components/AddWorkoutDialog";
 import Button from "../components/Button";
 import PageHeader from "../components/PageHeader";
+import LoadWrapper from "../components/LoadWrapper";
 
 const WorkoutsPage = () => {
   const [notification, setNotification] = useState<{
@@ -13,10 +14,11 @@ const WorkoutsPage = () => {
     type: "success" | "error" | "info";
   } | null>(null);
 
-  const trainingsWithState = useTrainings(4);
-  const trainings = trainingsWithState.map(
-    ({ loading, error, ...rest }) => rest
-  );
+  const {
+    trainings,
+    loading: workoutLoading,
+    error: workoutError,
+  } = useTrainings(4);
 
   const [openNewWorkout, setOpenNewWorkout] = useState(false);
 
@@ -38,54 +40,56 @@ const WorkoutsPage = () => {
 
   return (
     <>
-      {notification && (
-        <NotificationCard
-          message={notification.message}
-          type={notification.type}
-          onClose={() => setNotification(null)}
-        />
-      )}
-      {openNewWorkout && (
-        <AddWorkoutDialog
-          isOpen={true}
-          onClose={handleCloseDialog}
-          onSuccess={handleSuccess}
-          onError={(error) =>
-            setNotification({
-              message: error?.message || "Failed to add workout",
-              type: "error",
-            })
+      <LoadWrapper loading={workoutLoading}>
+        {notification && (
+          <NotificationCard
+            message={notification.message}
+            type={notification.type}
+            onClose={() => setNotification(null)}
+          />
+        )}
+        {openNewWorkout && (
+          <AddWorkoutDialog
+            isOpen={true}
+            onClose={handleCloseDialog}
+            onSuccess={handleSuccess}
+            onError={(error) =>
+              setNotification({
+                message: error?.message || "Failed to add workout",
+                type: "error",
+              })
+            }
+          />
+        )}
+        <PageHeader
+          title="Workout planner"
+          subtitle="Plan and schedule your workouts"
+          rightSlot={
+            <Button
+              variant="primary"
+              className=""
+              onClick={() => handleOpenDialog()}
+            >
+              New workout
+            </Button>
           }
-        />
-      )}
-      <PageHeader
-        title="Workout planner"
-        subtitle="Plan and schedule your workouts"
-        rightSlot={
-          <Button
-            variant="primary"
-            className=""
-            onClick={() => handleOpenDialog()}
-          >
-            New workout
-          </Button>
-        }
-      >
-        <div className="flex flex-col md:flex-row gap-6 w-full">
-          <div className="w-full md:flex-[3]">
-            <MyWorkouts />
+        >
+          <div className="flex flex-col md:flex-row gap-6 w-full">
+            <div className="w-full md:flex-[3]">
+              <MyWorkouts />
+            </div>
+            <div className="w-full md:flex-[2]">
+              <UpcomingWorkouts
+                workouts={trainings.map((training) => ({
+                  ...training,
+                  onClick: () => {},
+                }))}
+                showButton={false}
+              />
+            </div>
           </div>
-          <div className="w-full md:flex-[2]">
-            <UpcomingWorkouts
-              workouts={trainings.map((training) => ({
-                ...training,
-                onClick: () => {},
-              }))}
-              showButton={false}
-            />
-          </div>
-        </div>
-      </PageHeader>
+        </PageHeader>
+      </LoadWrapper>
     </>
   );
 };

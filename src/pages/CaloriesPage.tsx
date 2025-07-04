@@ -6,6 +6,7 @@ import TodaySummary from "../components/TodaySummary";
 import MealTable from "../components/MealTable";
 import PageHeader from "../components/PageHeader";
 import NotificationCard from "../components/NotificationCard";
+import LoadWrapper from "../components/LoadWrapper";
 
 const CaloriesPage: React.FC = () => {
   const {
@@ -69,31 +70,33 @@ const CaloriesPage: React.FC = () => {
 
   return (
     <>
-      {notification && (
-        <NotificationCard
-          message={notification.message}
-          type={notification.type}
-          onClose={() => setNotification(null)}
-        />
-      )}
-      <PageHeader
-        title="Nutrition Tracker"
-        subtitle="Track your daily calories and macronutrients"
-      >
-        <MealTable entries={entries} />
-        <div className="w-full flex flex-row gap-6 mb-2 sticky bottom-0 z-10 pb-2">
-          <TodaySummary
-            calories={totalCalories}
-            protein={totalProtein}
-            carbs={totalCarbs}
-            fats={totalFats}
-            goalCalories={caloriesGoal}
-            goalProtein={proteinGoal}
-            goalCarbs={carbsGoal}
-            goalFats={fatsGoal}
+      <LoadWrapper loading={macrosLoading || foodLoading || settingsLoading}>
+        {notification && (
+          <NotificationCard
+            message={notification.message}
+            type={notification.type}
+            onClose={() => setNotification(null)}
           />
-        </div>
-      </PageHeader>
+        )}
+        <PageHeader
+          title="Nutrition Tracker"
+          subtitle="Track your daily calories and macronutrients"
+        >
+          <MealTable entries={entries} />
+          <div className="w-full flex flex-row gap-6 mb-2 sticky bottom-0 z-10 pb-2">
+            <TodaySummary
+              calories={totalCalories}
+              protein={totalProtein}
+              carbs={totalCarbs}
+              fats={totalFats}
+              goalCalories={caloriesGoal}
+              goalProtein={proteinGoal}
+              goalCarbs={carbsGoal}
+              goalFats={fatsGoal}
+            />
+          </div>
+        </PageHeader>
+      </LoadWrapper>
     </>
   );
 };

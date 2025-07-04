@@ -193,8 +193,6 @@ const WorkoutSessionPage = () => {
     navigate("/workouts");
   };
 
-  if (!workout || !currentExercise) return <p>Loading...</p>;
-
   if (showSummary) {
     const { totalReps, totalSets, totalWeight, duration } = getSummaryData();
 
