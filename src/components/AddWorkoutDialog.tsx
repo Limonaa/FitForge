@@ -19,6 +19,7 @@ interface AddWorkoutDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  onError: (error: Error) => void;
 }
 
 interface Exercise {
@@ -33,16 +34,13 @@ const AddWorkoutDialog: React.FC<AddWorkoutDialogProps> = ({
   isOpen,
   onClose,
   onSuccess,
+  onError,
 }) => {
   const [title, setTitle] = useState("");
   const [duration, setDuration] = useState("");
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [loading, setLoading] = useState(false);
   const { userId, loading: userLoading } = useUser();
-  const [notification, setNotification] = useState<{
-    message: string;
-    type: "success" | "error" | "info";
-  } | null>(null);
 
   const handleExerciseChange = (
     index: number,
@@ -84,7 +82,6 @@ const AddWorkoutDialog: React.FC<AddWorkoutDialogProps> = ({
     }
 
     e.preventDefault();
-    setNotification(null);
     setLoading(true);
 
     const { data: workoutData, error: workoutError } = await supabase
@@ -101,10 +98,7 @@ const AddWorkoutDialog: React.FC<AddWorkoutDialogProps> = ({
       .single();
 
     if (workoutError || !workoutData) {
-      setNotification({
-        message: workoutError?.message || "Failed to create workout",
-        type: "error",
-      });
+      onError(workoutError);
       setLoading(false);
       return;
     }
@@ -120,15 +114,8 @@ const AddWorkoutDialog: React.FC<AddWorkoutDialogProps> = ({
       .insert(exercisesToInsert);
 
     if (exerciseError) {
-      setNotification({
-        message: exerciseError?.message || "Failed to insert workout exercises",
-        type: "error",
-      });
+      onError(exerciseError);
     } else {
-      setNotification({
-        message: "Workout added successfully",
-        type: "success",
-      });
       onSuccess();
       onClose();
       setTitle("");
@@ -141,13 +128,6 @@ const AddWorkoutDialog: React.FC<AddWorkoutDialogProps> = ({
 
   return (
     <>
-      {notification && (
-        <NotificationCard
-          message={notification.message}
-          type={notification.type}
-          onClose={() => setNotification(null)}
-        />
-      )}
       <Dialog open={isOpen} onClose={onClose} className="fixed z-50 inset-0">
         <div className="flex items-center justify-center min-h-screen bg-black/50">
           <Dialog.Panel className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto relative">

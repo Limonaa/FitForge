@@ -13,7 +13,6 @@ import {
   X,
 } from "lucide-react";
 import Button from "./Button";
-import NotificationCard from "./NotificationCard";
 import LabeledInput from "./LabeledInput";
 
 interface AddFoodDialogProps {
@@ -21,6 +20,7 @@ interface AddFoodDialogProps {
   onClose: () => void;
   mealType: MealType;
   onSuccess: () => void;
+  onError: (error: Error) => void;
 }
 
 const AddFoodDialog: React.FC<AddFoodDialogProps> = ({
@@ -28,6 +28,7 @@ const AddFoodDialog: React.FC<AddFoodDialogProps> = ({
   onClose,
   mealType,
   onSuccess,
+  onError,
 }) => {
   const [name, setName] = useState("");
   const [calories, setCalories] = useState<string>("");
@@ -36,14 +37,9 @@ const AddFoodDialog: React.FC<AddFoodDialogProps> = ({
   const [fats, setFats] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const { userId, loading: userLoading } = useUser();
-  const [notification, setNotification] = useState<{
-    message: string;
-    type: "success" | "error" | "info";
-  } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setNotification(null);
     if (userLoading || !userId) return;
 
     const cal = Number(calories);
@@ -62,10 +58,7 @@ const AddFoodDialog: React.FC<AddFoodDialogProps> = ({
       carb < 0 ||
       fat < 0
     ) {
-      setNotification({
-        message: "Please enter valid, non-negative numbers for all fields.",
-        type: "error",
-      });
+      alert("Please enter valid, non-negative numbers for all fields.");
       return;
     }
 
@@ -89,15 +82,8 @@ const AddFoodDialog: React.FC<AddFoodDialogProps> = ({
       setLoading(false);
 
       if (error) {
-        setNotification({
-          message: error.message,
-          type: "error",
-        });
+        onError(error);
       } else {
-        setNotification({
-          message: "Food added succesfully",
-          type: "success",
-        });
         onSuccess();
         onClose();
         setName("");
@@ -111,13 +97,6 @@ const AddFoodDialog: React.FC<AddFoodDialogProps> = ({
 
   return (
     <>
-      {notification && (
-        <NotificationCard
-          message={notification.message}
-          type={notification.type}
-          onClose={() => setNotification(null)}
-        />
-      )}
       <Dialog open={isOpen} onClose={onClose} className="fixed z-50 inset-0">
         <div className="flex items-center justify-center min-h-screen bg-black/50">
           <Dialog.Panel className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 relative">

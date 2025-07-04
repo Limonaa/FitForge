@@ -3,6 +3,7 @@ import { type FoodEntry } from "../types/FoodEntry";
 import { MealType } from "../types/meals";
 import AddFoodDialog from "./AddFoodDialog";
 import Button from "./Button";
+import NotificationCard from "./NotificationCard";
 
 interface MealTableProps {
   entries: FoodEntry[];
@@ -23,6 +24,10 @@ const MealTable: React.FC<MealTableProps> = ({ entries }) => {
   };
 
   const [openMealType, setOpenMealType] = useState<MealType | null>(null);
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: "error" | "info" | "success";
+  } | null>(null);
 
   const handleOpenDialog = (mealType: MealType) => {
     setOpenMealType(mealType);
@@ -33,6 +38,10 @@ const MealTable: React.FC<MealTableProps> = ({ entries }) => {
   };
 
   const handleSuccess = () => {
+    setNotification({
+      message: "Food added succesfully",
+      type: "success",
+    });
     handleCloseDialog();
   };
 
@@ -45,12 +54,25 @@ const MealTable: React.FC<MealTableProps> = ({ entries }) => {
 
   return (
     <>
+      {notification && (
+        <NotificationCard
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
       {openMealType && (
         <AddFoodDialog
           isOpen={true}
           onClose={handleCloseDialog}
           mealType={openMealType}
           onSuccess={handleSuccess}
+          onError={(error) =>
+            setNotification({
+              message: error.message || "Failed to add meal",
+              type: "error",
+            })
+          }
         />
       )}
       <div className="space-y-4 w-full">

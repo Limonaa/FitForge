@@ -29,6 +29,10 @@ const WorkoutsPage = () => {
   };
 
   const handleSuccess = () => {
+    setNotification({
+      message: "Workout added successfully",
+      type: "success",
+    });
     handleCloseDialog();
   };
 
@@ -46,6 +50,12 @@ const WorkoutsPage = () => {
           isOpen={true}
           onClose={handleCloseDialog}
           onSuccess={handleSuccess}
+          onError={(error) =>
+            setNotification({
+              message: error?.message || "Failed to add workout",
+              type: "error",
+            })
+          }
         />
       )}
       <PageHeader
