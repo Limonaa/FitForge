@@ -1,6 +1,8 @@
 import React, { useMemo, useState } from "react";
 import type { Workout } from "../types/Workout";
 import { useNavigate } from "react-router-dom";
+import LabeledInput from "./LabeledInput";
+import { Search } from "lucide-react";
 
 interface WorkoutsHistoryTableProps {
   workouts: Workout[];
@@ -26,12 +28,12 @@ const WorkoutsHistoryTable: React.FC<WorkoutsHistoryTableProps> = ({
     <div className="bg-white shadow-md rounded-xl p-4 sm:p-6 w-full">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
         <p className="text-lg font-semibold">Recent Workouts</p>
-        <input
-          type="text"
-          placeholder="Filter by name..."
+        <LabeledInput
           value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          className="border border-gray-300 rounded-md px-3 py-2 text-sm w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          onChange={setFilter}
+          placeholder="Filter by name..."
+          icon={<Search className="text-indigo-500" size={18} />}
+          type="text"
         />
       </div>
 

@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Button from "./Button";
 import NotificationCard from "./NotificationCard";
+import LabeledInput from "./LabeledInput";
 
 interface AddFoodDialogProps {
   isOpen: boolean;
@@ -132,65 +133,42 @@ const AddFoodDialog: React.FC<AddFoodDialogProps> = ({
             </Dialog.Title>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="flex items-center border rounded-md px-3 py-2 bg-gray-50">
-                <UtensilsCrossed className="text-indigo-500 mr-2" size={18} />
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                  placeholder="Food name"
-                  className="w-full bg-transparent outline-none text-sm"
-                />
-              </div>
-
-              <div className="flex items-center border rounded-md px-3 py-2 bg-gray-50">
-                <Flame className="text-red-500 mr-2" size={18} />
-                <input
-                  type="number"
-                  value={calories}
-                  onChange={(e) => setCalories(e.target.value)}
-                  required
-                  placeholder="Calories"
-                  className="w-full bg-transparent outline-none text-sm"
-                />
-              </div>
-
-              <div className="flex items-center border rounded-md px-3 py-2 bg-gray-50">
-                <Beef className="text-purple-500 mr-2" size={18} />
-                <input
-                  type="number"
-                  value={protein}
-                  onChange={(e) => setProtein(e.target.value)}
-                  required
-                  placeholder="Protein (g)"
-                  className="w-full bg-transparent outline-none text-sm"
-                />
-              </div>
-
-              <div className="flex items-center border rounded-md px-3 py-2 bg-gray-50">
-                <Croissant className="text-blue-500 mr-2" size={18} />
-                <input
-                  type="number"
-                  value={carbs}
-                  onChange={(e) => setCarbs(e.target.value)}
-                  required
-                  placeholder="Carbs (g)"
-                  className="w-full bg-transparent outline-none text-sm"
-                />
-              </div>
-
-              <div className="flex items-center border rounded-md px-3 py-2 bg-gray-50">
-                <Egg className="text-amber-500 mr-2" size={18} />
-                <input
-                  type="number"
-                  value={fats}
-                  onChange={(e) => setFats(e.target.value)}
-                  required
-                  placeholder="Fats (g)"
-                  className="w-full bg-transparent outline-none text-sm"
-                />
-              </div>
+              <LabeledInput
+                value={name}
+                onChange={setName}
+                placeholder="Food name"
+                icon={<UtensilsCrossed className="text-indigo-500" size={18} />}
+                type="text"
+                required
+              />
+              <LabeledInput
+                value={calories}
+                onChange={setCalories}
+                placeholder="Calories"
+                icon={<Flame className="text-red-500" size={18} />}
+                type="number"
+              />
+              <LabeledInput
+                value={protein}
+                onChange={setProtein}
+                placeholder="Protein"
+                icon={<Beef className="text-purple-500" size={18} />}
+                type="number"
+              />
+              <LabeledInput
+                value={carbs}
+                onChange={setCarbs}
+                placeholder="Carbs"
+                icon={<Croissant className="text-blue-500" size={18} />}
+                type="number"
+              />
+              <LabeledInput
+                value={fats}
+                onChange={setFats}
+                placeholder="Fats"
+                icon={<Egg className="text-amber-500" size={18} />}
+                type="number"
+              />
 
               <div className="flex justify-end gap-2 pt-2">
                 <Button variant="secondary" onClick={onClose}>

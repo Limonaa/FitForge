@@ -7,11 +7,13 @@ import {
   GaugeCircleIcon,
   ListPlus,
   Repeat,
+  Timer,
   Trash2,
   X,
 } from "lucide-react";
 import Button from "./Button";
 import NotificationCard from "./NotificationCard";
+import LabeledInput from "./LabeledInput";
 
 interface AddWorkoutDialogProps {
   isOpen: boolean;
@@ -33,7 +35,7 @@ const AddWorkoutDialog: React.FC<AddWorkoutDialogProps> = ({
   onSuccess,
 }) => {
   const [title, setTitle] = useState("");
-  const [duration, setDuration] = useState(0);
+  const [duration, setDuration] = useState("");
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [loading, setLoading] = useState(false);
   const { userId, loading: userLoading } = useUser();
@@ -92,7 +94,7 @@ const AddWorkoutDialog: React.FC<AddWorkoutDialogProps> = ({
           user_id: userId,
           title,
           next_workout: new Date().toISOString().slice(0, 10),
-          duration: duration * 60,
+          duration: Number(duration) * 60,
         },
       ])
       .select("id")
@@ -130,7 +132,7 @@ const AddWorkoutDialog: React.FC<AddWorkoutDialogProps> = ({
       onSuccess();
       onClose();
       setTitle("");
-      setDuration(0);
+      setDuration("0");
       setExercises([]);
     }
 
@@ -161,27 +163,24 @@ const AddWorkoutDialog: React.FC<AddWorkoutDialogProps> = ({
             </Dialog.Title>
 
             <form onSubmit={handleSubmit}>
-              <label className="text-sm font-medium text-gray-700">
-                Workout Title
-              </label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-                className="w-full border px-3 py-2 rounded-md mb-4 bg-gray-50"
-              />
-
-              <label className="text-sm font-medium text-gray-700">
-                Duration (min)
-              </label>
-              <input
-                type="number"
-                value={duration}
-                onChange={(e) => setDuration(Number(e.target.value))}
-                required
-                className="w-full border px-3 py-2 rounded-md mb-4 bg-gray-50"
-              />
+              <div className="space-y-2">
+                <LabeledInput
+                  value={title}
+                  onChange={setTitle}
+                  placeholder="Workout title"
+                  icon={<Dumbbell className="text-indigo-500" size={18} />}
+                  type="text"
+                  required
+                />
+                <LabeledInput
+                  value={duration}
+                  onChange={setDuration}
+                  placeholder="Duration (min)"
+                  icon={<Timer className="text-indigo-500" size={18} />}
+                  type="text"
+                  required
+                />
+              </div>
 
               <div className="mb-4 flex justify-between items-center">
                 <p className="font-semibold text-gray-800 text-base">
