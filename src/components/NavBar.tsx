@@ -6,6 +6,7 @@ import {
   History,
   Menu,
   X,
+  Bug,
 } from "lucide-react";
 import React from "react";
 import { NavLink, Link } from "react-router-dom";
@@ -78,6 +79,7 @@ const Navbar: React.FC<NavbarProps> = ({ isOpen, setIsOpen }) => {
             { to: "/calories", label: "Calories", icon: <Utensils /> },
             { to: "/history", label: "History", icon: <History /> },
             { to: "/account", label: "Account", icon: <User /> },
+            { to: "/report-bug", label: "Report bug", icon: <Bug /> },
           ].map(({ to, label, icon }) => (
             <NavLink
               key={label}

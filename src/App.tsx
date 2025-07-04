@@ -13,6 +13,7 @@ import WorkoutsPage from "./pages/WorkoutsPage";
 import EditWorkoutPage from "./pages/EditWorkoutPage";
 import WorkoutSessionPage from "./pages/WorkoutSessionPage";
 import WorkoutDetails from "./pages/WorkoutDetailsPage";
+import ReportBugPage from "./pages/ReportBugPage";
 
 const Layout = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -54,6 +55,7 @@ const App = () => {
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/history/:id" element={<WorkoutDetails />} />
           <Route path="/account" element={<AccountPage />} />
+          <Route path="/report-bug" element={<ReportBugPage />} />
         </Route>
 
         <Route path="/register" element={<Register />} />

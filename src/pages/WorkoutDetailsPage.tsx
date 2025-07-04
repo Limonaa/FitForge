@@ -143,25 +143,27 @@ const WorkoutHistoryDetailsPage = () => {
 
           <h3 className="text-xl font-semibold mb-2">Exercises</h3>
 
-          {exercises.length === 0 ? (
-            <p className="text-gray-500">
-              No exercises found for this workout.
-            </p>
-          ) : (
-            exercises
-              .sort((a, b) => a.orderInWorkout - b.orderInWorkout)
-              .map((exercise) => (
-                <div key={exercise.id} className="p-4 mb-4">
-                  <h4 className="text-xl font-semibold text-indigo-600 mb-2">
-                    {exercise.name}
-                  </h4>
-                  <div className="text-gray-600 text-md font-semibold border-b-2 w-max">
-                    {exercise.weight} kg · {exercise.reps} reps ·{" "}
-                    {exercise.sets} sets
+          <div className="grid grid-cols-2 sm:grid-cols-4">
+            {exercises.length === 0 ? (
+              <p className="text-gray-500">
+                No exercises found for this workout.
+              </p>
+            ) : (
+              exercises
+                .sort((a, b) => a.orderInWorkout - b.orderInWorkout)
+                .map((exercise) => (
+                  <div key={exercise.id} className="p-4 mb-4">
+                    <h4 className="text-xl font-semibold text-indigo-600 mb-2 truncate">
+                      {exercise.name}
+                    </h4>
+                    <div className="text-gray-600 text-md font-semibold border-b-2 w-max">
+                      {exercise.weight} kg · {exercise.reps} reps ·{" "}
+                      {exercise.sets} sets
+                    </div>
                   </div>
-                </div>
-              ))
-          )}
+                ))
+            )}
+          </div>
         </PageHeader>
       </LoadWrapper>
     </>
