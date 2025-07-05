@@ -7,9 +7,15 @@ import NotificationCard from "./NotificationCard";
 
 interface MealTableProps {
   entries: FoodEntry[];
+  onDelete: (id: string) => void;
+  refetch: () => void;
 }
 
-const MealTable: React.FC<MealTableProps> = ({ entries }) => {
+const MealTable: React.FC<MealTableProps> = ({
+  entries,
+  onDelete,
+  refetch,
+}) => {
   const mealTypeLabels: Record<MealType, string> = {
     [MealType.Breakfats]: "Breakfast",
     [MealType.Lunch]: "Lunch",
@@ -42,6 +48,7 @@ const MealTable: React.FC<MealTableProps> = ({ entries }) => {
       message: "Food added succesfully",
       type: "success",
     });
+    refetch();
     handleCloseDialog();
   };
 
@@ -94,11 +101,12 @@ const MealTable: React.FC<MealTableProps> = ({ entries }) => {
               <table className="min-w-full bg-white border border-gray-200">
                 <thead className="text-gray-700 text-sm font-semibold">
                   <tr>
-                    <th className="px-4 py-2 text-left w-1/4">Food Name</th>
-                    <th className="px-4 py-2 text-start w-1/5">Calories</th>
-                    <th className="px-4 py-2 text-start w-1/5">Protein (g)</th>
-                    <th className="px-4 py-2 text-start w-1/5">Carbs (g)</th>
-                    <th className="px-4 py-2 text-start w-1/5">Fats (g)</th>
+                    <th className="px-4 py-2 text-left w-4/12">Food Name</th>
+                    <th className="px-4 py-2 text-start w-2/12">Calories</th>
+                    <th className="px-4 py-2 text-start w-2/12">Protein (g)</th>
+                    <th className="px-4 py-2 text-start w-2/12">Carbs (g)</th>
+                    <th className="px-4 py-2 text-start w-1/12">Fats (g)</th>
+                    <th className="px-4 py-2 w-1/12"></th>
                   </tr>
                 </thead>
                 {foods.length > 0 ? (
@@ -108,18 +116,24 @@ const MealTable: React.FC<MealTableProps> = ({ entries }) => {
                         key={item.id}
                         className="border-t border-gray-200 hover:bg-gray-50"
                       >
-                        <td className="px-4 py-2 w-1/4">{item.name}</td>
-                        <td className="px-4 py-2 text-start w-1/5">
+                        <td className="px-4 py-2 w-4/12">{item.name}</td>
+                        <td className="px-4 py-2 text-start w-2/12">
                           {item.calories}
                         </td>
-                        <td className="px-4 py-2 text-start w-1/5">
+                        <td className="px-4 py-2 text-start w-2/12">
                           {item.protein}
                         </td>
-                        <td className="px-4 py-2 text-start w-1/5">
+                        <td className="px-4 py-2 text-start w-2/12">
                           {item.carbs}
                         </td>
-                        <td className="px-4 py-2 text-start w-1/5">
+                        <td className="px-4 py-2 text-start w-1/12">
                           {item.fats}
+                        </td>
+                        <td
+                          className="px-4 text-start text-red-500 w-1/12 hover:cursor-pointer"
+                          onClick={() => onDelete(item.id)}
+                        >
+                          Remove
                         </td>
                       </tr>
                     ))}

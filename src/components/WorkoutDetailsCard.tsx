@@ -5,7 +5,7 @@ interface WorkoutDetailsCardProps {
   type: string;
   icon: LucideIcon;
   title: string;
-  value: number;
+  value: string | number;
   unit?: string | null;
 }
 
@@ -13,18 +13,21 @@ const bgColorClasses: Record<string, string> = {
   weight: "bg-amber-100",
   reps: "bg-blue-100",
   sets: "bg-green-100",
+  time: "bg-red-100",
 };
 
 const iconColorClasses: Record<string, string> = {
   weight: "text-amber-600",
   reps: "text-blue-700",
   sets: "text-green-700",
+  time: "text-red-700",
 };
 
 const textColorClasses: Record<string, string> = {
   weight: "text-amber-600",
   reps: "text-blue-700",
   sets: "text-green-700",
+  time: "text-red-700",
 };
 
 const WorkoutDetailsCard: React.FC<WorkoutDetailsCardProps> = ({

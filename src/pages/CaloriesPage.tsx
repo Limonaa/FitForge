@@ -7,6 +7,9 @@ import MealTable from "../components/MealTable";
 import PageHeader from "../components/PageHeader";
 import NotificationCard from "../components/NotificationCard";
 import LoadWrapper from "../components/LoadWrapper";
+import { supabase } from "../services/supabaseService";
+import { useUser } from "../context/UserContext";
+import { type FoodEntry } from "../types/FoodEntry";
 
 const CaloriesPage: React.FC = () => {
   const {
@@ -15,6 +18,12 @@ const CaloriesPage: React.FC = () => {
     error: foodError,
     refetch,
   } = useFoodEntries();
+  const [visibleEntries, setVisibleEntries] = useState<FoodEntry[]>([]);
+
+  useEffect(() => {
+    setVisibleEntries(entries);
+  }, [entries]);
+
   const {
     totalCalories,
     totalProtein,
@@ -33,10 +42,39 @@ const CaloriesPage: React.FC = () => {
     error: settingsError,
   } = useUserSettings();
 
+  const { userId } = useUser();
   const [notification, setNotification] = useState<{
     message: string;
     type: "success" | "error" | "info";
   } | null>(null);
+
+  const handleRemoveMeal = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from("food_entries")
+        .delete()
+        .eq("id", id)
+        .eq("user_id", userId);
+
+      if (error) {
+        setNotification({
+          message: error.message || "Failed to delete meal",
+          type: "error",
+        });
+        return;
+      }
+      setNotification({
+        message: "Removed meal successfully",
+        type: "success",
+      });
+      setVisibleEntries((prev) => prev.filter((entry) => entry.id !== id));
+    } catch (err: any) {
+      setNotification({
+        message: err.message || "Removed meal successfully",
+        type: "error",
+      });
+    }
+  };
 
   // FoodEntries Error Handler
   useEffect(() => {
@@ -82,7 +120,11 @@ const CaloriesPage: React.FC = () => {
           title="Nutrition Tracker"
           subtitle="Track your daily calories and macronutrients"
         >
-          <MealTable entries={entries} />
+          <MealTable
+            entries={visibleEntries}
+            onDelete={handleRemoveMeal}
+            refetch={refetch}
+          />
           <div className="w-full flex flex-row gap-6 mb-2 sticky bottom-0 z-10 pb-2">
             <TodaySummary
               calories={totalCalories}

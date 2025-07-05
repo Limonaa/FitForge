@@ -7,6 +7,7 @@ import { useUser } from "../context/UserContext";
 import Button from "../components/Button";
 import WorkoutDetailsCard from "../components/WorkoutDetailsCard";
 import NotificationCard from "../components/NotificationCard";
+import LoadWrapper from "../components/LoadWrapper";
 
 const WorkoutSessionPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -193,6 +194,14 @@ const WorkoutSessionPage = () => {
     navigate("/workouts");
   };
 
+  if (!workout || !currentExercise) {
+    return (
+      <LoadWrapper loading={true}>
+        <></>
+      </LoadWrapper>
+    );
+  }
+
   if (showSummary) {
     const { totalReps, totalSets, totalWeight, duration } = getSummaryData();
 
@@ -206,41 +215,62 @@ const WorkoutSessionPage = () => {
           />
         )}
         <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-center">Workout summary</h2>
-          <div className="space-y-2 text-center">
-            <p>
-              <strong>Workout:</strong> {workout.title}
-            </p>
-            <p>
-              <strong>Time:</strong> {Math.floor(duration / 60)}:
-              {String(duration % 60).padStart(2, "0")}
-            </p>
-            <p>
-              <strong>Total sets:</strong> {totalSets}
-            </p>
-            <p>
-              <strong>Total reps:</strong> {totalReps}
-            </p>
-            <p>
-              <strong>Total weight (kg):</strong> {totalWeight}
-            </p>
+          <h2 className="text-3xl font-bold text-center text-gray-800">
+            Workout Summary
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <WorkoutDetailsCard
+              title="Time"
+              type="time"
+              icon={Timer}
+              value={`${Math.floor(duration / 60)}:${String(
+                duration % 60
+              ).padStart(2, "0")}`}
+            />
+            <WorkoutDetailsCard
+              title="Total Sets"
+              type="sets"
+              icon={Repeat}
+              value={totalSets}
+            />
+            <WorkoutDetailsCard
+              title="Total Reps"
+              type="reps"
+              icon={ArrowUpDown}
+              value={totalReps}
+            />
+            <WorkoutDetailsCard
+              title="Total Weight"
+              type="weight"
+              icon={Dumbbell}
+              value={totalWeight + " kg"}
+            />
           </div>
 
-          <div className="space-y-2">
-            {exercises.map((exercise, index) => {
-              const completed = completedSetsMap[index]?.length || 0;
-              return (
-                <div key={exercise.id} className="bg-gray-100 rounded-xl p-4">
-                  <p className="font-bold">{exercise.name}</p>
-                  <p>
-                    {completed} / {exercise.sets} sets done
-                  </p>
-                </div>
-              );
-            })}
+          <div className="bg-white rounded-xl shadow p-4 space-y-3">
+            <h3 className="text-xl font-semibold text-center text-gray-700">
+              Exercise Breakdown
+            </h3>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {exercises.map((exercise, index) => {
+                const completed = completedSetsMap[index]?.length || 0;
+                return (
+                  <div
+                    key={exercise.id}
+                    className="bg-gray-50 border rounded-lg p-3 shadow-sm"
+                  >
+                    <p className="font-medium text-gray-800">{exercise.name}</p>
+                    <p className="text-sm text-gray-600">
+                      {completed} / {exercise.sets} sets completed
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4 pt-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
             <Button variant="red" onClick={handleQuit}>
               Quit without saving
             </Button>
