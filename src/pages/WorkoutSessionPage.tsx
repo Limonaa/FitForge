@@ -8,6 +8,7 @@ import Button from "../components/Button";
 import WorkoutDetailsCard from "../components/WorkoutDetailsCard";
 import NotificationCard from "../components/NotificationCard";
 import LoadWrapper from "../components/LoadWrapper";
+import ConfirmDialog from "../components/ConfirmDialog";
 
 const WorkoutSessionPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,6 +23,7 @@ const WorkoutSessionPage = () => {
   const [elapsed, setElapsed] = useState(0);
   const [showSummary, setShowSummary] = useState(false);
   const [isWorkoutFinished, setIsWorkoutFinished] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const { userId, loading: userLoading } = useUser();
   const [notification, setNotification] = useState<{
     message: string;
@@ -123,13 +125,19 @@ const WorkoutSessionPage = () => {
     setCurrentIndex((i) => (i > 0 ? i - 1 : 0));
   };
 
-  const finishWorkout = () => {
-    const confirmEnd = confirm("Are you sure to end workout?");
-    if (!confirmEnd) return;
+  const handleFinishClick = () => {
+    setShowConfirmDialog(true);
+  };
 
+  const handleConfirmFinish = () => {
+    setShowConfirmDialog(false);
     localStorage.removeItem(`workout_start_${id}`);
     setIsWorkoutFinished(true);
     setShowSummary(true);
+  };
+
+  const handleDismissFinish = () => {
+    setShowConfirmDialog(false);
   };
 
   const getSummaryData = () => {
@@ -271,13 +279,13 @@ const WorkoutSessionPage = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
-            <Button variant="red" onClick={handleQuit}>
+            <Button variant="red" onClick={handleQuit} size="lg">
               Quit without saving
             </Button>
-            <Button variant="primary" onClick={handleContinueWorkout}>
+            <Button variant="primary" onClick={handleContinueWorkout} size="lg">
               Continue workout
             </Button>
-            <Button variant="green" onClick={handleSaveWorkout}>
+            <Button variant="green" onClick={handleSaveWorkout} size="lg">
               Save workout
             </Button>
           </div>
@@ -383,13 +391,19 @@ const WorkoutSessionPage = () => {
           onPrev={prevExercise}
           onSkip={skipExercise}
           onNext={nextExercise}
-          onFinish={finishWorkout}
+          onFinish={handleFinishClick}
         />
 
         <div className="text-center text-gray-500 mt-2">
           Exercise {currentIndex + 1} of {exercises.length}
         </div>
       </div>
+      <ConfirmDialog
+        message="Are you sure you want to finish the workout?"
+        isOpen={showConfirmDialog}
+        onAccept={handleConfirmFinish}
+        onDismiss={handleDismissFinish}
+      />
     </>
   );
 };
