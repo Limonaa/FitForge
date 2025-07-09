@@ -120,7 +120,7 @@ const GoalsInformation: React.FC<GoalsInfoProps> = ({
             <label className="text-gray-700">Calories goal</label>
             <input
               name="caloriesGoal"
-              type="number"
+              type="string"
               value={formData.caloriesGoal}
               onChange={handleChange}
               className="border border-black rounded-md px-2 py-1 placeholder:text-gray-500"
@@ -130,7 +130,7 @@ const GoalsInformation: React.FC<GoalsInfoProps> = ({
             <label className="text-gray-700">Protein goal</label>
             <input
               name="proteinGoal"
-              type="number"
+              type="string"
               value={formData.proteinGoal}
               onChange={handleChange}
               className="border border-black rounded-md px-2 py-1 placeholder:text-gray-500"
@@ -140,7 +140,7 @@ const GoalsInformation: React.FC<GoalsInfoProps> = ({
             <label className="text-gray-700">Carbs goal</label>
             <input
               name="carbsGoal"
-              type="number"
+              type="string"
               value={formData.carbsGoal}
               onChange={handleChange}
               className="border border-black rounded-md px-2 py-1 placeholder:text-gray-500"
@@ -150,7 +150,7 @@ const GoalsInformation: React.FC<GoalsInfoProps> = ({
             <label className="text-gray-700">Fats goal</label>
             <input
               name="fatsGoal"
-              type="number"
+              type="string"
               value={formData.fatsGoal}
               onChange={handleChange}
               className="border border-black rounded-md px-2 py-1 placeholder:text-gray-500"

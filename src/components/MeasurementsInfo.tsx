@@ -89,7 +89,7 @@ const MeasurementsInfo: React.FC<MeasInfoProps> = ({ height, weight }) => {
             </label>
             <input
               name="height"
-              type="number"
+              type="string"
               value={formData.height}
               onChange={handleChange}
               className="border border-black rounded-md px-2 py-1 placeholder:text-gray-500"
@@ -100,7 +100,7 @@ const MeasurementsInfo: React.FC<MeasInfoProps> = ({ height, weight }) => {
               Weight <p className="text-gray-500">(kg)</p>
             </label>
             <input
-              type="number"
+              type="string"
               name="weight"
               value={formData.weight}
               onChange={handleChange}

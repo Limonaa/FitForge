@@ -202,11 +202,29 @@ const WorkoutSessionPage = () => {
     navigate("/workouts");
   };
 
-  if (!workout || !currentExercise) {
+  if (!workout) {
     return (
       <LoadWrapper loading={true}>
         <></>
       </LoadWrapper>
+    );
+  }
+
+  if (exercises.length === 0) {
+    return (
+      <div className="flex flex-col justify-center items-center p-4 gap-2">
+        <p className="text-2xl font-semibold">No exercises found</p>
+        <p className="text-sm text-gray-600 font-semibold">
+          Workout have to contain at least 1 exercise
+        </p>
+        <Button
+          onClick={() => navigate("/workouts")}
+          variant="primary"
+          size="lg"
+        >
+          Back to Workouts
+        </Button>
+      </div>
     );
   }
 
