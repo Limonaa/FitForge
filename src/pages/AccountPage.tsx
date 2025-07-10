@@ -10,6 +10,7 @@ import { AvatarUploader } from "../components/AvatarUploader";
 import PageHeader from "../components/PageHeader";
 import NotificationCard from "../components/NotificationCard";
 import LoadWrapper from "../components/LoadWrapper";
+import { useUser } from "../context/UserContext";
 
 type SelectType = "prof" | "meas" | "goals" | "set";
 
@@ -38,6 +39,7 @@ const AccountPage = () => {
     message: string;
     type: "success" | "error" | "info";
   } | null>(null);
+  const { email } = useUser();
 
   const renderSelectedComponent = () => {
     switch (selected) {
@@ -45,7 +47,7 @@ const AccountPage = () => {
         return (
           <ProfileInformations
             name={name}
-            email="test@example.com"
+            email={email || ""}
             gender={gender}
             birthdate={birthdate}
           />

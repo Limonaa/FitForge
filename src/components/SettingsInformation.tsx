@@ -35,7 +35,11 @@ const SettingsInformation = () => {
     setEmailMessage(null);
     setLoading(true);
 
-    const { error } = await supabase.auth.updateUser({ email: newEmail });
+    const trimmedEmail = newEmail.trim();
+    const { data, error } = await supabase.auth.updateUser({
+      email: trimmedEmail,
+    });
+    console.log(data);
 
     if (error) {
       setNotification({
@@ -98,7 +102,7 @@ const SettingsInformation = () => {
           onClose={() => setNotification(null)}
         />
       )}
-      <div className="bg-white shadow-md rounded-xl justify-center items-center m-6 p-4 min-w-80">
+      <div className="bg-white shadow-md rounded-xl justify-center items-center sm:m-6 pt-4 sm:p-4 min-w-80">
         <p className="text-xl font-semibold mb-4">Account settings</p>
 
         <form onSubmit={handleChangeEmail} className="mb-6 flex flex-col">
@@ -108,7 +112,7 @@ const SettingsInformation = () => {
             <input
               type="email"
               placeholder="New email"
-              value={newEmail}
+              value={newEmail ?? ""}
               onChange={(e) => setNewEmail(e.target.value)}
               className="border rounded px-3 py-2 w-full"
               required
@@ -136,7 +140,7 @@ const SettingsInformation = () => {
             <input
               type="password"
               placeholder="New password"
-              value={newPassword}
+              value={newPassword ?? ""}
               onChange={(e) => setNewPassword(e.target.value)}
               className="border rounded px-3 py-2 w-full"
               required
@@ -148,7 +152,7 @@ const SettingsInformation = () => {
             <input
               type="password"
               placeholder="Confirm new password"
-              value={confirmPassword}
+              value={confirmPassword ?? ""}
               onChange={(e) => setConfirmPassword(e.target.value)}
               className="border rounded px-3 py-2 w-full"
               required

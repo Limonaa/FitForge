@@ -3,16 +3,19 @@ import { supabase } from "../services/supabaseService";
 
 type UserContextType = {
   userId: string | null;
+  email: string | null;
   loading: boolean;
 };
 
 const UserContext = createContext<UserContextType>({
   userId: null,
+  email: null,
   loading: true,
 });
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [userId, setUserId] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -22,6 +25,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       } = await supabase.auth.getUser();
 
       setUserId(user?.id || null);
+      setEmail(user?.email || null);
       setLoading(false);
     };
 
@@ -29,7 +33,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ userId, loading }}>
+    <UserContext.Provider value={{ userId, email, loading }}>
       {children}
     </UserContext.Provider>
   );
