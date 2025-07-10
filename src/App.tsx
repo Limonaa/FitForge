@@ -14,6 +14,7 @@ import EditWorkoutPage from "./pages/EditWorkoutPage";
 import WorkoutSessionPage from "./pages/WorkoutSessionPage";
 import WorkoutDetails from "./pages/WorkoutDetailsPage";
 import ReportBugPage from "./pages/ReportBugPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 const Layout = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -60,6 +61,7 @@ const App = () => {
 
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );
