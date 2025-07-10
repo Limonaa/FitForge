@@ -12,18 +12,12 @@ import PageHeader from "../components/PageHeader";
 import LoadWrapper from "../components/LoadWrapper";
 
 const Home = () => {
+  //Trainings
   const {
     trainings,
     loading: workoutLoading,
     error: workoutError,
   } = useTrainings(3);
-  // Trainings
-  // const trainingsWithState = useTrainings();
-  // const trainings = trainingsWithState.map(
-  //   ({ loading, error, ...rest }) => rest
-  // );
-  // const trainingsLoading = trainingsWithState[0]?.loading ?? false;
-  // const trainingsError = trainingsWithState[0]?.error ?? null;
 
   // Macros
   const {

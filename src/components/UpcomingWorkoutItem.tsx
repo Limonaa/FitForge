@@ -8,7 +8,6 @@ export interface UpcomingWorkoutItemProps {
 }
 
 const UpcomingWorkoutItem: React.FC<UpcomingWorkoutItemProps> = ({
-  id,
   title,
   nextTraining,
   onClick,

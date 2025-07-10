@@ -10,7 +10,7 @@ const SettingsInformation = () => {
   const [newEmail, setNewEmail] = useState("");
   const [emailMessage, setEmailMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [currentPassword, setCurrentPassword] = useState("");
+  const [_currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [notification, setNotification] = useState<{

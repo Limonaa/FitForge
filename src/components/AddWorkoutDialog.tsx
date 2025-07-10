@@ -12,7 +12,6 @@ import {
   X,
 } from "lucide-react";
 import Button from "./Button";
-import NotificationCard from "./NotificationCard";
 import LabeledInput from "./LabeledInput";
 
 interface AddWorkoutDialogProps {

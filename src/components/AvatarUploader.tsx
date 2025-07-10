@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { supabase } from "../services/supabaseService";
 import { X } from "lucide-react";
-import NotificationCard from "./NotificationCard";
 
 export function AvatarUploader({
   onClose,

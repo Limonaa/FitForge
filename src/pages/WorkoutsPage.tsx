@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NotificationCard from "../components/NotificationCard";
 import MyWorkouts from "../components/MyWorkouts";
 import UpcomingWorkouts from "../components/UpcomingWorkouts";
@@ -37,6 +37,15 @@ const WorkoutsPage = () => {
     });
     handleCloseDialog();
   };
+
+  useEffect(() => {
+    if (workoutError) {
+      setNotification({
+        message: workoutError.message || "Failed to fetch workout data",
+        type: "error",
+      });
+    }
+  }, [workoutError]);
 
   return (
     <>
